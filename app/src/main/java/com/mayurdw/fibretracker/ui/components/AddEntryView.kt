@@ -2,11 +2,10 @@ package com.mayurdw.fibretracker.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -14,26 +13,27 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mayurdw.fibretracker.data.CommonFoods
+import com.mayurdw.fibretracker.model.FoodItem
 import com.mayurdw.fibretracker.ui.theme.FibreTrackerTheme
 
 @Composable
-fun AddEntryView(modifier: Modifier = Modifier) {
-    val foodItem = remember { mutableStateOf(CommonFoods[0].foodName) }
-    val foodQuantity = remember { mutableStateOf(CommonFoods[0].foodAmountInGrams.toString()) }
+fun AddEntryView(modifier: Modifier = Modifier, selectedFoodItem: FoodItem) {
+    val foodQuantity = remember { mutableStateOf(selectedFoodItem.foodAmountInGrams.toString()) }
 
     Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.Center,
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = Alignment.Start
-        ) {
-        TextField(
-            value = foodItem.value,
-            onValueChange = { newValue: String -> foodItem.value = newValue },
-            label = { Text("Food Item") },
-            placeholder = { Text("Chia") },
+    ) {
+        Text(
+            text = selectedFoodItem.foodName,
+            modifier = modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.bodyLarge
         )
         TextField(
             value = foodQuantity.value,
@@ -42,11 +42,17 @@ fun AddEntryView(modifier: Modifier = Modifier) {
             placeholder = { Text("Chia") },
         )
 
-        Text(modifier = modifier, text = "Fibre Per MilliGram = ${CommonFoods[0].fiberPerMilliGrams}")
+        Text(
+            modifier = modifier,
+            text = "Fibre Per MilliGram = ${selectedFoodItem.fiberPerMilliGrams}"
+        )
 
-        Text(modifier = modifier, text = "Fiber Consumed = ${CommonFoods[0].totalFiberInFood / 1000}")
+        Text(
+            modifier = modifier,
+            text = "Fiber Consumed = ${selectedFoodItem.totalFiberInFood / 1000}"
+        )
 
-        Button(onClick = { }, content = { Text("Submit") } )
+        Button(onClick = { }, content = { Text("Submit") })
     }
 }
 
@@ -54,6 +60,6 @@ fun AddEntryView(modifier: Modifier = Modifier) {
 @Composable
 private fun AddEntryPreview() {
     FibreTrackerTheme {
-        AddEntryView()
+        AddEntryView(selectedFoodItem = CommonFoods[0])
     }
 }
