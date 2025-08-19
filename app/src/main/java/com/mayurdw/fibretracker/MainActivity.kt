@@ -7,8 +7,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
-import com.mayurdw.fibretracker.ui.components.AddEntryView
 import com.mayurdw.fibretracker.ui.theme.FibreTrackerTheme
 
 class MainActivity : ComponentActivity() {
@@ -18,9 +18,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             FibreTrackerTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    AddEntryView(
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    Text("Hello World", modifier = Modifier.padding(innerPadding))
                 }
             }
         }
