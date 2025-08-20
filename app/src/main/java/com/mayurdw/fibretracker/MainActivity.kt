@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,9 +30,13 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
 
             NavHost(navController, startDestination = Home) {
-                composable<Home> { HomeScreen() }
+                composable<Home> {
+                    HomeScreen {
+                        navController.navigate(route = AddFoodItem)
+                    }
+                }
                 composable<AddFoodItem> {
-                    AddFoodItemList(foodItems = emptyList()) {
+                    AddFoodItemList(foodItems = CommonFoods) {
                         navController.navigate(
                             route = AddAmountItem
                         )
@@ -44,10 +49,12 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(onAddButtonClicked: () -> Unit) {
     FibreTrackerTheme {
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-            Text("Hello World", modifier = Modifier.padding(innerPadding))
+            OutlinedButton(onClick = onAddButtonClicked) {
+                Text("Hello World", modifier = Modifier.padding(innerPadding))
+            }
         }
     }
 }
