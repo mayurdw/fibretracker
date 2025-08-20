@@ -30,7 +30,13 @@ class MainActivity : ComponentActivity() {
 
             NavHost(navController, startDestination = Home) {
                 composable<Home> { HomeScreen() }
-                composable<AddFoodItem> { AddFoodItemList(foodItems = emptyList()) { } }
+                composable<AddFoodItem> {
+                    AddFoodItemList(foodItems = emptyList()) {
+                        navController.navigate(
+                            route = AddAmountItem
+                        )
+                    }
+                }
                 composable<AddAmountItem> { AddEntryView(selectedFoodItem = CommonFoods[0]) }
             }
         }
