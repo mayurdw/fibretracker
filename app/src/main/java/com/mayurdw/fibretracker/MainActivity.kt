@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.mayurdw.fibretracker.data.CommonFoods
 import com.mayurdw.fibretracker.ui.components.AddEntryView
 import com.mayurdw.fibretracker.ui.components.AddFoodItemList
@@ -36,13 +37,18 @@ class MainActivity : ComponentActivity() {
                     }
                 }
                 composable<AddFoodItem> {
-                    AddFoodItemList(foodItems = CommonFoods) {
+                    AddFoodItemList(foodItems = CommonFoods) { foodItem ->
                         navController.navigate(
-                            route = AddAmountItem
+                            route = AddAmountItem(foodItem.foodName)
                         )
                     }
                 }
-                composable<AddAmountItem> { AddEntryView(selectedFoodItem = CommonFoods[0]) }
+                composable<AddAmountItem> { backStackEntry ->
+                    val foodName: AddAmountItem = backStackEntry.toRoute()
+                    AddEntryView(selectedFoodItem = CommonFoods.find {
+                        foodName.foodItem == it.foodName
+                    } ?: CommonFoods[0])
+                }
             }
         }
     }

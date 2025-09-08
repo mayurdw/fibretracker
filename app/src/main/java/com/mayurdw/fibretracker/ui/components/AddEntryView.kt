@@ -9,6 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -22,7 +23,8 @@ import com.mayurdw.fibretracker.ui.theme.FibreTrackerTheme
 
 @Composable
 fun AddEntryView(modifier: Modifier = Modifier, selectedFoodItem: FoodItem) {
-    val foodQuantity = remember { mutableStateOf(selectedFoodItem.foodAmountInGrams.toString()) }
+    val foodQuantity: MutableState<String> =
+        remember { mutableStateOf(selectedFoodItem.foodAmountInGrams.toString()) }
 
     Column(
         modifier = modifier.fillMaxSize(),
@@ -37,9 +39,11 @@ fun AddEntryView(modifier: Modifier = Modifier, selectedFoodItem: FoodItem) {
         )
         TextField(
             value = foodQuantity.value,
-            onValueChange = { newValue: String -> foodQuantity.value = newValue },
+            onValueChange = { newValue: String ->
+                foodQuantity.value = newValue
+            },
             label = { Text("Quantity in Grams") },
-            placeholder = { Text("Chia") },
+            placeholder = { Text("${selectedFoodItem.foodAmountInGrams}") },
         )
 
         Text(
@@ -49,7 +53,7 @@ fun AddEntryView(modifier: Modifier = Modifier, selectedFoodItem: FoodItem) {
 
         Text(
             modifier = modifier,
-            text = "Fiber Consumed = ${selectedFoodItem.totalFiberInFood / 1000}"
+            text = "Fiber Consumed = ${selectedFoodItem.fiberPerMilliGrams * foodQuantity.value.toInt() / 1000}"
         )
 
         Button(onClick = { }, content = { Text("Submit") })

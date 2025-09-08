@@ -9,4 +9,4 @@ object Home
 object AddFoodItem
 
 @Serializable
-object AddAmountItem
+data class AddAmountItem(val foodItem: String)
