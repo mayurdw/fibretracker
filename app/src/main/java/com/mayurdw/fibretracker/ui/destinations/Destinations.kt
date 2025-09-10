@@ -2,11 +2,13 @@ package com.mayurdw.fibretracker.ui.destinations
 
 import kotlinx.serialization.Serializable
 
-@Serializable
-object Home
+interface Destinations {}
 
 @Serializable
-object AddFoodItem
+object Home : Destinations
 
 @Serializable
-data class AddAmountItem(val foodItem: String)
+object AddFoodItem : Destinations
+
+@Serializable
+data class AddAmountItem(val foodItem: String) : Destinations

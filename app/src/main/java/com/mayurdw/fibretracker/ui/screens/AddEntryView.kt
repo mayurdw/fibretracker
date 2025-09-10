@@ -1,4 +1,4 @@
-package com.mayurdw.fibretracker.ui.components
+package com.mayurdw.fibretracker.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
