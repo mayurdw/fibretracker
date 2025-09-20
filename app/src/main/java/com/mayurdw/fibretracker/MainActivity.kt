@@ -14,9 +14,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -39,7 +40,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
-            val destination: MutableState<Destinations> = remember { mutableStateOf(Home) }
+            var destination: Destinations by remember { mutableStateOf(Home) }
 
             FibreTrackerTheme {
                 Scaffold(
@@ -47,7 +48,7 @@ class MainActivity : ComponentActivity() {
                         CenterAlignedTopAppBar(
                             colors = TopAppBarDefaults.topAppBarColors(),
                             title = {
-                                Text("Fibre Tracker")
+                                Text(destination.title)
                             }
                         )
                     },
@@ -61,11 +62,13 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(innerPadding)
                     ) {
                         composable<Home> {
+                            destination = Home
                             HomeScreen {
                                 navController.navigate(route = AddFoodItem)
                             }
                         }
                         composable<AddFoodItem> {
+                            destination = AddFoodItem
                             AddFoodItemList(foodItems = CommonFoods) { foodItem ->
                                 navController.navigate(
                                     route = AddAmountItem(foodItem.foodName)
@@ -74,6 +77,7 @@ class MainActivity : ComponentActivity() {
                         }
                         composable<AddAmountItem> { backStackEntry ->
                             val foodName: AddAmountItem = backStackEntry.toRoute()
+                            destination = foodName
                             AddEntryView(selectedFoodItem = CommonFoods.find {
                                 foodName.foodItem == it.foodName
                             } ?: CommonFoods[0])
