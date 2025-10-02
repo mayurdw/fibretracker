@@ -14,19 +14,15 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.mayurdw.fibretracker.data.CommonFoods
 import com.mayurdw.fibretracker.ui.destinations.AddAmountItem
 import com.mayurdw.fibretracker.ui.destinations.AddFoodItem
-import com.mayurdw.fibretracker.ui.destinations.Destinations
 import com.mayurdw.fibretracker.ui.destinations.Home
 import com.mayurdw.fibretracker.ui.screens.AddEntryView
 import com.mayurdw.fibretracker.ui.screens.AddFoodItemList
@@ -40,7 +36,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
-            var destination: Destinations by remember { mutableStateOf(Home) }
+            val currentDestinationRoute =
+                navController.currentBackStackEntryAsState().value?.destination?.route
 
             FibreTrackerTheme {
                 Scaffold(
@@ -48,7 +45,7 @@ class MainActivity : ComponentActivity() {
                         CenterAlignedTopAppBar(
                             colors = TopAppBarDefaults.topAppBarColors(),
                             title = {
-                                Text(destination.title)
+                                Text(currentDestinationRoute ?: "")
                             }
                         )
                     },
@@ -58,17 +55,15 @@ class MainActivity : ComponentActivity() {
                 ) { innerPadding ->
                     NavHost(
                         navController,
-                        startDestination = destination,
+                        startDestination = Home,
                         modifier = Modifier.padding(innerPadding)
                     ) {
                         composable<Home> {
-                            destination = Home
                             HomeScreen {
                                 navController.navigate(route = AddFoodItem)
                             }
                         }
                         composable<AddFoodItem> {
-                            destination = AddFoodItem
                             AddFoodItemList(foodItems = CommonFoods) { foodItem ->
                                 navController.navigate(
                                     route = AddAmountItem(foodItem.foodName)
@@ -77,7 +72,6 @@ class MainActivity : ComponentActivity() {
                         }
                         composable<AddAmountItem> { backStackEntry ->
                             val foodName: AddAmountItem = backStackEntry.toRoute()
-                            destination = foodName
                             AddEntryView(selectedFoodItem = CommonFoods.find {
                                 foodName.foodItem == it.foodName
                             } ?: CommonFoods[0])
