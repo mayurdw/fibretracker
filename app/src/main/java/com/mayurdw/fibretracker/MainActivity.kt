@@ -28,7 +28,9 @@ import com.mayurdw.fibretracker.ui.screens.AddEntryView
 import com.mayurdw.fibretracker.ui.screens.AddFoodItemList
 import com.mayurdw.fibretracker.ui.screens.HomeScreen
 import com.mayurdw.fibretracker.ui.theme.FibreTrackerTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
