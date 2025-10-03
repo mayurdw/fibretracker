@@ -19,11 +19,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
 import com.mayurdw.fibretracker.data.CommonFoods
 import com.mayurdw.fibretracker.ui.destinations.AddAmountItem
 import com.mayurdw.fibretracker.ui.destinations.AddFoodItem
 import com.mayurdw.fibretracker.ui.destinations.Home
+import com.mayurdw.fibretracker.ui.destinations.getTitle
 import com.mayurdw.fibretracker.ui.screens.AddEntryView
 import com.mayurdw.fibretracker.ui.screens.AddFoodItemList
 import com.mayurdw.fibretracker.ui.screens.HomeScreen
@@ -45,7 +45,13 @@ class MainActivity : ComponentActivity() {
                         CenterAlignedTopAppBar(
                             colors = TopAppBarDefaults.topAppBarColors(),
                             title = {
-                                Text(currentDestinationRoute ?: "")
+                                Text(
+                                    getString(
+                                        getTitle(
+                                            currentDestinationRoute
+                                        )
+                                    )
+                                )
                             }
                         )
                     },
@@ -66,15 +72,12 @@ class MainActivity : ComponentActivity() {
                         composable<AddFoodItem> {
                             AddFoodItemList(foodItems = CommonFoods) { foodItem ->
                                 navController.navigate(
-                                    route = AddAmountItem(foodItem.foodName)
+                                    route = AddAmountItem
                                 )
                             }
                         }
-                        composable<AddAmountItem> { backStackEntry ->
-                            val foodName: AddAmountItem = backStackEntry.toRoute()
-                            AddEntryView(selectedFoodItem = CommonFoods.find {
-                                foodName.foodItem == it.foodName
-                            } ?: CommonFoods[0])
+                        composable<AddAmountItem> {
+                            AddEntryView()
                         }
                     }
                 }

@@ -22,7 +22,7 @@ import com.mayurdw.fibretracker.model.FoodItem
 import com.mayurdw.fibretracker.ui.theme.FibreTrackerTheme
 
 @Composable
-fun AddEntryView(modifier: Modifier = Modifier, selectedFoodItem: FoodItem) {
+fun AddEntryView(modifier: Modifier = Modifier, selectedFoodItem: FoodItem = CommonFoods[0]) {
     val foodQuantity: MutableState<String> =
         remember { mutableStateOf(selectedFoodItem.foodAmountInGrams.toString()) }
 
