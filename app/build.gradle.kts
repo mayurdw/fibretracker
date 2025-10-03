@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serializer)
+    alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
 }
 
@@ -56,6 +57,8 @@ dependencies {
     implementation(libs.androidx.room)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
+    ksp(libs.hilt.compiler)
+    implementation(libs.hilt)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
