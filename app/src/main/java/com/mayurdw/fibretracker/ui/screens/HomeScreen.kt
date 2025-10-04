@@ -2,11 +2,14 @@ package com.mayurdw.fibretracker.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
@@ -19,7 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,7 +46,11 @@ fun HomeScreen(
     when (homeState) {
         is HomeState.Success -> {
             val homeData = homeState as HomeState.Success
-            HomeScreenLayout(modifier = modifier, homeData.data)
+            HomeScreenLayout(
+                modifier = modifier,
+                homeData = homeData.data,
+                onNextClicked = { viewModel.onDateChanged(false) },
+                onPreviousClicked = { viewModel.onDateChanged(true) })
         }
 
         else -> {
@@ -55,25 +61,67 @@ fun HomeScreen(
 
 
 @Composable
-fun HomeScreenLayout(modifier: Modifier, homeData: HomeData) {
+fun HomeScreenLayout(
+    modifier: Modifier,
+    homeData: HomeData,
+    onNextClicked: () -> Unit,
+    onPreviousClicked: () -> Unit
+) {
     Column(modifier = modifier.fillMaxSize(), verticalArrangement = Arrangement.Top) {
         DatePicker(
             modifier,
             homeData.hasNext,
             homeData.hasPrevious,
-            homeData.dateData.formattedDate
+            homeData.dateData.formattedDate,
+            onNextClicked,
+            onPreviousClicked
         )
 
         Spacer(
-            modifier.fillMaxWidth()
+            modifier
+                .fillMaxWidth()
+                .height(24.dp)
         )
 
+        FibreValue(modifier, homeData.dateData.fibreOfTheDay)
+
+        Spacer(
+            modifier
+                .fillMaxWidth()
+                .height(36.dp)
+        )
+
+        FoodItems(
+            modifier,
+            homeData.dateData.foodItems
+        )
+
+    }
+}
+
+@Composable
+private fun FibreValue(
+    modifier: Modifier,
+    value: String,
+    units: String = "gm"
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.Bottom,
+        horizontalArrangement = Arrangement.Center
+    ) {
         Text(
-            modifier = modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center,
+            modifier = modifier,
             fontSize = 48.sp,
             fontWeight = FontWeight.Bold,
-            text = homeData.dateData.fibreOfTheDay
+            text = value
+        )
+
+        Spacer(modifier.size(8.dp))
+
+        Text(
+            modifier = modifier,
+            text = units
         )
     }
 }
@@ -83,7 +131,9 @@ private fun DatePicker(
     modifier: Modifier,
     hasNext: Boolean,
     hasPrevious: Boolean,
-    formattedDate: String
+    formattedDate: String,
+    onNextClicked: () -> Unit,
+    onPreviousClicked: () -> Unit
 ) {
     Row(
         modifier = modifier
@@ -94,7 +144,7 @@ private fun DatePicker(
     ) {
         IconButton(
             modifier = modifier,
-            onClick = {}, enabled = hasPrevious
+            onClick = onPreviousClicked, enabled = hasPrevious
         ) {
             Icon(painterResource(R.drawable.previous), contentDescription = null)
         }
@@ -103,7 +153,7 @@ private fun DatePicker(
             modifier = modifier, text = formattedDate
         )
 
-        IconButton(onClick = {}, enabled = hasNext) {
+        IconButton(onClick = onNextClicked, enabled = hasNext) {
             Icon(
                 modifier = modifier,
                 painter = painterResource(R.drawable.next),
@@ -116,7 +166,10 @@ private fun DatePicker(
 
 @Composable
 fun FoodItems(modifier: Modifier = Modifier, foodItems: List<FoodListItem>) {
-    LazyColumn(modifier = modifier.fillMaxWidth()) {
+    LazyColumn(
+        modifier = modifier.fillMaxWidth(),
+        contentPadding = PaddingValues(top = 8.dp, start = 8.dp, end = 8.dp)
+    ) {
         items(items = foodItems, key = { item: FoodListItem -> item.id }) {
             Row(
                 modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
@@ -137,7 +190,8 @@ fun FoodItems(modifier: Modifier = Modifier, foodItems: List<FoodListItem>) {
 private fun PreviewHomeScreenLayout() {
     FibreTrackerTheme {
         HomeScreenLayout(
-            Modifier, HomeData(
+            modifier = Modifier,
+            homeData = HomeData(
                 hasPrevious = false,
                 hasNext = true,
                 dateData = DateData(
@@ -148,7 +202,9 @@ private fun PreviewHomeScreenLayout() {
                         FoodListItem(id = 2, foodQuantity = "15.23", foodName = "Chia")
                     )
                 )
-            )
+            ),
+            onNextClicked = {},
+            onPreviousClicked = {}
         )
     }
 }
