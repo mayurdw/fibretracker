@@ -3,6 +3,7 @@ package com.mayurdw.fibretracker.ui.screens
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -17,8 +18,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mayurdw.fibretracker.R
 import com.mayurdw.fibretracker.ui.theme.FibreTrackerTheme
@@ -52,21 +56,60 @@ fun HomeScreen(
 
 @Composable
 fun HomeScreenLayout(modifier: Modifier, homeData: HomeData) {
-    Column(modifier = modifier.fillMaxSize()) {
-        Row(modifier = modifier.fillMaxWidth().padding(top = 16.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.Bottom) {
-            IconButton(onClick = {}, enabled = homeData.hasPrevious) {
-                Icon(painterResource(R.drawable.previous), contentDescription = null)
-            }
+    Column(modifier = modifier.fillMaxSize(), verticalArrangement = Arrangement.Top) {
+        DatePicker(
+            modifier,
+            homeData.hasNext,
+            homeData.hasPrevious,
+            homeData.dateData.formattedDate
+        )
 
-            Text(modifier = modifier, text = homeData.dateData.formattedDate)
+        Spacer(
+            modifier.fillMaxWidth()
+        )
 
-            IconButton(onClick = {}, enabled = homeData.hasNext) {
-                Icon(painterResource(R.drawable.next), contentDescription = null)
-            }
+        Text(
+            modifier = modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center,
+            fontSize = 48.sp,
+            fontWeight = FontWeight.Bold,
+            text = homeData.dateData.fibreOfTheDay
+        )
+    }
+}
+
+@Composable
+private fun DatePicker(
+    modifier: Modifier,
+    hasNext: Boolean,
+    hasPrevious: Boolean,
+    formattedDate: String
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        IconButton(
+            modifier = modifier,
+            onClick = {}, enabled = hasPrevious
+        ) {
+            Icon(painterResource(R.drawable.previous), contentDescription = null)
         }
 
+        Text(
+            modifier = modifier, text = formattedDate
+        )
 
-
+        IconButton(onClick = {}, enabled = hasNext) {
+            Icon(
+                modifier = modifier,
+                painter = painterResource(R.drawable.next),
+                contentDescription = null
+            )
+        }
     }
 }
 
