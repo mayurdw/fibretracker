@@ -16,11 +16,20 @@ object AddFoodItem : Destinations
 object AddAmountItem : Destinations
 
 @StringRes
-fun getTitle(routeName: String?): Int {
-    return when (routeName) {
-        Home.javaClass.canonicalName -> R.string.home
-        AddFoodItem.javaClass.canonicalName -> R.string.add_food
-        AddAmountItem.javaClass.canonicalName -> R.string.add_amount
+fun getTitle(destinations: Destinations): Int {
+    return when (destinations) {
+        Home -> R.string.home
+        AddFoodItem -> R.string.add_food
+        AddAmountItem -> R.string.add_amount
         else -> R.string.unknown
+    }
+}
+
+fun getDestination(routeName: String?): Destinations {
+    return when (routeName) {
+        Home.javaClass.canonicalName -> Home
+        AddFoodItem.javaClass.canonicalName -> AddFoodItem
+        AddAmountItem.javaClass.canonicalName -> AddAmountItem
+        else -> Home
     }
 }

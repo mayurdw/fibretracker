@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -34,11 +35,11 @@ import com.mayurdw.fibretracker.viewmodels.HomeData
 import com.mayurdw.fibretracker.viewmodels.HomeScreenViewModel
 import com.mayurdw.fibretracker.viewmodels.HomeState
 
+
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    viewModel: HomeScreenViewModel = viewModel(),
-    onAddButtonClicked: () -> Unit = {}
+    viewModel: HomeScreenViewModel = viewModel()
 ) {
     val homeState by viewModel.homeStateFlow.collectAsState()
     viewModel.getLatestData()
@@ -146,7 +147,12 @@ private fun DatePicker(
             modifier = modifier,
             onClick = onPreviousClicked, enabled = hasPrevious
         ) {
-            Icon(painterResource(R.drawable.previous), contentDescription = null)
+            Icon(
+                modifier = modifier,
+                painter = painterResource(R.drawable.previous),
+                contentDescription = null,
+                tint = if (hasPrevious) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primaryFixedDim
+            )
         }
 
         Text(
@@ -157,7 +163,8 @@ private fun DatePicker(
             Icon(
                 modifier = modifier,
                 painter = painterResource(R.drawable.next),
-                contentDescription = null
+                contentDescription = null,
+                tint = if (hasNext) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primaryFixedDim
             )
         }
     }
