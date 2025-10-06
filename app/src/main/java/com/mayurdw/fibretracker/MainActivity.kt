@@ -35,6 +35,7 @@ import com.mayurdw.fibretracker.ui.destinations.Home
 import com.mayurdw.fibretracker.ui.destinations.getDestination
 import com.mayurdw.fibretracker.ui.destinations.getTitle
 import com.mayurdw.fibretracker.ui.screens.AddEntryView
+import com.mayurdw.fibretracker.ui.screens.AddFoodItemLayout
 import com.mayurdw.fibretracker.ui.screens.AddFoodItemList
 import com.mayurdw.fibretracker.ui.screens.HomeScreen
 import com.mayurdw.fibretracker.ui.theme.FibreTrackerTheme
@@ -115,10 +116,8 @@ class MainActivity : ComponentActivity() {
                             HomeScreen()
                         }
                         composable<AddFoodItem> {
-                            AddFoodItemList(foodItems = CommonFoods) { foodItem ->
-                                navController.navigate(
-                                    route = AddAmountItem
-                                )
+                            AddFoodItemLayout {
+                                navController.navigate(AddAmountItem)
                             }
                         }
                         composable<AddAmountItem> {
