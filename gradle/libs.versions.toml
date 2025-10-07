@@ -12,7 +12,7 @@ composeBom = "2025.09.01"
 navVersion = "2.9.5"
 viewModelVersion = "2.9.4"
 room = "2.8.1"
-hilt = "2.57.1"
+hilt = "2.57.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
