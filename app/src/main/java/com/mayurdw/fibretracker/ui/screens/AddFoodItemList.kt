@@ -16,6 +16,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mayurdw.fibretracker.data.CommonFoods
 import com.mayurdw.fibretracker.model.FoodItem
@@ -29,7 +31,7 @@ fun AddFoodItemLayout(
     viewModel: AddFoodEntryViewModel = viewModel(),
     onItemSelect: () -> Unit
 ) {
-    val entries by viewModel.entryState.collectAsState()
+    val entries by viewModel.entryState.collectAsStateWithLifecycle(minActiveState = Lifecycle.State.RESUMED)
     viewModel.loadData()
 
     when (entries) {
