@@ -17,8 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.mayurdw.fibretracker.data.CommonFoods
-import com.mayurdw.fibretracker.model.FoodItem
+import com.mayurdw.fibretracker.model.domain.CommonFoods
+import com.mayurdw.fibretracker.model.domain.FoodItem
 import com.mayurdw.fibretracker.ui.theme.FibreTrackerTheme
 
 @Composable

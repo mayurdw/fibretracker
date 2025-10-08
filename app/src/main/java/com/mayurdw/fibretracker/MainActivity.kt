@@ -27,7 +27,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.mayurdw.fibretracker.data.CommonFoods
 import com.mayurdw.fibretracker.ui.destinations.AddAmountItem
 import com.mayurdw.fibretracker.ui.destinations.AddFoodItem
 import com.mayurdw.fibretracker.ui.destinations.Destinations
@@ -36,7 +35,6 @@ import com.mayurdw.fibretracker.ui.destinations.getDestination
 import com.mayurdw.fibretracker.ui.destinations.getTitle
 import com.mayurdw.fibretracker.ui.screens.AddEntryView
 import com.mayurdw.fibretracker.ui.screens.AddFoodItemLayout
-import com.mayurdw.fibretracker.ui.screens.AddFoodItemList
 import com.mayurdw.fibretracker.ui.screens.HomeScreen
 import com.mayurdw.fibretracker.ui.theme.FibreTrackerTheme
 import dagger.hilt.android.AndroidEntryPoint

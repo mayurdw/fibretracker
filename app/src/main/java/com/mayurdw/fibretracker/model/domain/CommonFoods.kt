@@ -1,6 +1,4 @@
-package com.mayurdw.fibretracker.data
-
-import com.mayurdw.fibretracker.model.FoodItem
+package com.mayurdw.fibretracker.model.domain
 
 val CommonFoods = listOf(
     FoodItem("Oats", 50, 120),

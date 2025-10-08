@@ -2,8 +2,8 @@ package com.mayurdw.fibretracker.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mayurdw.fibretracker.data.CommonFoods
-import com.mayurdw.fibretracker.model.FoodItem
+import com.mayurdw.fibretracker.model.domain.CommonFoods
+import com.mayurdw.fibretracker.model.domain.FoodItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
