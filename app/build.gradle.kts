@@ -66,6 +66,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     ksp(libs.hilt.compiler)
     implementation(libs.hilt)
+    implementation(libs.hilt.navigation)
 
     testImplementation(libs.junit)
     testImplementation(libs.androidx.room.test)

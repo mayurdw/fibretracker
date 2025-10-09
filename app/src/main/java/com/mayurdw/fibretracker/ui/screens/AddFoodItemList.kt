@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -27,7 +28,7 @@ import com.mayurdw.fibretracker.viewmodels.AddFoodEntryViewModel
 
 @Composable
 fun AddFoodItemLayout(
-    viewModel: AddFoodEntryViewModel = viewModel(),
+    viewModel: AddFoodEntryViewModel = hiltViewModel(),
     onItemSelect: () -> Unit
 ) {
     val entries by viewModel.entryState.collectAsStateWithLifecycle(minActiveState = Lifecycle.State.RESUMED)
