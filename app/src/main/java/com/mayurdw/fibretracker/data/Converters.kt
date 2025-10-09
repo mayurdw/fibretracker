@@ -7,8 +7,7 @@ fun convertFoodItemToFoodEntity(foodItem: FoodItem): Food {
     return Food(
         displayName = foodItem.foodName,
         fibreQuantityPerServingInMG = foodItem.fiberPerMilliGrams.toString(),
-        singleServingSizeInGm = foodItem.foodAmountInGrams.toString(),
-        id = -1
+        singleServingSizeInGm = foodItem.foodAmountInGrams.toString()
     )
 }
 

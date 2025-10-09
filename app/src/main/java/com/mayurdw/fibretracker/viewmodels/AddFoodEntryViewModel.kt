@@ -5,9 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.mayurdw.fibretracker.data.IFoodUseCase
 import com.mayurdw.fibretracker.model.domain.FoodItem
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,11 +19,9 @@ class AddFoodEntryViewModel @Inject constructor(
         field = MutableStateFlow<AddFoodEntryState>(AddFoodEntryState.Loading)
 
     fun loadData() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             entryState.emit(AddFoodEntryState.Loading)
-            foodUseCase.getFoods().collectLatest {
-                entryState.emit(AddFoodEntryState.Success(it))
-            }
+            entryState.emit(AddFoodEntryState.Success(foodUseCase.getFoods()))
         }
     }
 }
