@@ -17,12 +17,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.mayurdw.fibretracker.model.domain.CommonFoods
 import com.mayurdw.fibretracker.model.domain.FoodItem
-import com.mayurdw.fibretracker.ui.theme.FibreTrackerTheme
+import com.mayurdw.fibretracker.viewmodels.FoodQuantityViewModel
 
+@Preview(showBackground = true, widthDp = 320, heightDp = 480)
 @Composable
-fun AddEntryView(modifier: Modifier = Modifier, selectedFoodItem: FoodItem = CommonFoods[0]) {
+fun FoodQuantityScreen(
+    modifier: Modifier = Modifier,
+    selectedFood: String = "",
+    viewModel: FoodQuantityViewModel = hiltViewModel()
+) {
+    val selectedFoodItem = CommonFoods[0]
     val foodQuantity: MutableState<String> =
         remember { mutableStateOf(selectedFoodItem.foodAmountInGrams.toString()) }
 
@@ -57,13 +64,5 @@ fun AddEntryView(modifier: Modifier = Modifier, selectedFoodItem: FoodItem = Com
         )
 
         Button(onClick = { }, content = { Text("Submit") })
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun AddEntryPreview() {
-    FibreTrackerTheme {
-        AddEntryView(selectedFoodItem = CommonFoods[0])
     }
 }

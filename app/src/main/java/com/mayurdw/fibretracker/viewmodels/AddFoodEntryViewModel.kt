@@ -18,8 +18,6 @@ class AddFoodEntryViewModel @Inject constructor(
     val entryState: StateFlow<FoodEntryState>
         field = MutableStateFlow<FoodEntryState>(FoodEntryState.Loading)
 
-    lateinit var foodItemSelected: FoodItem
-
     fun loadData() {
         viewModelScope.launch(Dispatchers.IO) {
             entryState.emit(FoodEntryState.Loading)

@@ -13,15 +13,16 @@ object Home : Destinations
 object AddFoodItem : Destinations
 
 @Serializable
-object AddAmountItem : Destinations
+data class AddAmountItem(
+    val selectedFoodItem: String
+) : Destinations
 
 @StringRes
 fun getTitle(destinations: Destinations): Int {
     return when (destinations) {
         Home -> R.string.home
         AddFoodItem -> R.string.add_food
-        AddAmountItem -> R.string.add_amount
-        else -> R.string.unknown
+        else -> R.string.add_amount
     }
 }
 
@@ -29,7 +30,6 @@ fun getDestination(routeName: String?): Destinations {
     return when (routeName) {
         Home.javaClass.canonicalName -> Home
         AddFoodItem.javaClass.canonicalName -> AddFoodItem
-        AddAmountItem.javaClass.canonicalName -> AddAmountItem
         else -> Home
     }
 }

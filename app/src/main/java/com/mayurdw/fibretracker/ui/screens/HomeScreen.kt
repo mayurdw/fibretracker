@@ -54,6 +54,9 @@ fun HomeScreen(
                 onNextClicked = { viewModel.onDateChanged(false) },
                 onPreviousClicked = { viewModel.onDateChanged(true) })
         }
+        is HomeState.Loading -> {
+            LoadingScreen(modifier)
+        }
 
         else -> {
 

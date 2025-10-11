@@ -26,9 +26,9 @@ import com.mayurdw.fibretracker.viewmodels.FoodEntryState
 
 
 @Composable
-fun AddFoodItemLayout(
+fun AddFoodItemScreen(
     viewModel: AddFoodEntryViewModel = hiltViewModel(),
-    onItemSelect: () -> Unit
+    onItemSelect: (foodItem: FoodItem) -> Unit
 ) {
     val entries by viewModel.entryState.collectAsStateWithLifecycle(minActiveState = Lifecycle.State.RESUMED)
     viewModel.loadData()
@@ -40,8 +40,12 @@ fun AddFoodItemLayout(
             AddFoodItemList(
                 foodItems = data.foodItems
             ) {
-                onItemSelect()
+                onItemSelect(it)
             }
+        }
+
+        is FoodEntryState.Loading -> {
+            LoadingScreen()
         }
 
         else -> {}

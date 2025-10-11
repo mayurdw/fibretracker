@@ -27,14 +27,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.mayurdw.fibretracker.ui.destinations.AddAmountItem
 import com.mayurdw.fibretracker.ui.destinations.AddFoodItem
 import com.mayurdw.fibretracker.ui.destinations.Destinations
 import com.mayurdw.fibretracker.ui.destinations.Home
 import com.mayurdw.fibretracker.ui.destinations.getDestination
 import com.mayurdw.fibretracker.ui.destinations.getTitle
-import com.mayurdw.fibretracker.ui.screens.AddEntryView
-import com.mayurdw.fibretracker.ui.screens.AddFoodItemLayout
+import com.mayurdw.fibretracker.ui.screens.AddFoodItemScreen
+import com.mayurdw.fibretracker.ui.screens.FoodQuantityScreen
 import com.mayurdw.fibretracker.ui.screens.HomeScreen
 import com.mayurdw.fibretracker.ui.theme.FibreTrackerTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -114,12 +115,13 @@ class MainActivity : ComponentActivity() {
                             HomeScreen()
                         }
                         composable<AddFoodItem> {
-                            AddFoodItemLayout {
-                                navController.navigate(AddAmountItem)
+                            AddFoodItemScreen {
+                                navController.navigate(AddAmountItem(it.foodName))
                             }
                         }
-                        composable<AddAmountItem> {
-                            AddEntryView()
+                        composable<AddAmountItem> { backStackEntry ->
+                            val foodItem: String = backStackEntry.toRoute()
+                            FoodQuantityScreen(selectedFood = foodItem)
                         }
                     }
                 }

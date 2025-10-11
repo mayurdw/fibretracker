@@ -53,5 +53,8 @@ abstract class UseCaseModule {
     abstract fun provideFoodUseCase(foodUseCase: FoodUseCase): IFoodUseCase
 
     @Binds
-    abstract fun provideEntryUseCase(entryUseCase: EntryUseCase): IEntryUseCase
+    abstract fun provideAddEntryUseCase(addEntryUseCase: AddEntryUseCase): IAddEntryUseCase
+
+    @Binds
+    abstract fun provideGetEntryUseCase(getEntryUseCase: GetEntryUseCase): IGetEntryUseCase
 }
