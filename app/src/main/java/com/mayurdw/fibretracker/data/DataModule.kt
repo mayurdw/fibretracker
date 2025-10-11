@@ -28,6 +28,22 @@ object DataModule {
     fun getFoodDao(database: FoodDatabase): FoodDao {
         return database.getFoodDao()
     }
+
+    @Provides
+    @Singleton
+    fun provideEntityDatabase(@ApplicationContext context: Context): EntryDatabase {
+        return Room
+            .inMemoryDatabaseBuilder(
+                context,
+                EntryDatabase::class.java
+            )
+            .fallbackToDestructiveMigration(false).build()
+    }
+
+    @Provides
+    fun getEntryDao(database: EntryDatabase): EntryDao {
+        return database.getEntryDao()
+    }
 }
 
 @Module
@@ -35,4 +51,7 @@ object DataModule {
 abstract class UseCaseModule {
     @Binds
     abstract fun provideFoodUseCase(foodUseCase: FoodUseCase): IFoodUseCase
+
+    @Binds
+    abstract fun provideEntryUseCase(entryUseCase: EntryUseCase): IEntryUseCase
 }

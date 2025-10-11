@@ -15,19 +15,21 @@ import javax.inject.Inject
 class AddFoodEntryViewModel @Inject constructor(
     private val foodUseCase: IFoodUseCase
 ) : ViewModel() {
-    val entryState: StateFlow<AddFoodEntryState>
-        field = MutableStateFlow<AddFoodEntryState>(AddFoodEntryState.Loading)
+    val entryState: StateFlow<FoodEntryState>
+        field = MutableStateFlow<FoodEntryState>(FoodEntryState.Loading)
+
+    lateinit var foodItemSelected: FoodItem
 
     fun loadData() {
         viewModelScope.launch(Dispatchers.IO) {
-            entryState.emit(AddFoodEntryState.Loading)
-            entryState.emit(AddFoodEntryState.Success(foodUseCase.getFoods()))
+            entryState.emit(FoodEntryState.Loading)
+            entryState.emit(FoodEntryState.Success(foodUseCase.getFoods()))
         }
     }
 }
 
-sealed interface AddFoodEntryState {
-    object Error : AddFoodEntryState
-    object Loading : AddFoodEntryState
-    data class Success(val foodItems: List<FoodItem>) : AddFoodEntryState
+sealed interface FoodEntryState {
+    object Error : FoodEntryState
+    object Loading : FoodEntryState
+    data class Success(val foodItems: List<FoodItem>) : FoodEntryState
 }

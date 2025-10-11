@@ -18,12 +18,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mayurdw.fibretracker.model.domain.CommonFoods
 import com.mayurdw.fibretracker.model.domain.FoodItem
 import com.mayurdw.fibretracker.ui.theme.FibreTrackerTheme
-import com.mayurdw.fibretracker.viewmodels.AddFoodEntryState
 import com.mayurdw.fibretracker.viewmodels.AddFoodEntryViewModel
+import com.mayurdw.fibretracker.viewmodels.FoodEntryState
 
 
 @Composable
@@ -35,8 +34,8 @@ fun AddFoodItemLayout(
     viewModel.loadData()
 
     when (entries) {
-        is AddFoodEntryState.Success -> {
-            val data = entries as AddFoodEntryState.Success
+        is FoodEntryState.Success -> {
+            val data = entries as FoodEntryState.Success
 
             AddFoodItemList(
                 foodItems = data.foodItems
