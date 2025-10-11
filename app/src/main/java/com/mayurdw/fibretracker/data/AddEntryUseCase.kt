@@ -3,6 +3,6 @@ package com.mayurdw.fibretracker.data
 import javax.inject.Inject
 
 class AddEntryUseCase @Inject constructor(
-    private val addEntryUseCase: IAddEntryUseCase
+    private val entryDao: EntryDao
 ) : IAddEntryUseCase {
 }

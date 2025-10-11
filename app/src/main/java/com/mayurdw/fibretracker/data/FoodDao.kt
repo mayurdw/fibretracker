@@ -12,4 +12,7 @@ interface FoodDao {
 
     @Upsert
     suspend fun insertFood(foodEntity: FoodEntity)
+
+    @Query("SELECT * FROM food WHERE id LIKE :id")
+    suspend fun getFoodById(id: Int): FoodEntity
 }

@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -18,7 +19,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.mayurdw.fibretracker.model.domain.CommonFoods
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mayurdw.fibretracker.viewmodels.FoodQuantityState
 import com.mayurdw.fibretracker.viewmodels.FoodQuantityViewModel
 
 @Preview(showBackground = true, widthDp = 320, heightDp = 480)
@@ -28,40 +31,50 @@ fun FoodQuantityScreen(
     selectedFood: Int = -1,
     viewModel: FoodQuantityViewModel = hiltViewModel()
 ) {
-    val selectedFoodItem = CommonFoods[0]
-    val foodQuantity: MutableState<String> =
-        remember { mutableStateOf(selectedFoodItem.singleServingSizeInGm.toString()) }
+    val state by viewModel.foodState.collectAsStateWithLifecycle(Lifecycle.State.RESUMED)
+    viewModel.loadFoodDetails(selectedFood)
+    when (state) {
+        is FoodQuantityState.Loading -> LoadingScreen()
+        is FoodQuantityState.Success -> {
+            val selectedFoodItem = (state as FoodQuantityState.Success).food
 
-    Column(
-        modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalAlignment = Alignment.Start
-    ) {
-        Text(
-            text = selectedFoodItem.displayName,
-            modifier = modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodyLarge
-        )
-        TextField(
-            value = foodQuantity.value,
-            onValueChange = { newValue: String ->
-                foodQuantity.value = newValue
-            },
-            label = { Text("Quantity in Grams") },
-            placeholder = { Text("${selectedFoodItem.singleServingSizeInGm}") },
-        )
+            val foodQuantity: MutableState<String> =
+                remember { mutableStateOf(selectedFoodItem.singleServingSizeInGm.toString()) }
 
-        Text(
-            modifier = modifier,
-            text = "Fibre Per MilliGram = ${selectedFoodItem.fibreQuantityPerServingInMG}"
-        )
+            Column(
+                modifier = modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalAlignment = Alignment.Start
+            ) {
+                Text(
+                    text = selectedFoodItem.displayName,
+                    modifier = modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+                TextField(
+                    value = foodQuantity.value,
+                    onValueChange = { newValue: String ->
+                        foodQuantity.value = newValue
+                    },
+                    label = { Text("Quantity in Grams") },
+                    placeholder = { Text("${selectedFoodItem.singleServingSizeInGm}") },
+                )
 
-        Text(
-            modifier = modifier,
-            text = "Fiber Consumed = ${selectedFoodItem.fibreQuantityPerServingInMG * foodQuantity.value.toInt() / 1000}"
-        )
+                Text(
+                    modifier = modifier,
+                    text = "Fibre Per MilliGram = ${selectedFoodItem.fibreQuantityPerServingInMG}"
+                )
 
-        Button(onClick = { }, content = { Text("Submit") })
+                Text(
+                    modifier = modifier,
+                    text = "Fiber Consumed = ${selectedFoodItem.fibreQuantityPerServingInMG * foodQuantity.value.toInt() / 1000}"
+                )
+
+                Button(onClick = { }, content = { Text("Submit") })
+            }
+        }
+
+
     }
 }
