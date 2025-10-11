@@ -25,9 +25,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mayurdw.fibretracker.R
 import com.mayurdw.fibretracker.ui.theme.FibreTrackerTheme
 import com.mayurdw.fibretracker.viewmodels.DateData
@@ -40,7 +40,7 @@ import com.mayurdw.fibretracker.viewmodels.HomeState
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    viewModel: HomeScreenViewModel = viewModel()
+    viewModel: HomeScreenViewModel = hiltViewModel<HomeScreenViewModel>()
 ) {
     val homeState by viewModel.homeStateFlow.collectAsStateWithLifecycle(minActiveState = Lifecycle.State.RESUMED)
     viewModel.getLatestData()
@@ -54,6 +54,7 @@ fun HomeScreen(
                 onNextClicked = { viewModel.onDateChanged(false) },
                 onPreviousClicked = { viewModel.onDateChanged(true) })
         }
+
         is HomeState.Loading -> {
             LoadingScreen(modifier)
         }

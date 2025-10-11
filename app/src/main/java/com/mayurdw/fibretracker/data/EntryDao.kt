@@ -10,6 +10,9 @@ interface EntryDao {
     @Query("SELECT * FROM entry WHERE dateTime LIKE :currentDate")
     fun getEntries(currentDate: Long): List<FoodEntryEntity>
 
+    @Query("SELECT * FROM entry")
+    fun getAll(): List<FoodEntryEntity>
+
     @Upsert
     fun insertEntry(entryEntity: FoodEntryEntity)
 }
