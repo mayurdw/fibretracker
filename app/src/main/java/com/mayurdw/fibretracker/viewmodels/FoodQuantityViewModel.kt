@@ -7,7 +7,9 @@ import com.mayurdw.fibretracker.data.IFoodUseCase
 import com.mayurdw.fibretracker.model.entity.FoodEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,10 +22,22 @@ class FoodQuantityViewModel @Inject constructor(
     val foodState: StateFlow<FoodQuantityState>
         field = MutableStateFlow<FoodQuantityState>(FoodQuantityState.Loading)
 
+    val entryState: StateFlow<Boolean>
+        field = MutableStateFlow<Boolean>(false)
+
     fun loadFoodDetails(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             foodState.emit(FoodQuantityState.Loading)
             foodState.emit(FoodQuantityState.Success(foodUseCase.getFoodById(id)))
+        }
+    }
+
+    fun insertNewEntry(foodEntity: FoodEntity) {
+        viewModelScope.launch(Dispatchers.IO) {
+            foodState.emit(FoodQuantityState.Loading)
+            entryState.emit(false)
+            entryUseCase.insertNewEntry(foodEntity)
+            entryState.emit(true)
         }
     }
 }
