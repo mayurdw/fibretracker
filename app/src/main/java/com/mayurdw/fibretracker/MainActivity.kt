@@ -120,8 +120,8 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                         composable<AddAmountItem> { backStackEntry ->
-                            val foodItem: String = backStackEntry.toRoute()
-                            FoodQuantityScreen(selectedFood = foodItem)
+                            val foodItem: AddAmountItem = backStackEntry.toRoute()
+                            FoodQuantityScreen(selectedFood = foodItem.selectedFoodItem)
                         }
                     }
                 }
