@@ -1,9 +1,9 @@
 package com.mayurdw.fibretracker.data
 
-import com.mayurdw.fibretracker.model.domain.FoodItem
+import com.mayurdw.fibretracker.model.entity.FoodEntity
 
 interface IFoodUseCase {
-    suspend fun getFoods(): List<FoodItem>
+    suspend fun getFoods(): List<FoodEntity>
 
-    suspend fun insertNewFood(newFoodItem: FoodItem)
+    suspend fun insertNewFood(newFoodItem: FoodEntity)
 }

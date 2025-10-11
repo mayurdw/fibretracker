@@ -116,12 +116,12 @@ class MainActivity : ComponentActivity() {
                         }
                         composable<AddFoodItem> {
                             AddFoodItemScreen {
-                                navController.navigate(AddAmountItem(it.foodName))
+                                navController.navigate(AddAmountItem(it.id))
                             }
                         }
                         composable<AddAmountItem> { backStackEntry ->
                             val foodItem: AddAmountItem = backStackEntry.toRoute()
-                            FoodQuantityScreen(selectedFood = foodItem.selectedFoodItem)
+                            FoodQuantityScreen(selectedFood = foodItem.selectedFoodId)
                         }
                     }
                 }

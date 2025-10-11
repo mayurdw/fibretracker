@@ -19,7 +19,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mayurdw.fibretracker.model.domain.CommonFoods
-import com.mayurdw.fibretracker.model.domain.FoodItem
+import com.mayurdw.fibretracker.model.entity.FoodEntity
 import com.mayurdw.fibretracker.ui.theme.FibreTrackerTheme
 import com.mayurdw.fibretracker.viewmodels.AddFoodEntryViewModel
 import com.mayurdw.fibretracker.viewmodels.FoodEntryState
@@ -28,7 +28,7 @@ import com.mayurdw.fibretracker.viewmodels.FoodEntryState
 @Composable
 fun AddFoodItemScreen(
     viewModel: AddFoodEntryViewModel = hiltViewModel(),
-    onItemSelect: (foodItem: FoodItem) -> Unit
+    onItemSelect: (food: FoodEntity) -> Unit
 ) {
     val entries by viewModel.entryState.collectAsStateWithLifecycle(minActiveState = Lifecycle.State.RESUMED)
     viewModel.loadData()
@@ -55,8 +55,8 @@ fun AddFoodItemScreen(
 @Composable
 fun AddFoodItemList(
     modifier: Modifier = Modifier,
-    foodItems: List<FoodItem>,
-    onItemSelect: (FoodItem) -> Unit
+    foodItems: List<FoodEntity>,
+    onItemSelect: (FoodEntity) -> Unit
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
@@ -64,8 +64,8 @@ fun AddFoodItemList(
     ) {
         itemsIndexed(
             items = foodItems,
-            key = { index: Int, foodItem: FoodItem -> foodItem.foodName }
-        ) { index: Int, foodItem: FoodItem ->
+            key = { index: Int, foodItem: FoodEntity -> foodItem.id }
+        ) { index: Int, foodItem: FoodEntity ->
 
             FoodItem(modifier, foodItem, onItemSelect)
             if (index < foodItems.lastIndex)
@@ -75,9 +75,9 @@ fun AddFoodItemList(
 }
 
 @Composable
-fun FoodItem(modifier: Modifier = Modifier, foodItem: FoodItem, onItemSelect: (FoodItem) -> Unit) {
+fun FoodItem(modifier: Modifier = Modifier, foodItem: FoodEntity, onItemSelect: (FoodEntity) -> Unit) {
     Text(
-        text = foodItem.foodName,
+        text = foodItem.displayName,
         style = MaterialTheme.typography.bodyMedium,
         modifier = modifier
             .fillMaxWidth()

@@ -14,7 +14,7 @@ object AddFoodItem : Destinations
 
 @Serializable
 data class AddAmountItem(
-    val selectedFoodItem: String
+    val selectedFoodId: Int
 ) : Destinations
 
 @StringRes
@@ -30,6 +30,6 @@ fun getDestination(routeName: String?): Destinations {
     return when (routeName) {
         Home.javaClass.canonicalName -> Home
         AddFoodItem.javaClass.canonicalName -> AddFoodItem
-        else -> AddAmountItem("")
+        else -> AddAmountItem(-1)
     }
 }

@@ -19,19 +19,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.mayurdw.fibretracker.model.domain.CommonFoods
-import com.mayurdw.fibretracker.model.domain.FoodItem
 import com.mayurdw.fibretracker.viewmodels.FoodQuantityViewModel
 
 @Preview(showBackground = true, widthDp = 320, heightDp = 480)
 @Composable
 fun FoodQuantityScreen(
     modifier: Modifier = Modifier,
-    selectedFood: String = "",
+    selectedFood: Int = -1,
     viewModel: FoodQuantityViewModel = hiltViewModel()
 ) {
     val selectedFoodItem = CommonFoods[0]
     val foodQuantity: MutableState<String> =
-        remember { mutableStateOf(selectedFoodItem.foodAmountInGrams.toString()) }
+        remember { mutableStateOf(selectedFoodItem.singleServingSizeInGm.toString()) }
 
     Column(
         modifier = modifier.fillMaxSize(),
@@ -39,7 +38,7 @@ fun FoodQuantityScreen(
         horizontalAlignment = Alignment.Start
     ) {
         Text(
-            text = selectedFoodItem.foodName,
+            text = selectedFoodItem.displayName,
             modifier = modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodyLarge
@@ -50,17 +49,17 @@ fun FoodQuantityScreen(
                 foodQuantity.value = newValue
             },
             label = { Text("Quantity in Grams") },
-            placeholder = { Text("${selectedFoodItem.foodAmountInGrams}") },
+            placeholder = { Text("${selectedFoodItem.singleServingSizeInGm}") },
         )
 
         Text(
             modifier = modifier,
-            text = "Fibre Per MilliGram = ${selectedFoodItem.fiberPerMilliGrams}"
+            text = "Fibre Per MilliGram = ${selectedFoodItem.fibreQuantityPerServingInMG}"
         )
 
         Text(
             modifier = modifier,
-            text = "Fiber Consumed = ${selectedFoodItem.fiberPerMilliGrams * foodQuantity.value.toInt() / 1000}"
+            text = "Fiber Consumed = ${selectedFoodItem.fibreQuantityPerServingInMG * foodQuantity.value.toInt() / 1000}"
         )
 
         Button(onClick = { }, content = { Text("Submit") })
