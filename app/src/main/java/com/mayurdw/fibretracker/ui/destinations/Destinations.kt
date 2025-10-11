@@ -22,7 +22,7 @@ fun getTitle(destinations: Destinations): Int {
     return when (destinations) {
         Home -> R.string.home
         AddFoodItem -> R.string.add_food
-        else -> R.string.add_amount
+        is AddAmountItem -> R.string.add_amount
     }
 }
 
@@ -30,6 +30,6 @@ fun getDestination(routeName: String?): Destinations {
     return when (routeName) {
         Home.javaClass.canonicalName -> Home
         AddFoodItem.javaClass.canonicalName -> AddFoodItem
-        else -> Home
+        else -> AddAmountItem("")
     }
 }
