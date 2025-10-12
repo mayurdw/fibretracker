@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
 import com.mayurdw.fibretracker.model.entity.FoodEntryEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface EntryDao {
@@ -12,6 +13,9 @@ interface EntryDao {
 
     @Query("SELECT * FROM entry")
     fun getAll(): List<FoodEntryEntity>
+
+    @Query("SELECT * FROM entry")
+    fun getAllFlow(): Flow<List<FoodEntryEntity>>
 
     @Upsert
     fun insertEntry(entryEntity: FoodEntryEntity)
