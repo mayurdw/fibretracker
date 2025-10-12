@@ -2,6 +2,8 @@ package com.mayurdw.fibretracker.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mayurdw.fibretracker.model.domain.DateData
+import com.mayurdw.fibretracker.model.domain.FoodListItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -91,18 +93,6 @@ data class HomeData(
     val hasPrevious: Boolean,
     val hasNext: Boolean,
     val dateData: DateData
-)
-
-data class DateData(
-    val formattedDate: String,
-    val foodItems: List<FoodListItem>,
-    val fibreOfTheDay: String
-)
-
-data class FoodListItem(
-    val id: Int,
-    val foodName: String,
-    val foodQuantity: String
 )
 
 sealed interface HomeState {
