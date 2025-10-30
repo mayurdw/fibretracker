@@ -39,7 +39,7 @@ class EntryDatabaseTest {
 
     @Test
     fun `test database created and empty`() = runTest {
-        dao.getAllFlow().test {
+        dao.getEntries(Long.MIN_VALUE, Long.MAX_VALUE).test {
             val list = awaitItem()
             assertTrue(list.isEmpty())
         }
@@ -56,7 +56,7 @@ class EntryDatabaseTest {
             )
         )
 
-        dao.getAllFlow().test {
+        dao.getEntries(Long.MIN_VALUE, Long.MAX_VALUE).test {
             val list = awaitItem()
             assertTrue(list.isNotEmpty())
         }

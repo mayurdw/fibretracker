@@ -8,9 +8,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface EntryDao {
-    @Query("SELECT * FROM entry WHERE dateTime LIKE :currentDate")
-    fun getEntries(currentDate: Long): List<FoodEntryEntity>
-
     @Query("SELECT * FROM entry WHERE dateTime BETWEEN :startTime AND :endTime ORDER BY dateTime DESC")
     fun getEntries(startTime: Long, endTime: Long): Flow<List<FoodEntryEntity>>
 
