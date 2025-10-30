@@ -5,6 +5,8 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.cash.turbine.test
+import com.mayurdw.fibretracker.model.entity.FoodEntryEntity
+import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -43,4 +45,39 @@ class EntryDatabaseTest {
         }
     }
 
+    @Test
+    fun `test database adds a new object`() = runTest {
+        dao.insertEntry(
+            FoodEntryEntity(
+                "test",
+                1,
+                1,
+                12L
+            )
+        )
+
+        dao.getAllFlow().test {
+            val list = awaitItem()
+            assertTrue(list.isNotEmpty())
+        }
+    }
+
+
+    @Test
+    fun `test correct ordered elements returned`() = runTest {
+        repeat(5) {
+            dao.insertEntry(
+                FoodEntryEntity("$it", it, it, it.toLong())
+            )
+        }
+
+        dao.getEntries(
+            startTime = 3, endTime = 5
+        ).test {
+            val list = awaitItem()
+            assertEquals(2, list.size)
+            assertEquals(4, list[0].date)
+            assertEquals(3, list[1].date)
+        }
+    }
 }
