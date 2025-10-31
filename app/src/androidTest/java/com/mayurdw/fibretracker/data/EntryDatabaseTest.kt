@@ -80,4 +80,22 @@ class EntryDatabaseTest {
             assertEquals(3, list[1].date)
         }
     }
+
+    @Test
+    fun `test current date returns correct values`() = runTest {
+        repeat(5) {
+            dao.insertEntry(
+                FoodEntryEntity("$it", it, it, it.toLong())
+            )
+        }
+
+        dao.getEntries(
+            startTime = 2, endTime = 2
+        ).test {
+            val list = awaitItem()
+            assertTrue(list.isNotEmpty())
+            assertEquals(1, list.count())
+            assertEquals(2, list[0].date)
+        }
+    }
 }

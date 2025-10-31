@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mayurdw.fibretracker.model.domain.DateData
 import com.mayurdw.fibretracker.model.domain.FoodListItem
+import com.mayurdw.fibretracker.model.domain.HomeData
+import com.mayurdw.fibretracker.model.domain.HomeState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -87,16 +89,4 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-}
-
-data class HomeData(
-    val hasPrevious: Boolean,
-    val hasNext: Boolean,
-    val dateData: DateData
-)
-
-sealed interface HomeState {
-    object Loading : HomeState
-    object Error : HomeState
-    data class Success(val data: HomeData) : HomeState
 }

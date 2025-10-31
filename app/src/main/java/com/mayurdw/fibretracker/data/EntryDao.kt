@@ -8,14 +8,11 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface EntryDao {
-    @Query("SELECT * FROM entry WHERE dateTime BETWEEN :startTime AND :endTime ORDER BY dateTime DESC")
+    @Query("SELECT * FROM entry WHERE date BETWEEN :startTime AND :endTime ORDER BY date DESC")
     fun getEntries(startTime: Long, endTime: Long): Flow<List<FoodEntryEntity>>
 
     @Query("SELECT * FROM entry")
     fun getAll(): List<FoodEntryEntity>
-
-    @Query("SELECT * FROM entry")
-    fun getAllFlow(): Flow<List<FoodEntryEntity>>
 
     @Upsert
     fun insertEntry(entryEntity: FoodEntryEntity)

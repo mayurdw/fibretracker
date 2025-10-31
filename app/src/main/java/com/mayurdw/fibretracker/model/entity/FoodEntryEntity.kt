@@ -9,7 +9,7 @@ data class FoodEntryEntity(
     @ColumnInfo("foodName") val foodDisplayName: String,
     @ColumnInfo("serving") val foodServingInGms: Int,
     @ColumnInfo("fibre") val fibreThisServingInMilliGms: Int,
-    @ColumnInfo("dateTime") val date: Long
+    @ColumnInfo("date") val date: Long
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
