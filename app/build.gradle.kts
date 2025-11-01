@@ -67,6 +67,7 @@ dependencies {
     ksp(libs.hilt.compiler)
     implementation(libs.hilt)
     implementation(libs.hilt.navigation)
+    implementation(libs.datetime)
 
     testImplementation(libs.junit)
     testImplementation(libs.androidx.room.test)
