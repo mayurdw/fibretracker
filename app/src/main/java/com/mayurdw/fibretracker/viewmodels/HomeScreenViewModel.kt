@@ -11,12 +11,14 @@ import com.mayurdw.fibretracker.model.domain.FoodListItem
 import com.mayurdw.fibretracker.model.domain.HomeData
 import com.mayurdw.fibretracker.model.domain.HomeState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.format
+import kotlinx.datetime.format.char
 import kotlinx.datetime.todayIn
 import javax.inject.Inject
 import kotlin.time.Clock
@@ -92,16 +94,35 @@ class HomeScreenViewModel @Inject constructor(
                 ) { current, yesterday, tomorrow ->
 
                     val foodList = current.map { foodEntryEntity ->
-                        launch(Dispatchers.Default) {
-                            convertFoodEntryEntityToFoodListItem(foodEntryEntity = foodEntryEntity)
-                        }
+                        convertFoodEntryEntityToFoodListItem(foodEntryEntity = foodEntryEntity)
                     }
+                    val dateFormat = LocalDate.Format {
+                        day()
+                        char('/')
+                        monthNumber()
+                        char('/')
+                        yearTwoDigits(2000)
+                    }
+                    val date = currentDate.format(dateFormat)
+                    var totalFibre = 0
+                    current.forEach { totalFibre += it.fibreThisServingInMilliGms }
 
+                    HomeState.Success(
+                        HomeData(
+                            hasNext = tomorrow.count() > 0,
+                            hasPrevious = yesterday.count() > 0,
+                            dateData = DateData(
+                                formattedDate = date,
+                                fibreOfTheDay =
+                                    "${totalFibre / 1000.00}",
+                                foodItems = foodList
+                            )
+                        )
+                    )
+                }.collect {
+                    homeStateFlow.emit(it)
                 }
             }
-            if (index < 0)
-                index = dates.size - 1
-            emitState()
         }
     }
 

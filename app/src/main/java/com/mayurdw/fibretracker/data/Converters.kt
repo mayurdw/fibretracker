@@ -25,6 +25,6 @@ fun convertFoodEntryEntityToFoodListItem(foodEntryEntity: FoodEntryEntity): Food
         id = foodEntryEntity.id,
         foodName = foodEntryEntity.foodDisplayName,
         foodQuantity =
-            "${foodEntryEntity.foodServingInGms} gms"
+            "${foodEntryEntity.foodServingInGms}"
     )
 }
