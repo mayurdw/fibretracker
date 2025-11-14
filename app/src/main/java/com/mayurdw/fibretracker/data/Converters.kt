@@ -9,13 +9,13 @@ import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class)
-fun convertFoodEntityToEntryEntity(foodEntity: FoodEntity): FoodEntryEntity {
+fun convertFoodEntityToEntryEntity(foodEntity: FoodEntity, fibreQuantity: Int): FoodEntryEntity {
     val date = Clock.System.todayIn(TimeZone.currentSystemDefault())
 
     return FoodEntryEntity(
         foodDisplayName = foodEntity.displayName,
         foodServingInGms = foodEntity.singleServingSizeInGm,
-        fibreThisServingInMilliGms = foodEntity.fibreQuantityPerServingInMG,
+        fibreThisServingInMilliGms = fibreQuantity * 1000,
         date = date.toEpochDays()
     )
 }

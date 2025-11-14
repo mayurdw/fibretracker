@@ -4,16 +4,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -26,6 +25,7 @@ import com.mayurdw.fibretracker.model.entity.FoodEntity
 import com.mayurdw.fibretracker.ui.theme.FibreTrackerTheme
 import com.mayurdw.fibretracker.viewmodels.FoodQuantityState
 import com.mayurdw.fibretracker.viewmodels.FoodQuantityViewModel
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun FoodQuantityScreen(
@@ -51,8 +51,11 @@ fun FoodQuantityScreen(
         }
 
         is FoodQuantityState.Success -> {
-            FoodQuantityScreenContent(modifier, (state as FoodQuantityState.Success).food) {
-                viewModel.insertNewEntry(it)
+            FoodQuantityScreenContent(
+                modifier,
+                (state as FoodQuantityState.Success).food
+            ) { selectedFoodItem, fibreQuantity ->
+                viewModel.insertNewEntry(selectedFoodItem, fibreQuantity)
             }
         }
 
@@ -64,10 +67,18 @@ fun FoodQuantityScreen(
 private fun FoodQuantityScreenContent(
     modifier: Modifier = Modifier,
     selectedFoodItem: FoodEntity,
-    onSaveClick: (selectedFoodItem: FoodEntity) -> Unit
+    onSaveClick: (selectedFoodItem: FoodEntity, fibreQuantity: Int) -> Unit
 ) {
-    val foodQuantity: MutableState<String> =
-        remember { mutableStateOf(selectedFoodItem.singleServingSizeInGm.toString()) }
+    val foodQuantity =
+        rememberTextFieldState(initialText = selectedFoodItem.singleServingSizeInGm.toString())
+    var fibreQuantity =
+        selectedFoodItem.fibreQuantityPerServingInMG * foodQuantity.text.toString().toInt() / 1000
+
+    LaunchedEffect(foodQuantity) {
+        snapshotFlow { foodQuantity.text.toString() }.collectLatest { newValue: String ->
+            fibreQuantity = selectedFoodItem.fibreQuantityPerServingInMG * newValue.toInt() / 1000
+        }
+    }
 
     Column(
         modifier = modifier.fillMaxSize(),
@@ -81,10 +92,7 @@ private fun FoodQuantityScreenContent(
             style = MaterialTheme.typography.bodyLarge
         )
         TextField(
-            value = foodQuantity.value,
-            onValueChange = { newValue: String ->
-                foodQuantity.value = newValue
-            },
+            state = foodQuantity,
             label = { Text("Quantity in Grams") },
             placeholder = { Text("${selectedFoodItem.singleServingSizeInGm}") },
         )
@@ -96,11 +104,11 @@ private fun FoodQuantityScreenContent(
 
         Text(
             modifier = modifier,
-            text = "Fiber Consumed = ${selectedFoodItem.fibreQuantityPerServingInMG * foodQuantity.value.toInt() / 1000}"
+            text = "Fiber Consumed = $fibreQuantity"
         )
 
         Button(onClick = {
-            onSaveClick(selectedFoodItem)
+            onSaveClick(selectedFoodItem, fibreQuantity)
         }, content = { Text("Submit") })
     }
 }
@@ -115,6 +123,8 @@ private fun FoodQuantityScreenPreview() {
                 40,
                 35
             )
-        ) { }
+        ) { _, _ ->
+
+        }
     }
 }
