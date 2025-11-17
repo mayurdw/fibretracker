@@ -56,8 +56,8 @@ fun FoodQuantityScreen(
             FoodQuantityScreenContent(
                 modifier,
                 (state as FoodQuantityState.Success).food
-            ) { selectedFoodItem, fibreQuantity ->
-                viewModel.insertNewEntry(selectedFoodItem, fibreQuantity)
+            ) { selectedFoodItem, fibreQuantity, foodQuantity ->
+                viewModel.insertNewEntry(selectedFoodItem, fibreQuantity, foodQuantity)
             }
         }
 
@@ -69,7 +69,7 @@ fun FoodQuantityScreen(
 private fun FoodQuantityScreenContent(
     modifier: Modifier = Modifier,
     selectedFoodItem: FoodEntity,
-    onSaveClick: (selectedFoodItem: FoodEntity, fibreQuantity: Int) -> Unit
+    onSaveClick: (selectedFoodItem: FoodEntity, fibreQuantity: Int, foodQuantity: String) -> Unit
 ) {
     val foodQuantity =
         rememberTextFieldState(initialText = selectedFoodItem.singleServingSizeInGm.toString())
@@ -113,7 +113,7 @@ private fun FoodQuantityScreenContent(
         )
 
         Button(onClick = {
-            onSaveClick(selectedFoodItem, fibreQuantity)
+            onSaveClick(selectedFoodItem, fibreQuantity, foodQuantity.text.toString())
         }, content = { Text("Submit") })
     }
 }
@@ -128,7 +128,7 @@ private fun FoodQuantityScreenPreview() {
                 40,
                 35
             )
-        ) { _, _ ->
+        ) { _, _, _ ->
 
         }
     }
