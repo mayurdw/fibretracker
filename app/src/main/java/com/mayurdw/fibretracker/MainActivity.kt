@@ -30,11 +30,13 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.mayurdw.fibretracker.ui.destinations.AddAmountItem
 import com.mayurdw.fibretracker.ui.destinations.AddFoodItem
+import com.mayurdw.fibretracker.ui.destinations.AddNewFoodItem
 import com.mayurdw.fibretracker.ui.destinations.Destinations
 import com.mayurdw.fibretracker.ui.destinations.Home
 import com.mayurdw.fibretracker.ui.destinations.getDestination
 import com.mayurdw.fibretracker.ui.destinations.getTitle
 import com.mayurdw.fibretracker.ui.screens.AddFoodItemScreen
+import com.mayurdw.fibretracker.ui.screens.AddNewFoodScreen
 import com.mayurdw.fibretracker.ui.screens.FoodQuantityScreen
 import com.mayurdw.fibretracker.ui.screens.HomeScreen
 import com.mayurdw.fibretracker.ui.theme.FibreTrackerTheme
@@ -44,7 +46,11 @@ import dagger.hilt.android.AndroidEntryPoint
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
-fun FibreTrackerTopBar(currentDestination: Destinations = Home, onBackPressed: () -> Unit = {}) {
+fun FibreTrackerTopBar(
+    currentDestination: Destinations = Home,
+    onBackPressed: () -> Unit = {},
+    onAddPressed: () -> Unit = {}
+) {
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -61,6 +67,16 @@ fun FibreTrackerTopBar(currentDestination: Destinations = Home, onBackPressed: (
         navigationIcon = {
             if (Home != currentDestination) {
                 IconButton(onClick = onBackPressed) {
+                    Icon(
+                        painterResource(R.drawable.previous),
+                        contentDescription = null
+                    )
+                }
+            }
+        },
+        actions = {
+            if (AddFoodItem == currentDestination) {
+                IconButton(onClick = onAddPressed) {
                     Icon(
                         painterResource(R.drawable.previous),
                         contentDescription = null
@@ -85,9 +101,14 @@ class MainActivity : ComponentActivity() {
             FibreTrackerTheme {
                 Scaffold(
                     topBar = {
-                        FibreTrackerTopBar(destination) {
-                            navController.navigateUp()
-                        }
+                        FibreTrackerTopBar(
+                            currentDestination = destination,
+                            onBackPressed = {
+                                navController.navigateUp()
+                            },
+                            onAddPressed = {
+                                navController.navigate(AddNewFoodItem)
+                            })
                     },
                     floatingActionButton = {
                         if (Home == destination) {
@@ -119,6 +140,10 @@ class MainActivity : ComponentActivity() {
                                 navController.navigate(AddAmountItem(it.id))
                             }
                         }
+                        composable<AddNewFoodItem> {
+                            AddNewFoodScreen()
+                        }
+
                         composable<AddAmountItem> { backStackEntry ->
                             val foodItem: AddAmountItem = backStackEntry.toRoute()
                             FoodQuantityScreen(selectedFood = foodItem.selectedFoodId) {
