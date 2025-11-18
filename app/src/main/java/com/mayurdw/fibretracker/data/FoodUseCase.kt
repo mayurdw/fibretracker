@@ -26,6 +26,6 @@ class FoodUseCase @Inject constructor(
     }
 
     override suspend fun insertNewFood(newFoodItem: FoodEntity) {
-        TODO("Not yet implemented")
+        dao.insertFood(foodEntity = newFoodItem)
     }
 }

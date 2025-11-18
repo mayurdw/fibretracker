@@ -17,23 +17,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.mayurdw.fibretracker.ui.theme.FibreTrackerTheme
+import com.mayurdw.fibretracker.viewmodels.AddNewFoodViewModel
 
 @Composable
 fun AddNewFoodScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: AddNewFoodViewModel = hiltViewModel()
 ) {
     AddNewFoodContent(
         modifier = modifier
-    ) {
-        
+    ) { foodName: String, foodServing: String, fibrePerServing: String ->
+        viewModel.addNewFood(foodName, foodServing, fibrePerServing)
     }
 }
 
 @Composable
 private fun AddNewFoodContent(
     modifier: Modifier = Modifier,
-    onAddButton: () -> Unit,
+    onAddButton: (foodName: String, foodServing: String, fibrePerServing: String) -> Unit,
 ) {
     val foodNameState = rememberTextFieldState("")
     val foodServingSizeState = rememberTextFieldState("")
@@ -74,7 +77,13 @@ private fun AddNewFoodContent(
 
         Button(
             modifier = modifier.fillMaxWidth(),
-            onClick = onAddButton
+            onClick = {
+                onAddButton(
+                    foodNameState.text.toString(),
+                    foodServingSizeState.text.toString(),
+                    fibrePerServingInGms.text.toString()
+                )
+            }
         ) {
             Text("Add Food")
         }
@@ -85,6 +94,8 @@ private fun AddNewFoodContent(
 @Composable
 private fun AddNewFoodScreenPreview() {
     FibreTrackerTheme {
-        AddNewFoodContent { }
+        AddNewFoodContent { _, _, _ ->
+
+        }
     }
 }
