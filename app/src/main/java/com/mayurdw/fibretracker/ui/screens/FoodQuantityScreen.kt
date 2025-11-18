@@ -74,11 +74,19 @@ private fun FoodQuantityScreenContent(
     val foodQuantity =
         rememberTextFieldState(initialText = selectedFoodItem.singleServingSizeInGm.toString())
     var fibreQuantity =
-        selectedFoodItem.fibreQuantityPerServingInMG * foodQuantity.text.toString().toInt() / 1000
+        if (foodQuantity.text.isNotBlank()) {
+            selectedFoodItem.fibreQuantityPerServingInMG * foodQuantity.text.toString()
+                .toInt() / 1000
+        } else {
+            0
+        }
 
     LaunchedEffect(foodQuantity) {
         snapshotFlow { foodQuantity.text.toString() }.collectLatest { newValue: String ->
-            fibreQuantity = selectedFoodItem.fibreQuantityPerServingInMG * newValue.toInt() / 1000
+            if (newValue.isNotBlank()) {
+                fibreQuantity =
+                    selectedFoodItem.fibreQuantityPerServingInMG * newValue.toInt() / 1000
+            }
         }
     }
 
