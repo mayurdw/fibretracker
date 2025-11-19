@@ -76,6 +76,7 @@ fun FibreTrackerTopBar(
         },
         actions = {
             if (AddFoodItem == currentDestination) {
+                // TODO: Correct Icon
                 IconButton(onClick = onAddPressed) {
                     Icon(
                         painterResource(R.drawable.previous),
@@ -141,7 +142,9 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                         composable<AddNewFoodItem> {
-                            AddNewFoodScreen()
+                            AddNewFoodScreen {
+                                navController.popBackStack(AddFoodItem, false)
+                            }
                         }
 
                         composable<AddAmountItem> { backStackEntry ->

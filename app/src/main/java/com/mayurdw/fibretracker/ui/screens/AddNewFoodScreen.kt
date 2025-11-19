@@ -24,12 +24,14 @@ import com.mayurdw.fibretracker.viewmodels.AddNewFoodViewModel
 @Composable
 fun AddNewFoodScreen(
     modifier: Modifier = Modifier,
-    viewModel: AddNewFoodViewModel = hiltViewModel()
+    viewModel: AddNewFoodViewModel = hiltViewModel(),
+    onActionCompleted: () -> Unit = { }
 ) {
     AddNewFoodContent(
         modifier = modifier
     ) { foodName: String, foodServing: String, fibrePerServing: String ->
         viewModel.addNewFood(foodName, foodServing, fibrePerServing)
+        onActionCompleted()
     }
 }
 
@@ -59,7 +61,7 @@ private fun AddNewFoodContent(
             modifier = modifier,
             state = foodServingSizeState,
             placeholder = { Text("0") },
-            label = { Text("Enter Food Serving Size") },
+            label = { Text("Enter Food Serving Size in Gms") },
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
         )
 
@@ -67,7 +69,7 @@ private fun AddNewFoodContent(
             modifier = modifier,
             state = fibrePerServingInGms,
             placeholder = { Text("0") },
-            label = { Text("Fibre In Grams") },
+            label = { Text("Fibre Per Serving in Gms") },
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
         )
 

@@ -12,14 +12,14 @@ import javax.inject.Inject
 class AddNewFoodViewModel @Inject constructor(
     private val foodUseCase: IFoodUseCase
 ) : ViewModel() {
-    fun addNewFood(foodName: String, foodServingSize: String, fibrePreServingInGms: String) {
+    fun addNewFood(foodName: String, foodServingSize: String, fibrePerServingInGms: String) {
         viewModelScope.launch {
-            if (foodName.isNotBlank() && foodServingSize.isNotBlank() && fibrePreServingInGms.isNotBlank()) {
+            if (foodName.isNotBlank() && foodServingSize.isNotBlank() && fibrePerServingInGms.isNotBlank()) {
                 try {
                     val foodEntity = FoodEntity(
                         displayName = foodName,
                         singleServingSizeInGm = foodServingSize.toInt(),
-                        fibreQuantityPerServingInMG = fibrePreServingInGms.toInt() * 1000
+                        fibreQuantityPerServingInMG = (fibrePerServingInGms.toFloat() * 1000).toInt()
                     )
                     foodUseCase.insertNewFood(foodEntity)
                 } catch (_: Exception) {
