@@ -17,7 +17,7 @@ class AddNewFoodViewModel @Inject constructor(
             if (foodName.isNotBlank() && foodServingSize.isNotBlank() && fibrePerServingInGms.isNotBlank()) {
                 try {
                     val foodEntity = FoodEntity(
-                        displayName = foodName,
+                        name = foodName,
                         singleServingSizeInGm = foodServingSize.toInt(),
                         fibreQuantityPerServingInMG = (fibrePerServingInGms.toFloat() * 1000).toInt()
                     )

@@ -75,9 +75,13 @@ fun AddFoodItemList(
 }
 
 @Composable
-fun FoodItem(modifier: Modifier = Modifier, foodItem: FoodEntity, onItemSelect: (FoodEntity) -> Unit) {
+fun FoodItem(
+    modifier: Modifier = Modifier,
+    foodItem: FoodEntity,
+    onItemSelect: (FoodEntity) -> Unit
+) {
     Text(
-        text = foodItem.displayName,
+        text = foodItem.name,
         style = MaterialTheme.typography.bodyMedium,
         modifier = modifier
             .fillMaxWidth()

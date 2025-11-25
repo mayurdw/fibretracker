@@ -13,7 +13,7 @@ fun convertFoodEntityToEntryEntity(foodEntity: FoodEntity, fibreQuantity: Int): 
     val date = Clock.System.todayIn(TimeZone.currentSystemDefault())
 
     return FoodEntryEntity(
-        foodDisplayName = foodEntity.displayName,
+        foodDisplayName = foodEntity.name,
         foodServingInGms = foodEntity.singleServingSizeInGm,
         fibreThisServingInMilliGms = fibreQuantity * 1000,
         date = date.toEpochDays()

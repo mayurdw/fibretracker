@@ -5,8 +5,8 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.cash.turbine.test
-import com.mayurdw.fibretracker.data.database.EntryDao
-import com.mayurdw.fibretracker.data.database.EntryDatabase
+import com.mayurdw.fibretracker.data.database.FoodEntryDao
+import com.mayurdw.fibretracker.data.database.FoodEntryDatabase
 import com.mayurdw.fibretracker.model.entity.FoodEntryEntity
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
@@ -23,15 +23,15 @@ class EntryDatabaseTest {
     @get:Rule
     val dispatcherRule = TestDispatcherRule()
 
-    private lateinit var db: EntryDatabase
-    private lateinit var dao: EntryDao
+    private lateinit var db: FoodEntryDatabase
+    private lateinit var dao: FoodEntryDao
 
     @Before
     fun setup() {
         val context = ApplicationProvider.getApplicationContext<Context>()
 
-        db = Room.inMemoryDatabaseBuilder(context, EntryDatabase::class.java).build()
-        dao = db.getEntryDao()
+        db = Room.inMemoryDatabaseBuilder(context, FoodEntryDatabase::class.java).build()
+        dao = db.getFoodEntryDao()
     }
 
     @After

@@ -96,7 +96,7 @@ private fun FoodQuantityScreenContent(
         horizontalAlignment = Alignment.Start
     ) {
         Text(
-            text = selectedFoodItem.displayName,
+            text = selectedFoodItem.name,
             modifier = modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodyLarge

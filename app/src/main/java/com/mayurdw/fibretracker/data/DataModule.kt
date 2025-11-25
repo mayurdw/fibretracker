@@ -2,10 +2,8 @@ package com.mayurdw.fibretracker.data
 
 import android.content.Context
 import androidx.room.Room
-import com.mayurdw.fibretracker.data.database.EntryDao
-import com.mayurdw.fibretracker.data.database.EntryDatabase
-import com.mayurdw.fibretracker.data.database.FoodDao
-import com.mayurdw.fibretracker.data.database.FoodDatabase
+import com.mayurdw.fibretracker.data.database.FoodEntryDao
+import com.mayurdw.fibretracker.data.database.FoodEntryDatabase
 import com.mayurdw.fibretracker.data.usecase.AddEntryUseCase
 import com.mayurdw.fibretracker.data.usecase.FoodUseCase
 import com.mayurdw.fibretracker.data.usecase.GetEntryUseCase
@@ -24,35 +22,20 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object DataModule {
+
     @Provides
     @Singleton
-    fun provideFoodDatabase(@ApplicationContext context: Context): FoodDatabase {
+    fun provideDatabase(@ApplicationContext context: Context): FoodEntryDatabase {
         return Room
             .inMemoryDatabaseBuilder(
                 context,
-                FoodDatabase::class.java
+                FoodEntryDatabase::class.java
             ).fallbackToDestructiveMigration(false).build()
     }
 
     @Provides
-    fun getFoodDao(database: FoodDatabase): FoodDao {
-        return database.getFoodDao()
-    }
-
-    @Provides
-    @Singleton
-    fun provideEntityDatabase(@ApplicationContext context: Context): EntryDatabase {
-        return Room
-            .inMemoryDatabaseBuilder(
-                context,
-                EntryDatabase::class.java
-            )
-            .fallbackToDestructiveMigration(false).build()
-    }
-
-    @Provides
-    fun getEntryDao(database: EntryDatabase): EntryDao {
-        return database.getEntryDao()
+    fun getFoodEntryDao(database: FoodEntryDatabase): FoodEntryDao {
+        return database.getFoodEntryDao()
     }
 }
 
