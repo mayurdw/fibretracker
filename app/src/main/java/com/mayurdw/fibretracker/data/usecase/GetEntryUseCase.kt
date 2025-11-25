@@ -1,5 +1,6 @@
-package com.mayurdw.fibretracker.data
+package com.mayurdw.fibretracker.data.usecase
 
+import com.mayurdw.fibretracker.data.database.EntryDao
 import com.mayurdw.fibretracker.model.entity.FoodEntryEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDate

@@ -2,6 +2,16 @@ package com.mayurdw.fibretracker.data
 
 import android.content.Context
 import androidx.room.Room
+import com.mayurdw.fibretracker.data.database.EntryDao
+import com.mayurdw.fibretracker.data.database.EntryDatabase
+import com.mayurdw.fibretracker.data.database.FoodDao
+import com.mayurdw.fibretracker.data.database.FoodDatabase
+import com.mayurdw.fibretracker.data.usecase.AddEntryUseCase
+import com.mayurdw.fibretracker.data.usecase.FoodUseCase
+import com.mayurdw.fibretracker.data.usecase.GetEntryUseCase
+import com.mayurdw.fibretracker.data.usecase.IAddEntryUseCase
+import com.mayurdw.fibretracker.data.usecase.IFoodUseCase
+import com.mayurdw.fibretracker.data.usecase.IGetEntryUseCase
 import dagger.Binds
 import dagger.Module
 import dagger.Provides

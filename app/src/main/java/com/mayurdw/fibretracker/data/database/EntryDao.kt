@@ -1,4 +1,4 @@
-package com.mayurdw.fibretracker.data
+package com.mayurdw.fibretracker.data.database
 
 import androidx.room.Dao
 import androidx.room.Query

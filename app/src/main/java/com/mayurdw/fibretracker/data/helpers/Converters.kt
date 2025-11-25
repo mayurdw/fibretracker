@@ -1,4 +1,4 @@
-package com.mayurdw.fibretracker.data
+package com.mayurdw.fibretracker.data.helpers
 
 import com.mayurdw.fibretracker.model.domain.FoodListItem
 import com.mayurdw.fibretracker.model.entity.FoodEntity

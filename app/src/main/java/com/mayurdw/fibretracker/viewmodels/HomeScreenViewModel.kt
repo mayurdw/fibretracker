@@ -4,8 +4,8 @@ package com.mayurdw.fibretracker.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mayurdw.fibretracker.data.GetEntryUseCase
-import com.mayurdw.fibretracker.data.convertFoodEntryEntityToFoodListItem
+import com.mayurdw.fibretracker.data.usecase.GetEntryUseCase
+import com.mayurdw.fibretracker.data.helpers.convertFoodEntryEntityToFoodListItem
 import com.mayurdw.fibretracker.model.domain.DateData
 import com.mayurdw.fibretracker.model.domain.FoodListItem
 import com.mayurdw.fibretracker.model.domain.HomeData

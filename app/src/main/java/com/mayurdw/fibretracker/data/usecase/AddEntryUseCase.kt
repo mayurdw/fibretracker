@@ -1,5 +1,7 @@
-package com.mayurdw.fibretracker.data
+package com.mayurdw.fibretracker.data.usecase
 
+import com.mayurdw.fibretracker.data.database.EntryDao
+import com.mayurdw.fibretracker.data.helpers.convertFoodEntityToEntryEntity
 import com.mayurdw.fibretracker.model.entity.FoodEntity
 import javax.inject.Inject
 

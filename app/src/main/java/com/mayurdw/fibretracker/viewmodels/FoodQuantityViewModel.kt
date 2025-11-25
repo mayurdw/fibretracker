@@ -2,8 +2,8 @@ package com.mayurdw.fibretracker.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mayurdw.fibretracker.data.IAddEntryUseCase
-import com.mayurdw.fibretracker.data.IFoodUseCase
+import com.mayurdw.fibretracker.data.usecase.IAddEntryUseCase
+import com.mayurdw.fibretracker.data.usecase.IFoodUseCase
 import com.mayurdw.fibretracker.model.entity.FoodEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
