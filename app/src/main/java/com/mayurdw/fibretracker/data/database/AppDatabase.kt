@@ -6,7 +6,7 @@ import com.mayurdw.fibretracker.model.entity.FoodEntity
 import com.mayurdw.fibretracker.model.entity.FoodEntryEntity
 
 @Database(entities = [FoodEntity::class, FoodEntryEntity::class], version = 1, exportSchema = false)
-abstract class FoodEntryDatabase : RoomDatabase() {
-    abstract fun getFoodEntryDao(): FoodEntryDao
+abstract class AppDatabase : RoomDatabase() {
+    abstract fun getAppDao(): AppDao
 
 }

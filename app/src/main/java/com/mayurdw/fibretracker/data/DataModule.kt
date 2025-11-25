@@ -2,8 +2,8 @@ package com.mayurdw.fibretracker.data
 
 import android.content.Context
 import androidx.room.Room
-import com.mayurdw.fibretracker.data.database.FoodEntryDao
-import com.mayurdw.fibretracker.data.database.FoodEntryDatabase
+import com.mayurdw.fibretracker.data.database.AppDao
+import com.mayurdw.fibretracker.data.database.AppDatabase
 import com.mayurdw.fibretracker.data.usecase.AddEntryUseCase
 import com.mayurdw.fibretracker.data.usecase.FoodUseCase
 import com.mayurdw.fibretracker.data.usecase.GetEntryUseCase
@@ -25,17 +25,17 @@ object DataModule {
 
     @Provides
     @Singleton
-    fun provideDatabase(@ApplicationContext context: Context): FoodEntryDatabase {
+    fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
         return Room
             .inMemoryDatabaseBuilder(
                 context,
-                FoodEntryDatabase::class.java
+                AppDatabase::class.java
             ).fallbackToDestructiveMigration(false).build()
     }
 
     @Provides
-    fun getFoodEntryDao(database: FoodEntryDatabase): FoodEntryDao {
-        return database.getFoodEntryDao()
+    fun getFoodEntryDao(database: AppDatabase): AppDao {
+        return database.getAppDao()
     }
 }
 

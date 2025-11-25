@@ -8,7 +8,10 @@ import com.mayurdw.fibretracker.model.entity.FoodEntryEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface FoodEntryDao {
+interface AppDao {
+    /**
+     * ENTRY related methods
+     * */
     @Query("SELECT * FROM entry WHERE date BETWEEN :startTime AND :endTime ORDER BY date DESC")
     fun getEntries(startTime: Long, endTime: Long): Flow<List<FoodEntryEntity>>
 
@@ -18,6 +21,9 @@ interface FoodEntryDao {
     @Upsert
     fun insertEntry(entryEntity: FoodEntryEntity)
 
+    /**
+     * Food related methods
+     * */
     @Query("SELECT * FROM food")
     fun getAllFoods(): List<FoodEntity>
 

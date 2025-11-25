@@ -1,12 +1,12 @@
 package com.mayurdw.fibretracker.data.usecase
 
-import com.mayurdw.fibretracker.data.database.FoodEntryDao
+import com.mayurdw.fibretracker.data.database.AppDao
 import com.mayurdw.fibretracker.model.domain.CommonFoods
 import com.mayurdw.fibretracker.model.entity.FoodEntity
 import javax.inject.Inject
 
 class FoodUseCase @Inject constructor(
-    private val dao: FoodEntryDao
+    private val dao: AppDao
 ) : IFoodUseCase {
 
     override suspend fun getFoods(): List<FoodEntity> {
