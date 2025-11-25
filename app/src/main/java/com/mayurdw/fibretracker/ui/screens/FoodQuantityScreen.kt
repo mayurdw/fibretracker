@@ -75,7 +75,8 @@ private fun FoodQuantityScreenContent(
         rememberTextFieldState(initialText = selectedFoodItem.singleServingSizeInGm.toString())
     var fibreQuantity =
         if (foodQuantity.text.isNotBlank()) {
-            selectedFoodItem.fibreQuantityPerServingInMG * foodQuantity.text.toString()
+            // TODO: This is wrong now
+            selectedFoodItem.fibrePerMicroGram * foodQuantity.text.toString()
                 .toInt() / 1000
         } else {
             0
@@ -85,7 +86,8 @@ private fun FoodQuantityScreenContent(
         snapshotFlow { foodQuantity.text.toString() }.collectLatest { newValue: String ->
             if (newValue.isNotBlank()) {
                 fibreQuantity =
-                    selectedFoodItem.fibreQuantityPerServingInMG * newValue.toInt() / 1000
+                        // TODO: This is wrong now
+                    selectedFoodItem.fibrePerMicroGram * newValue.toInt() / 1000
             }
         }
     }
@@ -112,7 +114,8 @@ private fun FoodQuantityScreenContent(
 
         Text(
             modifier = modifier,
-            text = "Fibre Per Gram = ${selectedFoodItem.fibreQuantityPerServingInMG / 1000.0} gm"
+            // TODO: This is wrong now
+            text = "Fibre Per Gram = ${selectedFoodItem.fibrePerMicroGram / 1000.0} gm"
         )
 
         Text(

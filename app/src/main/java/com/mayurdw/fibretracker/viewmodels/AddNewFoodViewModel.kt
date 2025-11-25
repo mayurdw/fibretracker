@@ -19,7 +19,8 @@ class AddNewFoodViewModel @Inject constructor(
                     val foodEntity = FoodEntity(
                         name = foodName,
                         singleServingSizeInGm = foodServingSize.toInt(),
-                        fibreQuantityPerServingInMG = (fibrePerServingInGms.toFloat() * 1000).toInt()
+                        // TODO: This is wrong nowj
+                        fibrePerMicroGram = (fibrePerServingInGms.toFloat() * 1000).toInt()
                     )
                     foodUseCase.insertNewFood(foodEntity)
                 } catch (_: Exception) {

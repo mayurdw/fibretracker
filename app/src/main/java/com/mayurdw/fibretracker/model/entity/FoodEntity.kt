@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 data class FoodEntity(
     @ColumnInfo("name") val name: String,
     @ColumnInfo("single_serving_size") val singleServingSizeInGm: Int,
-    @ColumnInfo("fibre_per_serving") val fibreQuantityPerServingInMG: Int
+    @ColumnInfo("fibre_per_micro_gram") val fibrePerMicroGram: Int
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
