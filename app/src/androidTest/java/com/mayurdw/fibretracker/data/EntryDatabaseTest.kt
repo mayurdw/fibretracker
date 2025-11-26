@@ -157,6 +157,7 @@ class EntryDatabaseTest {
         val map = dao.getEntryMap(5L, 12L)
 
         assertEquals(1, map.size)
+        assertEquals(1, map[food]!!.count())
         assertEquals(entries[0].foodServingInGms, map[food]!![0].foodServingInGms)
     }
 }
