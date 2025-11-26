@@ -5,10 +5,9 @@ import com.mayurdw.fibretracker.model.domain.CommonFoods
 import com.mayurdw.fibretracker.model.entity.FoodEntity
 import javax.inject.Inject
 
-class FoodUseCase @Inject constructor(
+class GetFoodUseCase @Inject constructor(
     private val dao: AppDao
-) : IFoodUseCase {
-
+) : IGetFoodUseCase {
     override suspend fun getFoods(): List<FoodEntity> {
         val foods = dao.getAllFoods()
 
@@ -24,9 +23,5 @@ class FoodUseCase @Inject constructor(
 
     override suspend fun getFoodById(id: Int): FoodEntity {
         return dao.getFoodById(id)
-    }
-
-    override suspend fun insertNewFood(newFoodItem: FoodEntity) {
-        dao.insertFood(foodEntity = newFoodItem)
     }
 }

@@ -5,11 +5,13 @@ import androidx.room.Room
 import com.mayurdw.fibretracker.data.database.AppDao
 import com.mayurdw.fibretracker.data.database.AppDatabase
 import com.mayurdw.fibretracker.data.usecase.AddEntryUseCase
-import com.mayurdw.fibretracker.data.usecase.FoodUseCase
+import com.mayurdw.fibretracker.data.usecase.AddFoodUseCase
 import com.mayurdw.fibretracker.data.usecase.GetEntryUseCase
+import com.mayurdw.fibretracker.data.usecase.GetFoodUseCase
 import com.mayurdw.fibretracker.data.usecase.IAddEntryUseCase
-import com.mayurdw.fibretracker.data.usecase.IFoodUseCase
+import com.mayurdw.fibretracker.data.usecase.IAddFoodUseCase
 import com.mayurdw.fibretracker.data.usecase.IGetEntryUseCase
+import com.mayurdw.fibretracker.data.usecase.IGetFoodUseCase
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -43,11 +45,14 @@ object DataModule {
 @InstallIn(ViewModelComponent::class)
 abstract class UseCaseModule {
     @Binds
-    abstract fun provideFoodUseCase(foodUseCase: FoodUseCase): IFoodUseCase
+    abstract fun provideFoodUseCase(addFoodUseCase: AddFoodUseCase): IAddFoodUseCase
 
     @Binds
     abstract fun provideAddEntryUseCase(addEntryUseCase: AddEntryUseCase): IAddEntryUseCase
 
     @Binds
     abstract fun provideGetEntryUseCase(getEntryUseCase: GetEntryUseCase): IGetEntryUseCase
+
+    @Binds
+    abstract fun provideGetFoodUseCase(getFoodUseCase: GetFoodUseCase): IGetFoodUseCase
 }
