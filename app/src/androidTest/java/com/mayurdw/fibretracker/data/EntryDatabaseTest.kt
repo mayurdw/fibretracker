@@ -7,8 +7,10 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.cash.turbine.test
 import com.mayurdw.fibretracker.data.database.AppDao
 import com.mayurdw.fibretracker.data.database.AppDatabase
+import com.mayurdw.fibretracker.model.entity.FoodEntity
 import com.mayurdw.fibretracker.model.entity.FoodEntryEntity
 import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -98,5 +100,63 @@ class EntryDatabaseTest {
             assertEquals(1, list.count())
             assertEquals(2, list[0].date)
         }
+    }
+
+    @Test
+    fun `test multimap between food and entry`() = runTest {
+        val food = FoodEntity(
+            name = "Food",
+            singleServingSizeInGm = 10,
+            fibrePerMicroGram = 2000
+        ).apply { id = 1 }
+        val entry = FoodEntryEntity(
+            foodId = food.id,
+            foodServingInGms = 5,
+            date = 10
+        )
+
+        dao.insertFood(
+            food
+        )
+
+        dao.insertEntry(
+            entry
+        )
+
+        val map = dao.getEntryMap(0, 20)
+
+        assertEquals(1, map.size)
+        assertTrue(map.keys.contains(food))
+        assertFalse(map[food].isNullOrEmpty())
+        assertEquals(entry.foodServingInGms, map[food]!![0].foodServingInGms)
+    }
+
+    @Test
+    fun `multiple entries of one food`() = runTest {
+        val food = FoodEntity(
+            name = "Test",
+            singleServingSizeInGm = 10,
+            fibrePerMicroGram = 2000
+        ).apply { id = 1 }
+        val entries = listOf(
+            FoodEntryEntity(
+                foodId = food.id,
+                foodServingInGms = food.singleServingSizeInGm,
+                date = 10L
+            ),
+            FoodEntryEntity(
+                foodId = food.id,
+                foodServingInGms = food.singleServingSizeInGm * 2,
+                date = 4L
+            )
+        )
+
+        entries.forEach { dao.insertEntry(it) }
+        dao.insertFood(food)
+
+        val map = dao.getEntryMap(5L, 12L)
+
+        assertEquals(1, map.size)
+        assertEquals(entries[0].foodServingInGms, map[food]!![0].foodServingInGms)
     }
 }
