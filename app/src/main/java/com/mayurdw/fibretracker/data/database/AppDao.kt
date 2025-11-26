@@ -20,7 +20,8 @@ interface AppDao {
                 +
                 "JOIN entry WHERE date BETWEEN :startTime AND :endTime AND foodId = food.id ORDER BY date DESC"
     )
-    fun getEntryMap(startTime: Long, endTime: Long): Map<FoodEntity, List<FoodEntryEntity>>
+    fun getEntryMap(startTime: Long, endTime: Long):
+            Flow<Map<FoodEntity, List<FoodEntryEntity>>>
 
     @Query("SELECT * FROM entry")
     fun getAllEntries(): List<FoodEntryEntity>

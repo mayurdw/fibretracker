@@ -43,62 +43,9 @@ class EntryDatabaseTest {
 
     @Test
     fun `test database created and empty`() = runTest {
-        dao.getEntries(Long.MIN_VALUE, Long.MAX_VALUE).test {
+        dao.getEntryMap(Long.MIN_VALUE, Long.MAX_VALUE).test {
             val list = awaitItem()
             assertTrue(list.isEmpty())
-        }
-    }
-
-    @Test
-    fun `test database adds a new object`() = runTest {
-        dao.insertEntry(
-            FoodEntryEntity(
-                1,
-                1,
-                12L
-            )
-        )
-
-        dao.getEntries(Long.MIN_VALUE, Long.MAX_VALUE).test {
-            val list = awaitItem()
-            assertTrue(list.isNotEmpty())
-        }
-    }
-
-
-    @Test
-    fun `test correct ordered elements returned`() = runTest {
-        repeat(5) {
-            dao.insertEntry(
-                FoodEntryEntity(it, it, it.toLong())
-            )
-        }
-
-        dao.getEntries(
-            startTime = 3, endTime = 5
-        ).test {
-            val list = awaitItem()
-            assertEquals(2, list.size)
-            assertEquals(4, list[0].date)
-            assertEquals(3, list[1].date)
-        }
-    }
-
-    @Test
-    fun `test current date returns correct values`() = runTest {
-        repeat(5) {
-            dao.insertEntry(
-                FoodEntryEntity(it, it, it.toLong())
-            )
-        }
-
-        dao.getEntries(
-            startTime = 2, endTime = 2
-        ).test {
-            val list = awaitItem()
-            assertTrue(list.isNotEmpty())
-            assertEquals(1, list.count())
-            assertEquals(2, list[0].date)
         }
     }
 
@@ -123,12 +70,16 @@ class EntryDatabaseTest {
             entry
         )
 
-        val map = dao.getEntryMap(0, 20)
+        dao.getEntryMap(0, 20).test {
+            val map = awaitItem()
 
-        assertEquals(1, map.size)
-        assertTrue(map.keys.contains(food))
-        assertFalse(map[food].isNullOrEmpty())
-        assertEquals(entry.foodServingInGms, map[food]!![0].foodServingInGms)
+            assertEquals(1, map.size)
+            assertTrue(map.keys.contains(food))
+            assertFalse(map[food].isNullOrEmpty())
+            assertEquals(entry.foodServingInGms, map[food]!![0].foodServingInGms)
+        }
+
+
     }
 
     @Test
@@ -154,10 +105,12 @@ class EntryDatabaseTest {
         entries.forEach { dao.insertEntry(it) }
         dao.insertFood(food)
 
-        val map = dao.getEntryMap(5L, 12L)
+        dao.getEntryMap(5L, 12L).test {
+            val map = awaitItem()
+            assertEquals(1, map.size)
+            assertEquals(1, map[food]!!.count())
+            assertEquals(entries[0].foodServingInGms, map[food]!![0].foodServingInGms)
+        }
 
-        assertEquals(1, map.size)
-        assertEquals(1, map[food]!!.count())
-        assertEquals(entries[0].foodServingInGms, map[food]!![0].foodServingInGms)
     }
 }
