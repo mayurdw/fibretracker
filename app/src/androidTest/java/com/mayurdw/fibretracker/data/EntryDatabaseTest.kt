@@ -51,7 +51,6 @@ class EntryDatabaseTest {
     fun `test database adds a new object`() = runTest {
         dao.insertEntry(
             FoodEntryEntity(
-                "test",
                 1,
                 1,
                 12L
@@ -69,7 +68,7 @@ class EntryDatabaseTest {
     fun `test correct ordered elements returned`() = runTest {
         repeat(5) {
             dao.insertEntry(
-                FoodEntryEntity("$it", it, it, it.toLong())
+                FoodEntryEntity(it, it, it.toLong())
             )
         }
 
@@ -87,7 +86,7 @@ class EntryDatabaseTest {
     fun `test current date returns correct values`() = runTest {
         repeat(5) {
             dao.insertEntry(
-                FoodEntryEntity("$it", it, it, it.toLong())
+                FoodEntryEntity(it, it, it.toLong())
             )
         }
 

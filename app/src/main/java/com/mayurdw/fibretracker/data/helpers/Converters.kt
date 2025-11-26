@@ -13,9 +13,8 @@ fun convertFoodEntityToEntryEntity(foodEntity: FoodEntity, fibreQuantity: Int): 
     val date = Clock.System.todayIn(TimeZone.currentSystemDefault())
 
     return FoodEntryEntity(
-        foodDisplayName = foodEntity.name,
+        foodId = foodEntity.id,
         foodServingInGms = foodEntity.singleServingSizeInGm,
-        fibreThisServingInMilliGms = fibreQuantity * 1000,
         date = date.toEpochDays()
     )
 }
@@ -23,7 +22,7 @@ fun convertFoodEntityToEntryEntity(foodEntity: FoodEntity, fibreQuantity: Int): 
 fun convertFoodEntryEntityToFoodListItem(foodEntryEntity: FoodEntryEntity): FoodListItem {
     return FoodListItem(
         id = foodEntryEntity.id,
-        foodName = foodEntryEntity.foodDisplayName,
+        foodName = "",
         foodQuantity =
             "${foodEntryEntity.foodServingInGms}"
     )

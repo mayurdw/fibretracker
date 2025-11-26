@@ -4,8 +4,8 @@ package com.mayurdw.fibretracker.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mayurdw.fibretracker.data.usecase.GetEntryUseCase
 import com.mayurdw.fibretracker.data.helpers.convertFoodEntryEntityToFoodListItem
+import com.mayurdw.fibretracker.data.usecase.GetEntryUseCase
 import com.mayurdw.fibretracker.model.domain.DateData
 import com.mayurdw.fibretracker.model.domain.FoodListItem
 import com.mayurdw.fibretracker.model.domain.HomeData
@@ -105,7 +105,8 @@ class HomeScreenViewModel @Inject constructor(
                     }
                     val date = currentDate.format(dateFormat)
                     var totalFibre = 0
-                    current.forEach { totalFibre += it.fibreThisServingInMilliGms }
+                    // TODO: This is wrong
+                    current.forEach { totalFibre += 0 }
 
                     HomeState.Success(
                         HomeData(
