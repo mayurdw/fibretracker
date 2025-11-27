@@ -3,6 +3,7 @@ package com.mayurdw.fibretracker.data.database
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
+import com.mayurdw.fibretracker.model.domain.EntryData
 import com.mayurdw.fibretracker.model.entity.FoodEntity
 import com.mayurdw.fibretracker.model.entity.FoodEntryEntity
 import kotlinx.coroutines.flow.Flow
@@ -23,6 +24,18 @@ interface AppDao {
     )
     fun getEntryMap(startTime: Long, endTime: Long):
             Flow<Map<FoodEntryEntity, FoodEntity>>
+
+    @Query(
+        "SELECT entry.date AS date, " +
+                "entry.serving AS servingInGms, " +
+                "food.name AS name, " +
+                "entry.id AS id," +
+                "fibre_per_micro_gram AS fibrePerMicroGrams " +
+                "FROM entry, food " +
+                "WHERE entry.foodId = food.id " +
+                "AND entry.date BETWEEN :startTime AND :endTime"
+    )
+    fun getEntryData(startTime: Long, endTime: Long): Flow<List<EntryData>>
 
     @Query("SELECT * FROM entry")
     fun getAllEntries(): List<FoodEntryEntity>
