@@ -30,9 +30,9 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mayurdw.fibretracker.R
-import com.mayurdw.fibretracker.model.domain.DateData
-import com.mayurdw.fibretracker.model.domain.FoodListItem
 import com.mayurdw.fibretracker.model.domain.HomeData
+import com.mayurdw.fibretracker.model.domain.HomeData.DateData
+import com.mayurdw.fibretracker.model.domain.HomeData.FoodListItem
 import com.mayurdw.fibretracker.model.domain.HomeState
 import com.mayurdw.fibretracker.ui.theme.FibreTrackerTheme
 import com.mayurdw.fibretracker.viewmodels.HomeScreenViewModel

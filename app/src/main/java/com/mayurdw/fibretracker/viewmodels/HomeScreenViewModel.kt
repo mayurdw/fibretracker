@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mayurdw.fibretracker.data.helpers.convertFoodEntryEntityToFoodListItem
 import com.mayurdw.fibretracker.data.usecase.GetEntryUseCase
-import com.mayurdw.fibretracker.model.domain.DateData
-import com.mayurdw.fibretracker.model.domain.FoodListItem
 import com.mayurdw.fibretracker.model.domain.HomeData
+import com.mayurdw.fibretracker.model.domain.HomeData.DateData
+import com.mayurdw.fibretracker.model.domain.HomeData.FoodListItem
 import com.mayurdw.fibretracker.model.domain.HomeState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

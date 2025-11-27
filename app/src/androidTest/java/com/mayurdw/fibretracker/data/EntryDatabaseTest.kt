@@ -10,7 +10,7 @@ import com.mayurdw.fibretracker.data.database.AppDatabase
 import com.mayurdw.fibretracker.model.entity.FoodEntity
 import com.mayurdw.fibretracker.model.entity.FoodEntryEntity
 import junit.framework.TestCase.assertEquals
-import junit.framework.TestCase.assertFalse
+import junit.framework.TestCase.assertNotNull
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -74,12 +74,12 @@ class EntryDatabaseTest {
             val map = awaitItem()
 
             assertEquals(1, map.size)
-            assertTrue(map.keys.contains(food))
-            assertFalse(map[food].isNullOrEmpty())
-            assertEquals(entry.foodServingInGms, map[food]!![0].foodServingInGms)
+            assertTrue(map.keys.contains(entry))
+            assertEquals(1, map.keys.count())
+            assertEquals(entry.foodServingInGms, map.keys.first().foodServingInGms)
+            assertNotNull(map[entry])
+            assertEquals(food.name, map[entry]!!.name)
         }
-
-
     }
 
     @Test
@@ -107,9 +107,9 @@ class EntryDatabaseTest {
 
         dao.getEntryMap(5L, 12L).test {
             val map = awaitItem()
+
             assertEquals(1, map.size)
-            assertEquals(1, map[food]!!.count())
-            assertEquals(entries[0].foodServingInGms, map[food]!![0].foodServingInGms)
+            assertEquals(entries[0].foodServingInGms, map.keys.first().foodServingInGms)
         }
 
     }

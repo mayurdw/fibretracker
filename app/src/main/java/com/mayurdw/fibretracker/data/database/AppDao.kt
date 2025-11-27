@@ -16,12 +16,13 @@ interface AppDao {
     fun getEntries(startTime: Long, endTime: Long): Flow<List<FoodEntryEntity>>
 
     @Query(
-        "SELECT * FROM food "
-                +
-                "JOIN entry WHERE date BETWEEN :startTime AND :endTime AND foodId = food.id ORDER BY date DESC"
+        "SELECT * FROM entry " +
+                "JOIN food WHERE foodId = food.id " +
+                "AND date BETWEEN :startTime AND :endTime " +
+                "ORDER BY date DESC"
     )
     fun getEntryMap(startTime: Long, endTime: Long):
-            Flow<Map<FoodEntity, List<FoodEntryEntity>>>
+            Flow<Map<FoodEntryEntity, FoodEntity>>
 
     @Query("SELECT * FROM entry")
     fun getAllEntries(): List<FoodEntryEntity>

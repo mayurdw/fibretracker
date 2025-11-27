@@ -1,6 +1,6 @@
 package com.mayurdw.fibretracker.data.helpers
 
-import com.mayurdw.fibretracker.model.domain.FoodListItem
+import com.mayurdw.fibretracker.model.domain.HomeData.FoodListItem
 import com.mayurdw.fibretracker.model.entity.FoodEntity
 import com.mayurdw.fibretracker.model.entity.FoodEntryEntity
 import kotlinx.datetime.TimeZone
