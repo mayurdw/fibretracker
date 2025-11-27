@@ -10,7 +10,6 @@ import com.mayurdw.fibretracker.data.database.AppDatabase
 import com.mayurdw.fibretracker.model.entity.FoodEntity
 import com.mayurdw.fibretracker.model.entity.FoodEntryEntity
 import junit.framework.TestCase.assertEquals
-import junit.framework.TestCase.assertNotNull
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -43,7 +42,7 @@ class EntryDatabaseTest {
 
     @Test
     fun `test database created and empty`() = runTest {
-        dao.getEntryMap(Long.MIN_VALUE, Long.MAX_VALUE).test {
+        dao.getEntryData(Long.MIN_VALUE, Long.MAX_VALUE).test {
             val list = awaitItem()
             assertTrue(list.isEmpty())
         }
@@ -70,15 +69,12 @@ class EntryDatabaseTest {
             entry
         )
 
-        dao.getEntryMap(0, 20).test {
-            val map = awaitItem()
+        dao.getEntryData(0, 20).test {
+            val list = awaitItem()
 
-            assertEquals(1, map.size)
-            assertTrue(map.keys.contains(entry))
-            assertEquals(1, map.keys.count())
-            assertEquals(entry.foodServingInGms, map.keys.first().foodServingInGms)
-            assertNotNull(map[entry])
-            assertEquals(food.name, map[entry]!!.name)
+            assertEquals(1, list.size)
+            assertEquals(entry.foodServingInGms, list[0].servingInGms)
+            assertEquals(food.name, list[0].name)
         }
     }
 
@@ -105,12 +101,43 @@ class EntryDatabaseTest {
         entries.forEach { dao.insertEntry(it) }
         dao.insertFood(food)
 
-        dao.getEntryMap(5L, 12L).test {
-            val map = awaitItem()
+        dao.getEntryData(5L, 12L).test {
+            val list = awaitItem()
 
-            assertEquals(1, map.size)
-            assertEquals(entries[0].foodServingInGms, map.keys.first().foodServingInGms)
+            assertEquals(1, list.size)
+            assertEquals(entries[0].foodServingInGms, list[0].servingInGms)
         }
+    }
 
+    @Test
+    fun `multiple entries of same date`() = runTest {
+        val food = FoodEntity(
+            name = "Test",
+            singleServingSizeInGm = 10,
+            fibrePerMicroGram = 2000
+        ).apply { id = 1 }
+        val entries = listOf(
+            FoodEntryEntity(
+                foodId = food.id,
+                foodServingInGms = food.singleServingSizeInGm,
+                date = 10L
+            ),
+            FoodEntryEntity(
+                foodId = food.id,
+                foodServingInGms = food.singleServingSizeInGm * 2,
+                date = 10L
+            )
+        )
+
+        entries.forEach { dao.insertEntry(it) }
+        dao.insertFood(food)
+
+        dao.getEntryData(5L, 12L).test {
+            val list = awaitItem()
+
+            assertEquals(2, list.size)
+            assertEquals(entries[0].foodServingInGms, list[0].servingInGms)
+            assertEquals(entries[1].foodServingInGms, list[1].servingInGms)
+        }
     }
 }
