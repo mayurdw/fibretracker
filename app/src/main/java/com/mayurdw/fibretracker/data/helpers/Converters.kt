@@ -15,7 +15,7 @@ fun convertFoodEntityToEntryEntity(foodEntity: FoodEntity, fibreQuantity: Int): 
     return FoodEntryEntity(
         foodId = foodEntity.id,
         foodServingInGms = foodEntity.singleServingSizeInGm,
-        date = date.toEpochDays()
+        date = date
     )
 }
 

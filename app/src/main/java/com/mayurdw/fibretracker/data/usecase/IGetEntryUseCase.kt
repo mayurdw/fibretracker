@@ -8,8 +8,6 @@ import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 
 interface IGetEntryUseCase {
-    suspend fun getAllEntries(): List<FoodEntryEntity>
-
     suspend fun getCurrentDateEntries(currentDate: LocalDate): Flow<List<FoodEntryEntity>>
 
     suspend fun getYesterdaysDateEntries(currentDate: LocalDate): Flow<List<FoodEntryEntity>> {

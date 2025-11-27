@@ -12,12 +12,20 @@ import com.mayurdw.fibretracker.model.entity.FoodEntryEntity
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.minus
+import kotlinx.datetime.todayIn
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
+@OptIn(ExperimentalTime::class)
 @RunWith(AndroidJUnit4::class)
 class EntryDatabaseTest {
 
@@ -42,7 +50,8 @@ class EntryDatabaseTest {
 
     @Test
     fun `test database created and empty`() = runTest {
-        dao.getEntryData(Long.MIN_VALUE, Long.MAX_VALUE).test {
+        val currentDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
+        dao.getEntryData(currentDate, currentDate).test {
             val list = awaitItem()
             assertTrue(list.isEmpty())
         }
@@ -50,6 +59,7 @@ class EntryDatabaseTest {
 
     @Test
     fun `test multimap between food and entry`() = runTest {
+        val currentDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
         val food = FoodEntity(
             name = "Food",
             singleServingSizeInGm = 10,
@@ -58,7 +68,7 @@ class EntryDatabaseTest {
         val entry = FoodEntryEntity(
             foodId = food.id,
             foodServingInGms = 5,
-            date = 10
+            date = currentDate
         )
 
         dao.insertFood(
@@ -69,7 +79,7 @@ class EntryDatabaseTest {
             entry
         )
 
-        dao.getEntryData(0, 20).test {
+        dao.getEntryData(LocalDate.fromEpochDays(0), currentDate).test {
             val list = awaitItem()
 
             assertEquals(1, list.size)
@@ -80,6 +90,7 @@ class EntryDatabaseTest {
 
     @Test
     fun `multiple entries of one food`() = runTest {
+        val currentDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
         val food = FoodEntity(
             name = "Test",
             singleServingSizeInGm = 10,
@@ -89,19 +100,19 @@ class EntryDatabaseTest {
             FoodEntryEntity(
                 foodId = food.id,
                 foodServingInGms = food.singleServingSizeInGm,
-                date = 10L
+                date = currentDate
             ),
             FoodEntryEntity(
                 foodId = food.id,
                 foodServingInGms = food.singleServingSizeInGm * 2,
-                date = 4L
+                date = currentDate.minus(1, DateTimeUnit.DAY)
             )
         )
 
         entries.forEach { dao.insertEntry(it) }
         dao.insertFood(food)
 
-        dao.getEntryData(5L, 12L).test {
+        dao.getEntryData(currentDate, currentDate).test {
             val list = awaitItem()
 
             assertEquals(1, list.size)
@@ -111,6 +122,8 @@ class EntryDatabaseTest {
 
     @Test
     fun `multiple entries of same date`() = runTest {
+
+        val currentDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
         val food = FoodEntity(
             name = "Test",
             singleServingSizeInGm = 10,
@@ -120,19 +133,19 @@ class EntryDatabaseTest {
             FoodEntryEntity(
                 foodId = food.id,
                 foodServingInGms = food.singleServingSizeInGm,
-                date = 10L
+                date = currentDate
             ),
             FoodEntryEntity(
                 foodId = food.id,
                 foodServingInGms = food.singleServingSizeInGm * 2,
-                date = 10L
+                date = currentDate
             )
         )
 
         entries.forEach { dao.insertEntry(it) }
         dao.insertFood(food)
 
-        dao.getEntryData(5L, 12L).test {
+        dao.getEntryData(currentDate, currentDate).test {
             val list = awaitItem()
 
             assertEquals(2, list.size)

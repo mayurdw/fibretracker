@@ -1,10 +1,11 @@
 package com.mayurdw.fibretracker.model.domain
 
+import kotlinx.datetime.LocalDate
 import java.math.BigDecimal
 
 data class EntryData(
     val id: Int,
-    val date: Long,
+    val date: LocalDate,
     val name: String,
     val servingInGms: Int,
     val fibrePerMicroGrams: Int

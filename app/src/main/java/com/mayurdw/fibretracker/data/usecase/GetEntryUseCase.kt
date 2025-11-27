@@ -9,10 +9,6 @@ import javax.inject.Inject
 class GetEntryUseCase @Inject constructor(
     private val entryDao: AppDao
 ) : IGetEntryUseCase {
-    override suspend fun getAllEntries(): List<FoodEntryEntity> {
-        return entryDao.getAllEntries()
-    }
-
     override suspend fun getCurrentDateEntries(currentDate: LocalDate): Flow<List<FoodEntryEntity>> {
         return entryDao.getEntries(currentDate.toEpochDays(), currentDate.toEpochDays())
     }

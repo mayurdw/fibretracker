@@ -7,6 +7,7 @@ import com.mayurdw.fibretracker.model.domain.EntryData
 import com.mayurdw.fibretracker.model.entity.FoodEntity
 import com.mayurdw.fibretracker.model.entity.FoodEntryEntity
 import kotlinx.coroutines.flow.Flow
+import kotlinx.datetime.LocalDate
 
 @Dao
 interface AppDao {
@@ -27,10 +28,7 @@ interface AppDao {
                 "AND entry.date BETWEEN :startTime AND :endTime " +
                 "ORDER BY date DESC"
     )
-    fun getEntryData(startTime: Long, endTime: Long): Flow<List<EntryData>>
-
-    @Query("SELECT * FROM entry")
-    fun getAllEntries(): List<FoodEntryEntity>
+    fun getEntryData(startTime: LocalDate, endTime: LocalDate): Flow<List<EntryData>>
 
     @Upsert
     fun insertEntry(entryEntity: FoodEntryEntity)
