@@ -17,6 +17,10 @@ interface AppDao {
     @Query("SELECT * FROM entry WHERE date BETWEEN :startTime AND :endTime ORDER BY date DESC")
     fun getEntries(startTime: Long, endTime: Long): Flow<List<FoodEntryEntity>>
 
+
+    @Query("SELECT 1 FROM entry WHERE entry.date BETWEEN :startTime AND :endTime")
+    fun checkIfEntryDataExists(startTime: LocalDate, endTime: LocalDate): Flow<Boolean>
+
     @Query(
         "SELECT entry.date AS date, " +
                 "entry.serving AS servingInGms, " +

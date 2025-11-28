@@ -14,7 +14,8 @@ data class HomeData(
     data class FoodListItem(
         val id: Int,
         val foodName: String,
-        val foodQuantity: String
+        val foodQuantity: String,
+        val fibreThisMeal: String
     )
 }
 

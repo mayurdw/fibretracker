@@ -214,8 +214,18 @@ private fun PreviewHomeScreenLayout() {
                     "29/5/25",
                     fibreOfTheDay = "29.4",
                     foodItems = listOf(
-                        FoodListItem(id = 1, foodQuantity = "34.9", foodName = "Potato"),
-                        FoodListItem(id = 2, foodQuantity = "15.23", foodName = "Chia")
+                        FoodListItem(
+                            id = 1,
+                            foodQuantity = "34.9",
+                            foodName = "Potato",
+                            fibreThisMeal = "0.3"
+                        ),
+                        FoodListItem(
+                            id = 2,
+                            foodQuantity = "15.23",
+                            foodName = "Chia",
+                            fibreThisMeal = "0.5"
+                        )
                     )
                 )
             ),

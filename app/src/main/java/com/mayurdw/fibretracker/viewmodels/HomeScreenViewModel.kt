@@ -8,18 +8,21 @@ import com.mayurdw.fibretracker.data.helpers.convertFoodEntryEntityToFoodListIte
 import com.mayurdw.fibretracker.data.usecase.GetEntryUseCase
 import com.mayurdw.fibretracker.model.domain.HomeData
 import com.mayurdw.fibretracker.model.domain.HomeData.DateData
-import com.mayurdw.fibretracker.model.domain.HomeData.FoodListItem
 import com.mayurdw.fibretracker.model.domain.HomeState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import kotlinx.datetime.DateTimeUnit.Companion.DAY
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.format
 import kotlinx.datetime.format.char
+import kotlinx.datetime.minus
+import kotlinx.datetime.plus
 import kotlinx.datetime.todayIn
+import java.math.BigDecimal
 import javax.inject.Inject
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
@@ -31,70 +34,22 @@ class HomeScreenViewModel @Inject constructor(
     val homeStateFlow: StateFlow<HomeState>
         field = MutableStateFlow<HomeState>(HomeState.Loading)
 
-    private var index: Int = -1
-
-    private val dates: List<DateData> = listOf(
-        DateData(
-            formattedDate = "28/9/25",
-            fibreOfTheDay = "12",
-            foodItems = listOf(
-                FoodListItem(
-                    id = 8,
-                    foodName = "Potato",
-                    foodQuantity = "30"
-                )
-            )
-        ),
-        DateData(
-            formattedDate = "29/9/25",
-            fibreOfTheDay = "23",
-            foodItems = listOf(
-                FoodListItem(
-                    id = 9,
-                    foodName = "Chia",
-                    foodQuantity = "15"
-                )
-            )
-        ),
-        DateData(
-            formattedDate = "30/9/25",
-            fibreOfTheDay = "0",
-            foodItems = listOf(
-                FoodListItem(
-                    id = 19,
-                    foodName = "Yogurt",
-                    foodQuantity = "34gm"
-                )
-            )
-        )
-    )
-
-    suspend fun emitState() {
-        homeStateFlow.emit(
-            HomeState.Success(
-                data = HomeData(
-                    hasPrevious = index > 0,
-                    hasNext = dates.size - 1 > index,
-                    dateData = dates[index]
-                )
-            )
-        )
+    val currentDate by lazy {
+        Clock.System.todayIn(TimeZone.currentSystemDefault())
     }
 
     fun getLatestData() {
         viewModelScope.launch {
-            val currentDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
-
             homeStateFlow.emit(HomeState.Loading)
             with(getEntryUseCase) {
                 combine(
-                    getCurrentDateEntries(currentDate),
-                    getYesterdaysDateEntries(currentDate),
-                    getTomorrowsDateEntries(currentDate)
+                    getCurrentDateEntryData(currentDate),
+                    checkYesterdaysDateEntryData(currentDate),
+                    checkTomorrowsDateEntryData(currentDate)
                 ) { current, yesterday, tomorrow ->
 
-                    val foodList = current.map { foodEntryEntity ->
-                        convertFoodEntryEntityToFoodListItem(foodEntryEntity = foodEntryEntity)
+                    val foodList = current.map { entryData ->
+                        convertFoodEntryEntityToFoodListItem(entryData)
                     }
                     val dateFormat = LocalDate.Format {
                         day()
@@ -104,18 +59,16 @@ class HomeScreenViewModel @Inject constructor(
                         yearTwoDigits(2000)
                     }
                     val date = currentDate.format(dateFormat)
-                    var totalFibre = 0
-                    // TODO: This is wrong
-                    current.forEach { totalFibre += 0 }
+                    var totalFibre = BigDecimal.ZERO
+                    current.forEach { totalFibre += it.fibreConsumedInGms }
 
                     HomeState.Success(
                         HomeData(
-                            hasNext = tomorrow.count() > 0,
-                            hasPrevious = yesterday.count() > 0,
+                            hasNext = tomorrow,
+                            hasPrevious = yesterday,
                             dateData = DateData(
                                 formattedDate = date,
-                                fibreOfTheDay =
-                                    "${totalFibre / 1000.00}",
+                                fibreOfTheDay = totalFibre.toString(),
                                 foodItems = foodList
                             )
                         )
@@ -130,14 +83,12 @@ class HomeScreenViewModel @Inject constructor(
     fun onDateChanged(isPrevious: Boolean) {
         viewModelScope.launch {
             if (isPrevious) {
-                if (index > 0)
-                    index--
+                currentDate.minus(1, DAY)
             } else {
-                if (dates.size - 1 > index) {
-                    index++
-                }
+                currentDate.plus(1, DAY)
             }
-            emitState()
+
+            getLatestData()
         }
     }
 

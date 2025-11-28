@@ -8,7 +8,7 @@ import javax.inject.Inject
 class AddEntryUseCase @Inject constructor(
     private val entryDao: AppDao
 ) : IAddEntryUseCase {
-    override suspend fun insertNewEntry(foodEntity: FoodEntity, fibreQuantity: Int) {
-        entryDao.insertEntry(convertFoodEntityToEntryEntity(foodEntity, fibreQuantity))
+    override suspend fun insertNewEntry(foodEntity: FoodEntity) {
+        entryDao.insertEntry(convertFoodEntityToEntryEntity(foodEntity))
     }
 }

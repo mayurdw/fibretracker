@@ -56,8 +56,8 @@ fun FoodQuantityScreen(
             FoodQuantityScreenContent(
                 modifier,
                 (state as FoodQuantityState.Success).food
-            ) { selectedFoodItem, fibreQuantity, foodQuantity ->
-                viewModel.insertNewEntry(selectedFoodItem, fibreQuantity, foodQuantity)
+            ) { selectedFoodItem, foodQuantity ->
+                viewModel.insertNewEntry(selectedFoodItem, foodQuantity)
             }
         }
 
@@ -69,15 +69,13 @@ fun FoodQuantityScreen(
 private fun FoodQuantityScreenContent(
     modifier: Modifier = Modifier,
     selectedFoodItem: FoodEntity,
-    onSaveClick: (selectedFoodItem: FoodEntity, fibreQuantity: Int, foodQuantity: String) -> Unit
+    onSaveClick: (selectedFoodItem: FoodEntity, foodQuantity: String) -> Unit
 ) {
     val foodQuantity =
         rememberTextFieldState(initialText = selectedFoodItem.singleServingSizeInGm.toString())
     var fibreQuantity =
         if (foodQuantity.text.isNotBlank()) {
-            // TODO: This is wrong now
-            selectedFoodItem.fibrePerMicroGram * foodQuantity.text.toString()
-                .toInt() / 1000
+            selectedFoodItem.fibrePerGram * foodQuantity.text.toString().toBigDecimal()
         } else {
             0
         }
@@ -86,8 +84,7 @@ private fun FoodQuantityScreenContent(
         snapshotFlow { foodQuantity.text.toString() }.collectLatest { newValue: String ->
             if (newValue.isNotBlank()) {
                 fibreQuantity =
-                        // TODO: This is wrong now
-                    selectedFoodItem.fibrePerMicroGram * newValue.toInt() / 1000
+                    selectedFoodItem.fibrePerGram * newValue.toBigDecimal()
             }
         }
     }
@@ -114,8 +111,7 @@ private fun FoodQuantityScreenContent(
 
         Text(
             modifier = modifier,
-            // TODO: This is wrong now
-            text = "Fibre Per Gram = ${selectedFoodItem.fibrePerMicroGram / 1000.0} gm"
+            text = "Fibre Per Gram = ${selectedFoodItem.fibrePerGram}"
         )
 
         Text(
@@ -124,7 +120,7 @@ private fun FoodQuantityScreenContent(
         )
 
         Button(onClick = {
-            onSaveClick(selectedFoodItem, fibreQuantity, foodQuantity.text.toString())
+            onSaveClick(selectedFoodItem, foodQuantity.text.toString())
         }, content = { Text("Submit") })
     }
 }
@@ -139,7 +135,7 @@ private fun FoodQuantityScreenPreview() {
                 40,
                 35
             )
-        ) { _, _, _ ->
+        ) { _, _ ->
 
         }
     }

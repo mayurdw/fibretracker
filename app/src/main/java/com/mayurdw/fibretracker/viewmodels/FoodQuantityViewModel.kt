@@ -30,16 +30,16 @@ class FoodQuantityViewModel @Inject constructor(
         }
     }
 
-    fun insertNewEntry(foodEntity: FoodEntity, fibreQuantity: Int, foodQuantity: String) {
+    fun insertNewEntry(foodEntity: FoodEntity, foodQuantity: String) {
         viewModelScope.launch(Dispatchers.IO) {
             foodState.emit(FoodQuantityState.Loading)
             entryState.emit(false)
             val quantity = foodQuantity.toInt()
             if (foodEntity.singleServingSizeInGm != quantity) {
                 val entity = foodEntity.copy(singleServingSizeInGm = quantity)
-                entryUseCase.insertNewEntry(entity, fibreQuantity)
+                entryUseCase.insertNewEntry(entity)
             } else {
-                entryUseCase.insertNewEntry(foodEntity, fibreQuantity)
+                entryUseCase.insertNewEntry(foodEntity)
             }
             entryState.emit(true)
         }

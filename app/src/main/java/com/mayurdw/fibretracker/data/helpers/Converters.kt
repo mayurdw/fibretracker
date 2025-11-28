@@ -1,5 +1,6 @@
 package com.mayurdw.fibretracker.data.helpers
 
+import com.mayurdw.fibretracker.model.domain.EntryData
 import com.mayurdw.fibretracker.model.domain.HomeData.FoodListItem
 import com.mayurdw.fibretracker.model.entity.FoodEntity
 import com.mayurdw.fibretracker.model.entity.FoodEntryEntity
@@ -9,7 +10,7 @@ import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class)
-fun convertFoodEntityToEntryEntity(foodEntity: FoodEntity, fibreQuantity: Int): FoodEntryEntity {
+fun convertFoodEntityToEntryEntity(foodEntity: FoodEntity): FoodEntryEntity {
     val date = Clock.System.todayIn(TimeZone.currentSystemDefault())
 
     return FoodEntryEntity(
@@ -19,11 +20,12 @@ fun convertFoodEntityToEntryEntity(foodEntity: FoodEntity, fibreQuantity: Int): 
     )
 }
 
-fun convertFoodEntryEntityToFoodListItem(foodEntryEntity: FoodEntryEntity): FoodListItem {
+fun convertFoodEntryEntityToFoodListItem(entryData: EntryData): FoodListItem {
     return FoodListItem(
-        id = foodEntryEntity.id,
-        foodName = "",
+        id = entryData.id,
+        foodName = entryData.name,
         foodQuantity =
-            "${foodEntryEntity.foodServingInGms}"
+            "${entryData.servingInGms}",
+        fibreThisMeal = entryData.fibreConsumedInGms.toString()
     )
 }
