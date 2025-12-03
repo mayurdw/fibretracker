@@ -20,6 +20,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mayurdw.fibretracker.model.domain.CommonFoods
 import com.mayurdw.fibretracker.model.entity.FoodEntity
+import com.mayurdw.fibretracker.ui.screens.core.FoodCardView
 import com.mayurdw.fibretracker.ui.theme.FibreTrackerTheme
 import com.mayurdw.fibretracker.viewmodels.AddFoodEntryViewModel
 import com.mayurdw.fibretracker.viewmodels.FoodEntryState
@@ -49,56 +50,5 @@ fun AddFoodItemScreen(
         }
 
         else -> {}
-    }
-}
-
-@Composable
-fun AddFoodItemList(
-    modifier: Modifier = Modifier,
-    foodItems: List<FoodEntity>,
-    onItemSelect: (FoodEntity) -> Unit
-) {
-    LazyColumn(
-        modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        itemsIndexed(
-            items = foodItems,
-            key = { index: Int, foodItem: FoodEntity -> foodItem.id }
-        ) { index: Int, foodItem: FoodEntity ->
-
-            FoodItem(modifier, foodItem, onItemSelect)
-            if (index < foodItems.lastIndex)
-                HorizontalDivider(modifier, thickness = 2.dp)
-        }
-    }
-}
-
-@Composable
-fun FoodItem(
-    modifier: Modifier = Modifier,
-    foodItem: FoodEntity,
-    onItemSelect: (FoodEntity) -> Unit
-) {
-    Text(
-        text = foodItem.name,
-        style = MaterialTheme.typography.bodyMedium,
-        modifier = modifier
-            .fillMaxWidth()
-            .sizeIn(minHeight = 32.dp)
-            .clickable(
-                enabled = true,
-                onClick = { onItemSelect(foodItem) })
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun AddFoodItemListPreview() {
-    FibreTrackerTheme {
-        AddFoodItemList(
-            foodItems = CommonFoods,
-            onItemSelect = {}
-        )
     }
 }

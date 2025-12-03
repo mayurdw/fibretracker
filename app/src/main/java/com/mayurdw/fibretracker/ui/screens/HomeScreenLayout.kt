@@ -1,6 +1,5 @@
 package com.mayurdw.fibretracker.ui.screens
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,8 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -30,6 +27,7 @@ import com.mayurdw.fibretracker.R
 import com.mayurdw.fibretracker.model.domain.HomeData
 import com.mayurdw.fibretracker.model.domain.HomeData.DateData
 import com.mayurdw.fibretracker.model.domain.HomeData.FoodListItem
+import com.mayurdw.fibretracker.ui.screens.core.FoodCardView
 import com.mayurdw.fibretracker.ui.theme.FibreTrackerTheme
 
 @Composable
@@ -160,13 +158,7 @@ fun FoodItems(modifier: Modifier = Modifier, foodItems: List<FoodListItem>) {
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(items = foodItems, key = { item: FoodListItem -> item.id }) {
-            Card(
-                colors = CardDefaults.elevatedCardColors().copy(
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                    contentColor = MaterialTheme.colorScheme.secondary
-                ),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
-            ) {
+            FoodCardView {
                 Row(
                     modifier = modifier
                         .fillMaxWidth()
