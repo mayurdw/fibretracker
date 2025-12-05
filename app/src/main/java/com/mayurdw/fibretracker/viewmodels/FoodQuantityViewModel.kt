@@ -37,6 +37,7 @@ class FoodQuantityViewModel @Inject constructor(
             val quantity = foodQuantity.toInt()
             if (foodEntity.singleServingSizeInGm != quantity) {
                 val entity = foodEntity.copy(singleServingSizeInGm = quantity)
+                entity.id = foodEntity.id
                 entryUseCase.insertNewEntry(entity)
             } else {
                 entryUseCase.insertNewEntry(foodEntity)
