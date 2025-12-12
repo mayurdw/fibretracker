@@ -7,7 +7,11 @@ import com.mayurdw.fibretracker.data.helpers.LocalDateConverters
 import com.mayurdw.fibretracker.model.entity.FoodEntity
 import com.mayurdw.fibretracker.model.entity.FoodEntryEntity
 
-@Database(entities = [FoodEntity::class, FoodEntryEntity::class], version = 1, exportSchema = false)
+@Database(
+    version = 1,
+    entities = [FoodEntity::class, FoodEntryEntity::class],
+    exportSchema = false
+)
 @TypeConverters(LocalDateConverters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun getAppDao(): AppDao

@@ -29,10 +29,12 @@ object DataModule {
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
         return Room
-            .inMemoryDatabaseBuilder(
+            .databaseBuilder(
                 context,
-                AppDatabase::class.java
-            ).fallbackToDestructiveMigration(false).build()
+                AppDatabase::class.java,
+                "app-database"
+            )
+            .build()
     }
 
     @Provides
