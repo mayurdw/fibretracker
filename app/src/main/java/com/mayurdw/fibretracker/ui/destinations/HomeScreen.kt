@@ -1,4 +1,4 @@
-package com.mayurdw.fibretracker.ui.screens
+package com.mayurdw.fibretracker.ui.destinations
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -8,6 +8,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mayurdw.fibretracker.model.domain.HomeState
+import com.mayurdw.fibretracker.ui.screens.HomeScreenLayout
+import com.mayurdw.fibretracker.ui.screens.core.LoadingScreen
 import com.mayurdw.fibretracker.viewmodels.HomeScreenViewModel
 
 

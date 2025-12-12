@@ -1,8 +1,9 @@
-package com.mayurdw.fibretracker.ui.screens
+package com.mayurdw.fibretracker.ui.destinations
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.mayurdw.fibretracker.ui.screens.AddNewFoodScreenLayout
 import com.mayurdw.fibretracker.viewmodels.AddNewFoodViewModel
 
 @Composable

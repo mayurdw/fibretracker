@@ -33,10 +33,10 @@ import com.mayurdw.fibretracker.ui.destinations.Destinations
 import com.mayurdw.fibretracker.ui.destinations.Home
 import com.mayurdw.fibretracker.ui.destinations.getDestination
 import com.mayurdw.fibretracker.ui.destinations.getTitle
-import com.mayurdw.fibretracker.ui.screens.AddFoodItemScreen
-import com.mayurdw.fibretracker.ui.screens.AddNewFoodScreen
-import com.mayurdw.fibretracker.ui.screens.FoodQuantityScreen
-import com.mayurdw.fibretracker.ui.screens.HomeScreen
+import com.mayurdw.fibretracker.ui.destinations.AddFoodItemScreen
+import com.mayurdw.fibretracker.ui.destinations.AddNewFoodScreen
+import com.mayurdw.fibretracker.ui.destinations.FoodQuantityScreen
+import com.mayurdw.fibretracker.ui.destinations.HomeScreen
 import com.mayurdw.fibretracker.ui.theme.FibreTrackerTheme
 import dagger.hilt.android.AndroidEntryPoint
 
