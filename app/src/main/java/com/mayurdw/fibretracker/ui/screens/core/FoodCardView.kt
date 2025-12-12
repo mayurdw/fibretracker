@@ -8,8 +8,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun FoodCardView(cardContent: @Composable () -> Unit) {
+fun FoodCardView(onCardSelect: () -> Unit = {}, cardContent: @Composable () -> Unit) {
     Card(
+        onClick = onCardSelect,
         colors = CardDefaults.elevatedCardColors().copy(
             containerColor = MaterialTheme.colorScheme.secondaryContainer,
             contentColor = MaterialTheme.colorScheme.secondary

@@ -50,7 +50,9 @@ fun FoodItem(
     foodItem: FoodEntity,
     onItemSelect: (FoodEntity) -> Unit
 ) {
-    FoodCardView {
+    FoodCardView(
+        onCardSelect = { onItemSelect(foodItem) }
+    ) {
         Row(
             modifier = modifier
                 .fillMaxWidth()
@@ -64,9 +66,6 @@ fun FoodItem(
                 modifier = modifier
                     .fillMaxWidth()
                     .sizeIn(minHeight = 32.dp)
-                    .clickable(
-                        enabled = true,
-                        onClick = { onItemSelect(foodItem) })
             )
         }
     }
