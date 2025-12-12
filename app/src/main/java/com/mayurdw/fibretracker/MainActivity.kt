@@ -75,10 +75,9 @@ fun FibreTrackerTopBar(
         },
         actions = {
             if (AddFoodItem == currentDestination) {
-                // TODO: Correct Icon
                 IconButton(onClick = onAddPressed) {
                     Icon(
-                        painterResource(R.drawable.previous),
+                        painterResource(R.drawable.add),
                         contentDescription = null
                     )
                 }
