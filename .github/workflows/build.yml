@@ -1,10 +1,6 @@
 name: Android CI
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+on: push
 
 jobs:
   build:
@@ -28,7 +24,6 @@ jobs:
       with:
         releaseDirectory: |
           app/build/outputs/apk/release
-          app/build/outputs/bundle/release
         signingKeyBase64: ${{ secrets.SIGNING_KEY }}
         output: build/release/signed
         alias: ${{ secrets.KEYSTORE_ALIAS }}
@@ -36,3 +31,8 @@ jobs:
         keyPassword: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
       env:
         BUILD_TOOLS_VERSION: "36.0.0"
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      if: github.ref_type == 'tag'
+      with:
+        files: app/build/outputs/apk/release/*.apk
