@@ -28,15 +28,15 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.mayurdw.fibretracker.ui.destinations.AddAmountItem
 import com.mayurdw.fibretracker.ui.destinations.AddFoodItem
+import com.mayurdw.fibretracker.ui.destinations.AddFoodItemScreen
 import com.mayurdw.fibretracker.ui.destinations.AddNewFoodItem
+import com.mayurdw.fibretracker.ui.destinations.AddNewFoodScreen
 import com.mayurdw.fibretracker.ui.destinations.Destinations
+import com.mayurdw.fibretracker.ui.destinations.FoodQuantityScreen
 import com.mayurdw.fibretracker.ui.destinations.Home
+import com.mayurdw.fibretracker.ui.destinations.HomeScreen
 import com.mayurdw.fibretracker.ui.destinations.getDestination
 import com.mayurdw.fibretracker.ui.destinations.getTitle
-import com.mayurdw.fibretracker.ui.destinations.AddFoodItemScreen
-import com.mayurdw.fibretracker.ui.destinations.AddNewFoodScreen
-import com.mayurdw.fibretracker.ui.destinations.FoodQuantityScreen
-import com.mayurdw.fibretracker.ui.destinations.HomeScreen
 import com.mayurdw.fibretracker.ui.theme.FibreTrackerTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -53,8 +53,8 @@ fun FibreTrackerTopBar(
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
-            titleContentColor = MaterialTheme.colorScheme.secondary,
-            navigationIconContentColor = MaterialTheme.colorScheme.secondary
+            titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer
         ),
         title = {
             Text(
@@ -74,7 +74,7 @@ fun FibreTrackerTopBar(
             }
         },
         actions = {
-            if (AddFoodItem == currentDestination) {
+            if (Home == currentDestination) {
                 IconButton(onClick = onAddPressed) {
                     Icon(
                         painterResource(R.drawable.add),
@@ -118,7 +118,7 @@ class MainActivity : ComponentActivity() {
                                 Icon(
                                     painterResource(R.drawable.add),
                                     contentDescription = "",
-                                    tint = MaterialTheme.colorScheme.primary
+                                    tint = MaterialTheme.colorScheme.onPrimaryContainer
                                 )
                             }
                         }

@@ -22,8 +22,8 @@ class GetEntryUseCase @Inject constructor(
     }
 
     override suspend fun checkTomorrowsDateEntryData(currentDate: LocalDate): Flow<Boolean> {
-        val yesterdaysDate = currentDate.plus(1, DAY)
+        val tomorrowsDate = currentDate.plus(1, DAY)
 
-        return entryDao.checkIfEntryDataExists(yesterdaysDate, yesterdaysDate)
+        return entryDao.checkIfEntryDataExists(tomorrowsDate, tomorrowsDate)
     }
 }

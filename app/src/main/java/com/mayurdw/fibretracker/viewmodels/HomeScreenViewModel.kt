@@ -34,9 +34,8 @@ class HomeScreenViewModel @Inject constructor(
     val homeStateFlow: StateFlow<HomeState>
         field = MutableStateFlow<HomeState>(HomeState.Loading)
 
-    val currentDate by lazy {
-        Clock.System.todayIn(TimeZone.currentSystemDefault())
-    }
+    var currentDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
+    val todaysDate = currentDate
 
     fun getLatestData() {
         viewModelScope.launch {
@@ -64,7 +63,7 @@ class HomeScreenViewModel @Inject constructor(
 
                     HomeState.Success(
                         HomeData(
-                            hasNext = tomorrow,
+                            hasNext = (todaysDate != currentDate || tomorrow),
                             hasPrevious = yesterday,
                             dateData = DateData(
                                 formattedDate = date,
@@ -83,9 +82,9 @@ class HomeScreenViewModel @Inject constructor(
     fun onDateChanged(isPrevious: Boolean) {
         viewModelScope.launch {
             if (isPrevious) {
-                currentDate.minus(1, DAY)
+                currentDate = currentDate.minus(1, DAY)
             } else {
-                currentDate.plus(1, DAY)
+                currentDate = currentDate.plus(1, DAY)
             }
 
             getLatestData()
