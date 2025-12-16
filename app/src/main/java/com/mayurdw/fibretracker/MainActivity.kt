@@ -45,7 +45,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @Preview
 @Composable
 fun FibreTrackerTopBar(
-    modifier: Modifier = Modifier,
     currentDestination: Destinations = Home,
     onBackPressed: () -> Unit = {},
     onAddPressed: () -> Unit = {}
@@ -54,7 +53,8 @@ fun FibreTrackerTopBar(
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
             titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-            navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+            navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            actionIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer
         ),
         title = {
             Text(
