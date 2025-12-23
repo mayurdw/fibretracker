@@ -21,7 +21,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewDynamicColors
+import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import com.mayurdw.fibretracker.R
 import com.mayurdw.fibretracker.model.domain.HomeData
@@ -45,12 +48,11 @@ fun HomeScreenLayout(
         verticalArrangement = Arrangement.Top
     ) {
         DatePicker(
-            modifier,
-            homeData.hasNext,
-            homeData.hasPrevious,
-            homeData.dateData.formattedDate,
-            onNextClicked,
-            onPreviousClicked
+            modifier = modifier,
+            hasNext = homeData.hasNext,
+            formattedDate = homeData.dateData.formattedDate,
+            onNextClicked = onNextClicked,
+            onPreviousClicked = onPreviousClicked
         )
 
         Spacer(
@@ -90,7 +92,7 @@ private fun FibreValue(
         Text(
             modifier = modifier,
             style = MaterialTheme.typography.displayLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = MaterialTheme.colorScheme.onSurface,
             text = value
         )
 
@@ -109,7 +111,6 @@ private fun FibreValue(
 private fun DatePicker(
     modifier: Modifier,
     hasNext: Boolean,
-    hasPrevious: Boolean,
     formattedDate: String,
     onNextClicked: () -> Unit,
     onPreviousClicked: () -> Unit
@@ -123,13 +124,13 @@ private fun DatePicker(
     ) {
         IconButton(
             modifier = modifier,
-            onClick = onPreviousClicked, enabled = hasPrevious
+            onClick = onPreviousClicked, enabled = true
         ) {
             Icon(
                 modifier = modifier,
                 painter = painterResource(R.drawable.previous),
                 contentDescription = null,
-                tint = if (hasPrevious) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.inverseOnSurface
+                tint = MaterialTheme.colorScheme.onSurface
             )
         }
 
@@ -202,36 +203,52 @@ fun FoodItems(
 }
 
 
-@Preview(showBackground = true)
+@PreviewLightDark
+@PreviewDynamicColors
 @Composable
-private fun PreviewHomeScreenLayout() {
+private fun PreviewHomeScreenLayout(
+    @PreviewParameter(HomeScreenPreviewProvider::class) data: HomeData
+) {
     FibreTrackerTheme {
         HomeScreenLayout(
             modifier = Modifier,
-            homeData = HomeData(
-                hasPrevious = false,
-                hasNext = true,
-                dateData = DateData(
-                    "29/5/25",
-                    fibreOfTheDay = "0.8",
-                    foodItems = listOf(
-                        FoodListItem(
-                            id = 1,
-                            foodQuantity = "34.9",
-                            foodName = "Potato",
-                            fibreThisMeal = "0.3"
-                        ),
-                        FoodListItem(
-                            id = 2,
-                            foodQuantity = "15.23",
-                            foodName = "Chia",
-                            fibreThisMeal = "0.5"
-                        )
-                    )
-                )
-            ),
+            homeData = data,
             onNextClicked = {},
             onPreviousClicked = {}
         )
     }
+}
+
+internal class HomeScreenPreviewProvider : PreviewParameterProvider<HomeData> {
+    override val values: Sequence<HomeData> = sequenceOf(
+        HomeData(
+            hasNext = true,
+            dateData = DateData(
+                "29/5/25",
+                fibreOfTheDay = "0.8",
+                foodItems = listOf(
+                    FoodListItem(
+                        id = 1,
+                        foodQuantity = "34.9",
+                        foodName = "Potato",
+                        fibreThisMeal = "0.3"
+                    ),
+                    FoodListItem(
+                        id = 2,
+                        foodQuantity = "15.23",
+                        foodName = "Chia",
+                        fibreThisMeal = "0.5"
+                    )
+                )
+            )
+        ),
+        HomeData(
+            hasNext = false,
+            dateData = DateData(
+                formattedDate = "30/5/25",
+                fibreOfTheDay = "0.0",
+                foodItems = emptyList()
+            )
+        )
+    )
 }

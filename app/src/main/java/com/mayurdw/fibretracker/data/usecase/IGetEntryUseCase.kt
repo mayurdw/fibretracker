@@ -6,8 +6,6 @@ import kotlinx.datetime.LocalDate
 
 interface IGetEntryUseCase {
     suspend fun getCurrentDateEntryData(currentDate: LocalDate): Flow<List<EntryData>>
-    suspend fun checkYesterdaysDateEntryData(currentDate: LocalDate): Flow<Boolean>
-    suspend fun checkTomorrowsDateEntryData(currentDate: LocalDate): Flow<Boolean>
 
     suspend fun getEntry(entryId: Int): Flow<EntryData>
 }

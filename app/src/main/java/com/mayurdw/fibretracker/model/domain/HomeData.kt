@@ -1,7 +1,6 @@
 package com.mayurdw.fibretracker.model.domain
 
 data class HomeData(
-    val hasPrevious: Boolean,
     val hasNext: Boolean,
     val dateData: DateData
 ) {

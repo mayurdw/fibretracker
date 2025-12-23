@@ -12,7 +12,7 @@ import com.mayurdw.fibretracker.model.domain.HomeState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DateTimeUnit.Companion.DAY
 import kotlinx.datetime.LocalDate
@@ -41,12 +41,7 @@ class HomeScreenViewModel @Inject constructor(
         viewModelScope.launch {
             homeStateFlow.emit(HomeState.Loading)
             with(getEntryUseCase) {
-                combine(
-                    getCurrentDateEntryData(currentDate),
-                    checkYesterdaysDateEntryData(currentDate),
-                    checkTomorrowsDateEntryData(currentDate)
-                ) { current, yesterday, tomorrow ->
-
+                getCurrentDateEntryData(currentDate).collectLatest { current ->
                     val foodList = current.map { entryData ->
                         convertFoodEntryEntityToFoodListItem(entryData)
                     }
@@ -61,19 +56,18 @@ class HomeScreenViewModel @Inject constructor(
                     var totalFibre = BigDecimal.ZERO
                     current.forEach { totalFibre += it.fibreConsumedInGms }
 
-                    HomeState.Success(
-                        HomeData(
-                            hasNext = (todaysDate != currentDate || tomorrow),
-                            hasPrevious = yesterday,
-                            dateData = DateData(
-                                formattedDate = date,
-                                fibreOfTheDay = totalFibre.toString(),
-                                foodItems = foodList
+                    homeStateFlow.emit(
+                        HomeState.Success(
+                            HomeData(
+                                hasNext = (todaysDate != currentDate),
+                                dateData = DateData(
+                                    formattedDate = date,
+                                    fibreOfTheDay = totalFibre.toString(),
+                                    foodItems = foodList
+                                )
                             )
                         )
                     )
-                }.collect {
-                    homeStateFlow.emit(it)
                 }
             }
         }
