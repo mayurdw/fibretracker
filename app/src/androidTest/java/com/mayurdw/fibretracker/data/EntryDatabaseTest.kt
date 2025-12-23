@@ -50,7 +50,7 @@ class EntryDatabaseTest {
     }
 
     @Test
-    fun `test database created and empty`() = runTest {
+    fun testDatabaseIsEmpty() = runTest {
         val currentDate = getCurrentDate()
         dao.getEntryData(currentDate, currentDate).test {
             val list = awaitItem()
@@ -63,7 +63,7 @@ class EntryDatabaseTest {
     }
 
     @Test
-    fun `test multimap between food and entry`() = runTest {
+    fun testMultimapBetweenFoodAndEntry() = runTest {
         val currentDate = getCurrentDate()
         val food = FoodEntity(
             name = "Food",
@@ -98,7 +98,7 @@ class EntryDatabaseTest {
     }
 
     @Test
-    fun `multiple entries of one food`() = runTest {
+    fun testMultipleEntriesOfSameFood() = runTest {
         val currentDate = getCurrentDate()
         val food = FoodEntity(
             name = "Test",
@@ -130,7 +130,7 @@ class EntryDatabaseTest {
     }
 
     @Test
-    fun `multiple entries of same date`() = runTest {
+    fun testMultipleEntriesOfSameDate() = runTest {
         val currentDate = getCurrentDate()
         val food = FoodEntity(
             name = "Test",
@@ -163,7 +163,7 @@ class EntryDatabaseTest {
     }
 
 
-    fun `upsert an old entry`() = runTest {
+    fun testUpsertASingleEntry() = runTest {
         val currentDate = getCurrentDate()
         val food = FoodEntity(
             name = "Test",
@@ -203,7 +203,7 @@ class EntryDatabaseTest {
     }
 
     @Test
-    fun `get Single Entry`() = runTest {
+    fun testGetSingleEntry() = runTest {
         val currentDate = getCurrentDate()
         val food = FoodEntity(
             name = "Test",
