@@ -24,6 +24,7 @@ interface AppDao {
     @Query(
         "SELECT entry.date AS date, " +
                 "entry.serving AS servingInGms, " +
+                "entry.foodId AS foodId, " +
                 "food.name AS name, " +
                 "entry.id AS id," +
                 "fibre_per_micro_gram AS fibrePerMicroGrams " +
@@ -34,8 +35,22 @@ interface AppDao {
     )
     fun getEntryData(startTime: LocalDate, endTime: LocalDate): Flow<List<EntryData>>
 
+
+    @Query(
+        "SELECT entry.date AS date, " +
+                "entry.serving AS servingInGms, " +
+                "entry.foodId AS foodId, " +
+                "food.name AS name, " +
+                "entry.id AS id," +
+                "fibre_per_micro_gram AS fibrePerMicroGrams " +
+                "FROM entry, food " +
+                "WHERE entry.foodId = food.id " +
+                "AND entry.id = :entryId"
+    )
+    fun getEntry(entryId: Int): Flow<EntryData>
+
     @Upsert
-    fun insertEntry(entryEntity: FoodEntryEntity)
+    fun upsertEntry(entryEntity: FoodEntryEntity)
 
     /**
      * Food related methods

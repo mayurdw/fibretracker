@@ -51,7 +51,7 @@ class EntryDatabaseTest {
 
     @Test
     fun `test database created and empty`() = runTest {
-        val currentDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
+        val currentDate = getCurrentDate()
         dao.getEntryData(currentDate, currentDate).test {
             val list = awaitItem()
             assertTrue(list.isEmpty())
@@ -64,7 +64,7 @@ class EntryDatabaseTest {
 
     @Test
     fun `test multimap between food and entry`() = runTest {
-        val currentDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
+        val currentDate = getCurrentDate()
         val food = FoodEntity(
             name = "Food",
             singleServingSizeInGm = 10,
@@ -80,7 +80,7 @@ class EntryDatabaseTest {
             food
         )
 
-        dao.insertEntry(
+        dao.upsertEntry(
             entry
         )
 
@@ -99,7 +99,7 @@ class EntryDatabaseTest {
 
     @Test
     fun `multiple entries of one food`() = runTest {
-        val currentDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
+        val currentDate = getCurrentDate()
         val food = FoodEntity(
             name = "Test",
             singleServingSizeInGm = 10,
@@ -118,7 +118,7 @@ class EntryDatabaseTest {
             )
         )
 
-        entries.forEach { dao.insertEntry(it) }
+        entries.forEach { dao.upsertEntry(it) }
         dao.insertFood(food)
 
         dao.getEntryData(currentDate, currentDate).test {
@@ -131,8 +131,7 @@ class EntryDatabaseTest {
 
     @Test
     fun `multiple entries of same date`() = runTest {
-
-        val currentDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
+        val currentDate = getCurrentDate()
         val food = FoodEntity(
             name = "Test",
             singleServingSizeInGm = 10,
@@ -151,7 +150,7 @@ class EntryDatabaseTest {
             )
         )
 
-        entries.forEach { dao.insertEntry(it) }
+        entries.forEach { dao.upsertEntry(it) }
         dao.insertFood(food)
 
         dao.getEntryData(currentDate, currentDate).test {
@@ -162,4 +161,75 @@ class EntryDatabaseTest {
             assertEquals(entries[1].foodServingInGms, list[1].servingInGms)
         }
     }
+
+
+    fun `upsert an old entry`() = runTest {
+        val currentDate = getCurrentDate()
+        val food = FoodEntity(
+            name = "Test",
+            singleServingSizeInGm = 10,
+            fibrePerMicroGram = 2000
+        ).apply { id = 1 }
+        val entry =
+            FoodEntryEntity(
+                foodId = food.id,
+                foodServingInGms = food.singleServingSizeInGm,
+                date = currentDate
+            ).apply { id = 1 }
+
+        dao.upsertEntry(entry)
+        dao.insertFood(food)
+
+
+        dao.getEntryData(currentDate, currentDate).test {
+            val list = awaitItem()
+
+            assertEquals(1, list.size)
+        }
+
+
+        val newEntry = entry.copy(foodServingInGms = food.singleServingSizeInGm / 2)
+
+        assertEquals(entry.id, newEntry.id)
+        assertEquals(entry.foodServingInGms, newEntry.foodServingInGms * 2)
+        dao.upsertEntry(newEntry)
+
+        dao.getEntryData(currentDate, currentDate).test {
+            val list = awaitItem()
+
+            assertEquals(1, list.size)
+            assertEquals(newEntry.foodServingInGms, list[0].servingInGms)
+        }
+    }
+
+    @Test
+    fun `get Single Entry`() = runTest {
+        val currentDate = getCurrentDate()
+        val food = FoodEntity(
+            name = "Test",
+            singleServingSizeInGm = 10,
+            fibrePerMicroGram = 2000
+        ).apply { id = 1 }
+        val entry =
+            FoodEntryEntity(
+                foodId = food.id,
+                foodServingInGms = food.singleServingSizeInGm,
+                date = currentDate
+            ).apply { id = 1 }
+
+        dao.upsertEntry(entry)
+        dao.insertFood(food)
+
+
+        dao.getEntry(entry.id).test {
+            val data = awaitItem()
+
+            assertEquals(entry.id, data.id)
+            assertEquals(entry.foodServingInGms, data.servingInGms)
+            assertEquals(entry.date, data.date)
+        }
+
+    }
+
+    inline fun getCurrentDate() = Clock.System.todayIn(TimeZone.currentSystemDefault())
 }

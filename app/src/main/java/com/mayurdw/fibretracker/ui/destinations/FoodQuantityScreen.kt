@@ -36,11 +36,16 @@ fun FoodQuantityScreen(
         }
 
         is FoodQuantityState.Success -> {
+            val foodEntity = (state as FoodQuantityState.Success).food
+
             FoodQuantityScreenLayout(
                 modifier,
-                (state as FoodQuantityState.Success).food
-            ) { selectedFoodItem, foodQuantity ->
-                viewModel.insertNewEntry(selectedFoodItem, foodQuantity)
+                foodName = foodEntity.name,
+                fibrePerGram = foodEntity.fibrePerGram,
+                singleServingSizeInGm = foodEntity.singleServingSizeInGm,
+                buttonEnabled = { !it.isNullOrBlank() }
+            ) { foodQuantity ->
+                viewModel.insertNewEntry(foodEntity, foodQuantity)
             }
         }
 

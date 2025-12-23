@@ -5,6 +5,7 @@ import java.math.BigDecimal
 
 data class EntryData(
     val id: Int,
+    val foodId: Int,
     val date: LocalDate,
     val name: String,
     val servingInGms: Int,

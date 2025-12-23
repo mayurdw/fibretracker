@@ -26,4 +26,8 @@ class GetEntryUseCase @Inject constructor(
 
         return entryDao.checkIfEntryDataExists(tomorrowsDate, tomorrowsDate)
     }
+
+    override suspend fun getEntry(entryId: Int): Flow<EntryData> {
+        return entryDao.getEntry(entryId)
+    }
 }

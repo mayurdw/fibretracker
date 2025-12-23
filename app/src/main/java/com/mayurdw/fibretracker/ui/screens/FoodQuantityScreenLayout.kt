@@ -21,25 +21,31 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewDynamicColors
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import com.mayurdw.fibretracker.model.entity.FoodEntity
+import com.mayurdw.fibretracker.R
 import com.mayurdw.fibretracker.ui.theme.FibreTrackerTheme
 import kotlinx.coroutines.flow.collectLatest
+import java.math.BigDecimal
 
 @Composable
 fun FoodQuantityScreenLayout(
     modifier: Modifier = Modifier,
-    selectedFoodItem: FoodEntity,
-    onSaveClick: (selectedFoodItem: FoodEntity, foodQuantity: String) -> Unit
+    singleServingSizeInGm: Int,
+    foodName: String,
+    fibrePerGram: BigDecimal,
+    buttonEnabled: (foodQuantity: String?) -> Boolean,
+    onSaveClick: (foodQuantity: String) -> Unit
 ) {
     val foodQuantity =
-        rememberTextFieldState(initialText = selectedFoodItem.singleServingSizeInGm.toString())
+        rememberTextFieldState(initialText = singleServingSizeInGm.toString())
     var fibreQuantity =
         if (foodQuantity.text.isNotBlank()) {
-            selectedFoodItem.fibrePerGram * foodQuantity.text.toString().toBigDecimal()
+            fibrePerGram * foodQuantity.text.toString().toBigDecimal()
         } else {
             0
         }
@@ -48,7 +54,7 @@ fun FoodQuantityScreenLayout(
         snapshotFlow { foodQuantity.text.toString() }.collectLatest { newValue: String ->
             if (newValue.isNotBlank()) {
                 fibreQuantity =
-                    selectedFoodItem.fibrePerGram * newValue.toBigDecimal()
+                    fibrePerGram * newValue.toBigDecimal()
             }
         }
     }
@@ -62,7 +68,7 @@ fun FoodQuantityScreenLayout(
         horizontalAlignment = Alignment.Start,
     ) {
         Text(
-            text = selectedFoodItem.name,
+            text = foodName,
             modifier = modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodyLarge,
@@ -73,7 +79,7 @@ fun FoodQuantityScreenLayout(
             modifier = modifier.fillMaxWidth(),
             state = foodQuantity,
             label = { Text("Quantity in Grams") },
-            placeholder = { Text("${selectedFoodItem.singleServingSizeInGm}") },
+            placeholder = { Text("$singleServingSizeInGm") },
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Number
             ),
@@ -95,7 +101,7 @@ fun FoodQuantityScreenLayout(
 
             Text(
                 modifier = modifier,
-                text = "${selectedFoodItem.fibrePerGram} gm",
+                text = "$fibrePerGram gm",
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -132,24 +138,24 @@ fun FoodQuantityScreenLayout(
                 contentColor = MaterialTheme.colorScheme.onPrimaryContainer
             ),
             onClick = {
-                onSaveClick(selectedFoodItem, foodQuantity.text.toString())
+                onSaveClick(foodQuantity.text.toString())
             },
-            enabled = foodQuantity.text.isNotBlank(),
-            content = { Text("Submit") })
+            enabled = buttonEnabled(foodQuantity.text.toString()),
+            content = { Text(stringResource(R.string.submit)) })
     }
 }
 
-@Preview(showBackground = true, widthDp = 320, heightDp = 480)
+@PreviewLightDark
+@PreviewDynamicColors
 @Composable
 private fun FoodQuantityScreenPreview() {
     FibreTrackerTheme {
         FoodQuantityScreenLayout(
-            selectedFoodItem = FoodEntity(
-                "Test",
-                40,
-                35
-            )
-        ) { _, _ ->
+            foodName = "Test",
+            singleServingSizeInGm = 40,
+            fibrePerGram = BigDecimal.ONE,
+            buttonEnabled = { true }
+        ) { _ ->
 
         }
     }

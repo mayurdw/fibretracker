@@ -35,7 +35,8 @@ fun HomeScreenLayout(
     modifier: Modifier,
     homeData: HomeData,
     onNextClicked: () -> Unit,
-    onPreviousClicked: () -> Unit
+    onPreviousClicked: () -> Unit,
+    onCardSelected: (id: Int) -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -68,7 +69,9 @@ fun HomeScreenLayout(
         FoodItems(
             modifier,
             homeData.dateData.foodItems
-        )
+        ) {
+            onCardSelected(it)
+        }
 
     }
 }
@@ -150,7 +153,11 @@ private fun DatePicker(
 
 
 @Composable
-fun FoodItems(modifier: Modifier = Modifier, foodItems: List<FoodListItem>) {
+fun FoodItems(
+    modifier: Modifier = Modifier,
+    foodItems: List<FoodListItem>,
+    onCardSelected: (id: Int) -> Unit
+) {
     LazyColumn(
         modifier = modifier
             .fillMaxWidth()
@@ -158,7 +165,9 @@ fun FoodItems(modifier: Modifier = Modifier, foodItems: List<FoodListItem>) {
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(items = foodItems, key = { item: FoodListItem -> item.id }) {
-            FoodCardView {
+            FoodCardView(
+                onCardSelect = { onCardSelected(it.id) }
+            ) {
                 Row(
                     modifier = modifier
                         .fillMaxWidth()

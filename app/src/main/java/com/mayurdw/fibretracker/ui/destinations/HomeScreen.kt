@@ -16,7 +16,8 @@ import com.mayurdw.fibretracker.viewmodels.HomeScreenViewModel
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    viewModel: HomeScreenViewModel = hiltViewModel<HomeScreenViewModel>()
+    viewModel: HomeScreenViewModel = hiltViewModel<HomeScreenViewModel>(),
+    onCardSelected: (id: Int) -> Unit
 ) {
     val homeState by viewModel.homeStateFlow.collectAsStateWithLifecycle(minActiveState = Lifecycle.State.RESUMED)
 
@@ -31,7 +32,9 @@ fun HomeScreen(
                 modifier = modifier,
                 homeData = homeData.data,
                 onNextClicked = { viewModel.onDateChanged(false) },
-                onPreviousClicked = { viewModel.onDateChanged(true) })
+                onPreviousClicked = { viewModel.onDateChanged(true) }) {
+                onCardSelected(it)
+            }
         }
 
         is HomeState.Loading -> {
