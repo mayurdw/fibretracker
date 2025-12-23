@@ -5,6 +5,7 @@
     <string name="add_amount">Add Amount</string>
     <string name="add_new_food">Add New Food</string>
     <string name="edit_food_entry">Edit Entry</string>
+    <string name="edit_menu">Edit</string>
     <string name="unknown">Unknown</string>
     <string name="submit">Submit</string>
 </resources>

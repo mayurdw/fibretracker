@@ -21,9 +21,12 @@ data class AddAmountItem(
 ) : Destinations
 
 @Serializable
-data class EditFoodEntry(
+data class EditEntry(
     val selectedEntryId: Int
 ) : Destinations
+
+@Serializable
+object EditMenu : Destinations
 
 @StringRes
 fun getTitle(destinations: Destinations): Int {
@@ -31,8 +34,9 @@ fun getTitle(destinations: Destinations): Int {
         Home -> R.string.home
         AddFoodItem -> R.string.add_food
         AddNewFoodItem -> R.string.add_new_food
+        EditMenu -> R.string.edit_menu
         is AddAmountItem -> R.string.add_amount
-        is EditFoodEntry -> R.string.edit_food_entry
+        is EditEntry -> R.string.edit_food_entry
     }
 }
 
@@ -41,11 +45,12 @@ fun getDestination(routeName: String?): Destinations {
         Home.javaClass.canonicalName -> Home
         AddFoodItem.javaClass.canonicalName -> AddFoodItem
         AddNewFoodItem.javaClass.canonicalName -> AddNewFoodItem
+        EditMenu.javaClass.canonicalName -> EditMenu
         else -> {
             if (routeName?.contains(AddAmountItem::class.java.simpleName) == true) {
                 AddAmountItem(-1)
             } else {
-                EditFoodEntry(-1)
+                EditEntry(-1)
             }
         }
     }

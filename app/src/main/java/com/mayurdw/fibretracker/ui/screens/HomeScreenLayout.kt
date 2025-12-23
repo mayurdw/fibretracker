@@ -74,7 +74,6 @@ fun HomeScreenLayout(
         ) {
             onCardSelected(it)
         }
-
     }
 }
 

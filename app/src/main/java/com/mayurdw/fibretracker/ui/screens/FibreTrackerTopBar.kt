@@ -19,7 +19,7 @@ import com.mayurdw.fibretracker.ui.destinations.AddAmountItem
 import com.mayurdw.fibretracker.ui.destinations.AddFoodItem
 import com.mayurdw.fibretracker.ui.destinations.AddNewFoodItem
 import com.mayurdw.fibretracker.ui.destinations.Destinations
-import com.mayurdw.fibretracker.ui.destinations.EditFoodEntry
+import com.mayurdw.fibretracker.ui.destinations.EditEntry
 import com.mayurdw.fibretracker.ui.destinations.Home
 import com.mayurdw.fibretracker.ui.destinations.getTitle
 import com.mayurdw.fibretracker.ui.theme.FibreTrackerTheme
@@ -56,7 +56,7 @@ fun FibreTrackerTopBar(
             }
         },
         actions = {
-            if (Home == currentDestination){
+            if (Home == currentDestination) {
                 IconButton(onClick = onAddPressed) {
                     Icon(
                         painterResource(R.drawable.edit),
@@ -72,7 +72,7 @@ fun FibreTrackerTopBar(
 @PreviewLightDark
 @PreviewDynamicColors
 private fun PreviewFibreTrackerTopBar(
-    @PreviewParameter(TopBarPreviewProvider::class) destination : Destinations
+    @PreviewParameter(TopBarPreviewProvider::class) destination: Destinations
 ) {
     FibreTrackerTheme {
         FibreTrackerTopBar(destination) { }
@@ -85,6 +85,6 @@ internal class TopBarPreviewProvider : PreviewParameterProvider<Destinations> {
         AddFoodItem,
         AddNewFoodItem,
         AddAmountItem(-1),
-        EditFoodEntry(-1)
+        EditEntry(-1)
     )
 }

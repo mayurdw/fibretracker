@@ -22,12 +22,14 @@ import com.mayurdw.fibretracker.ui.destinations.AddFoodItem
 import com.mayurdw.fibretracker.ui.destinations.AddFoodItemScreen
 import com.mayurdw.fibretracker.ui.destinations.AddNewFoodItem
 import com.mayurdw.fibretracker.ui.destinations.AddNewFoodScreen
-import com.mayurdw.fibretracker.ui.destinations.EditFoodEntry
+import com.mayurdw.fibretracker.ui.destinations.EditEntry
 import com.mayurdw.fibretracker.ui.destinations.EditFoodEntryScreen
+import com.mayurdw.fibretracker.ui.destinations.EditMenu
 import com.mayurdw.fibretracker.ui.destinations.FoodQuantityScreen
 import com.mayurdw.fibretracker.ui.destinations.Home
 import com.mayurdw.fibretracker.ui.destinations.HomeScreen
 import com.mayurdw.fibretracker.ui.destinations.getDestination
+import com.mayurdw.fibretracker.ui.screens.EditMenuScreen
 import com.mayurdw.fibretracker.ui.screens.FibreTrackerTopBar
 import com.mayurdw.fibretracker.ui.theme.FibreTrackerTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -52,7 +54,7 @@ class MainActivity : ComponentActivity() {
                                 navController.navigateUp()
                             },
                             onAddPressed = {
-                                navController.navigate(AddNewFoodItem)
+                                navController.navigate(EditMenu)
                             })
                     },
                     floatingActionButton = {
@@ -78,7 +80,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         composable<Home> {
                             HomeScreen {
-                                navController.navigate(EditFoodEntry(it))
+                                navController.navigate(EditEntry(it))
                             }
                         }
                         composable<AddFoodItem> {
@@ -86,6 +88,7 @@ class MainActivity : ComponentActivity() {
                                 navController.navigate(AddAmountItem(it.id))
                             }
                         }
+
                         composable<AddNewFoodItem> {
                             AddNewFoodScreen {
                                 navController.popBackStack(AddFoodItem, false)
@@ -99,8 +102,12 @@ class MainActivity : ComponentActivity() {
                             }
                         }
 
-                        composable<EditFoodEntry> { backStackEntry ->
-                            val foodItem: EditFoodEntry = backStackEntry.toRoute()
+                        composable<EditMenu> {
+                            EditMenuScreen()
+                        }
+
+                        composable<EditEntry> { backStackEntry ->
+                            val foodItem: EditEntry = backStackEntry.toRoute()
 
                             EditFoodEntryScreen(selectedFoodId = foodItem.selectedEntryId) {
                                 navController.popBackStack(Home, false)
