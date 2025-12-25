@@ -53,7 +53,7 @@ class MainActivity : ComponentActivity() {
                             onBackPressed = {
                                 navController.navigateUp()
                             },
-                            onAddPressed = {
+                            onFoodMenuPressed = {
                                 navController.navigate(EditMenu)
                             })
                     },
@@ -103,7 +103,11 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable<EditMenu> {
-                            EditMenuScreen()
+                            EditMenuScreen(
+                                onAddClicked = { navController.navigate(AddNewFoodItem) },
+                                // TODO: Complete this
+                                onEditClicked = { }
+                            )
                         }
 
                         composable<EditEntry> { backStackEntry ->

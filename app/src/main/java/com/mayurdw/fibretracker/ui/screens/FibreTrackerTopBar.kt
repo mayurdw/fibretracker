@@ -20,6 +20,7 @@ import com.mayurdw.fibretracker.ui.destinations.AddFoodItem
 import com.mayurdw.fibretracker.ui.destinations.AddNewFoodItem
 import com.mayurdw.fibretracker.ui.destinations.Destinations
 import com.mayurdw.fibretracker.ui.destinations.EditEntry
+import com.mayurdw.fibretracker.ui.destinations.EditMenu
 import com.mayurdw.fibretracker.ui.destinations.Home
 import com.mayurdw.fibretracker.ui.destinations.getTitle
 import com.mayurdw.fibretracker.ui.theme.FibreTrackerTheme
@@ -29,7 +30,7 @@ import com.mayurdw.fibretracker.ui.theme.FibreTrackerTheme
 fun FibreTrackerTopBar(
     currentDestination: Destinations = Home,
     onBackPressed: () -> Unit = {},
-    onAddPressed: () -> Unit = {}
+    onFoodMenuPressed: () -> Unit = {}
 ) {
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
@@ -57,9 +58,9 @@ fun FibreTrackerTopBar(
         },
         actions = {
             if (Home == currentDestination) {
-                IconButton(onClick = onAddPressed) {
+                IconButton(onClick = onFoodMenuPressed) {
                     Icon(
-                        painterResource(R.drawable.edit),
+                        painterResource(R.drawable.food),
                         contentDescription = null
                     )
                 }
@@ -84,6 +85,7 @@ internal class TopBarPreviewProvider : PreviewParameterProvider<Destinations> {
         Home,
         AddFoodItem,
         AddNewFoodItem,
+        EditMenu,
         AddAmountItem(-1),
         EditEntry(-1)
     )
