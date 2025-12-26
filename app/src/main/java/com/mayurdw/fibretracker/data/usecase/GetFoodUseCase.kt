@@ -13,7 +13,7 @@ class GetFoodUseCase @Inject constructor(
 
         if (foods.isEmpty()) {
             CommonFoods.forEach { foodItem ->
-                dao.insertFood(foodItem)
+                dao.upsertNewFood(foodItem)
             }
             return CommonFoods
         } else {

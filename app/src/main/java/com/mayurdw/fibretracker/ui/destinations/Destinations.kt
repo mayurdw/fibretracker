@@ -1,5 +1,6 @@
 package com.mayurdw.fibretracker.ui.destinations
 
+import android.util.Log
 import androidx.annotation.StringRes
 import com.mayurdw.fibretracker.R
 import kotlinx.serialization.Serializable
@@ -8,6 +9,14 @@ sealed interface Destinations
 
 @Serializable
 object Home : Destinations
+
+@Serializable
+object SelectFoodToEdit : Destinations
+
+@Serializable
+data class EnterEditedFood(
+    val selectedFoodId: Int
+) : Destinations
 
 @Serializable
 object AddFoodItem : Destinations
@@ -31,27 +40,38 @@ object EditMenu : Destinations
 @StringRes
 fun getTitle(destinations: Destinations): Int {
     return when (destinations) {
-        Home -> R.string.home
-        AddFoodItem -> R.string.add_food
-        AddNewFoodItem -> R.string.add_new_food
-        EditMenu -> R.string.edit_menu
+        is Home -> R.string.home
+        is AddFoodItem -> R.string.add_food
+        is AddNewFoodItem -> R.string.add_new_food
+        is EditMenu -> R.string.edit_menu
+        is SelectFoodToEdit -> R.string.select_food_to_edit
         is AddAmountItem -> R.string.add_amount
         is EditEntry -> R.string.edit_food_entry
+        is EnterEditedFood -> R.string.edit_existing_food
     }
 }
 
 fun getDestination(routeName: String?): Destinations {
-    return when (routeName) {
-        Home.javaClass.canonicalName -> Home
-        AddFoodItem.javaClass.canonicalName -> AddFoodItem
-        AddNewFoodItem.javaClass.canonicalName -> AddNewFoodItem
-        EditMenu.javaClass.canonicalName -> EditMenu
-        else -> {
-            if (routeName?.contains(AddAmountItem::class.java.simpleName) == true) {
-                AddAmountItem(-1)
-            } else {
-                EditEntry(-1)
+    routeName?.let {
+        val screens: List<Destinations> = listOf(
+            Home,
+            AddNewFoodItem,
+            AddFoodItem,
+            EditMenu,
+            AddAmountItem(-1),
+            EditEntry(-1),
+            SelectFoodToEdit,
+            EnterEditedFood(-1)
+        )
+
+        for (screen in screens) {
+            if (it.contains(screen::class.java.simpleName, ignoreCase = true)) {
+                return screen
             }
         }
     }
+
+    Log.e("Destinations", "Unknown Destination Route = $routeName")
+
+    return Home
 }

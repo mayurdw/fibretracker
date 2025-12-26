@@ -8,7 +8,7 @@ class AddFoodUseCase @Inject constructor(
     private val dao: AppDao
 ) : IAddFoodUseCase {
 
-    override suspend fun insertNewFood(newFoodItem: FoodEntity) {
-        dao.insertFood(foodEntity = newFoodItem)
+    override suspend fun upsertNewFood(newFoodItem: FoodEntity) {
+        dao.upsertNewFood(foodEntity = newFoodItem)
     }
 }

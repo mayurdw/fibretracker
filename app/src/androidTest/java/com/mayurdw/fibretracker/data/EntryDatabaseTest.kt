@@ -76,7 +76,7 @@ class EntryDatabaseTest {
             date = currentDate
         )
 
-        dao.insertFood(
+        dao.upsertNewFood(
             food
         )
 
@@ -119,7 +119,7 @@ class EntryDatabaseTest {
         )
 
         entries.forEach { dao.upsertEntry(it) }
-        dao.insertFood(food)
+        dao.upsertNewFood(food)
 
         dao.getEntryData(currentDate, currentDate).test {
             val list = awaitItem()
@@ -151,7 +151,7 @@ class EntryDatabaseTest {
         )
 
         entries.forEach { dao.upsertEntry(it) }
-        dao.insertFood(food)
+        dao.upsertNewFood(food)
 
         dao.getEntryData(currentDate, currentDate).test {
             val list = awaitItem()
@@ -178,7 +178,7 @@ class EntryDatabaseTest {
             ).apply { id = 1 }
 
         dao.upsertEntry(entry)
-        dao.insertFood(food)
+        dao.upsertNewFood(food)
 
 
         dao.getEntryData(currentDate, currentDate).test {
@@ -218,7 +218,7 @@ class EntryDatabaseTest {
             ).apply { id = 1 }
 
         dao.upsertEntry(entry)
-        dao.insertFood(food)
+        dao.upsertNewFood(food)
 
 
         dao.getEntry(entry.id).test {

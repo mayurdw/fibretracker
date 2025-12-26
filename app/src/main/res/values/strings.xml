@@ -8,5 +8,6 @@
     <string name="edit_menu">Edit</string>
     <string name="unknown">Unknown</string>
     <string name="submit">Submit</string>
+    <string name="select_food_to_edit">Select Food To Edit</string>
     <string name="edit_existing_food">Edit Existing Food</string>
 </resources>

@@ -3,5 +3,5 @@ package com.mayurdw.fibretracker.data.usecase
 import com.mayurdw.fibretracker.model.entity.FoodEntity
 
 interface IAddFoodUseCase {
-    suspend fun insertNewFood(newFoodItem: FoodEntity)
+    suspend fun upsertNewFood(newFoodItem: FoodEntity)
 }

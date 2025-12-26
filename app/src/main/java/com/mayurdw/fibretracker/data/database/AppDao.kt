@@ -59,7 +59,7 @@ interface AppDao {
     fun getAllFoods(): List<FoodEntity>
 
     @Upsert
-    suspend fun insertFood(foodEntity: FoodEntity)
+    suspend fun upsertNewFood(foodEntity: FoodEntity)
 
     @Query("SELECT * FROM food WHERE id LIKE :id")
     suspend fun getFoodById(id: Int): FoodEntity

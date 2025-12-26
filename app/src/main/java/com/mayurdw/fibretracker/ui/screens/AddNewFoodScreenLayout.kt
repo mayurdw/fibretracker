@@ -23,18 +23,29 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewDynamicColors
+import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
+import com.mayurdw.fibretracker.model.domain.CommonFoods
+import com.mayurdw.fibretracker.model.entity.FoodEntity
 import com.mayurdw.fibretracker.ui.theme.FibreTrackerTheme
 
 @Composable
 fun AddNewFoodScreenLayout(
     modifier: Modifier = Modifier,
+    data: FoodEntity? = null,
+    buttonIsEnabled: (foodName: String, foodServing: String, fibrePerServing: String) -> Boolean,
     onAddButton: (foodName: String, foodServing: String, fibrePerServing: String) -> Unit,
 ) {
-    val foodNameState = rememberTextFieldState("")
-    val foodServingSizeState = rememberTextFieldState("")
-    val fibrePerServingInGms = rememberTextFieldState("")
+    val foodNameState = rememberTextFieldState(data?.name ?: "")
+    val foodServingSizeState = rememberTextFieldState(
+        data?.let { it.singleServingSizeInGm.toString() } ?: run { "" })
+    val fibrePerServingInGms = rememberTextFieldState(
+        data?.let { (it.fibrePerGram * it.singleServingSizeInGm.toBigDecimal()).toString() }
+            ?: run { "" })
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -46,7 +57,9 @@ fun AddNewFoodScreenLayout(
         val focusManager = LocalFocusManager.current
 
         TextField(
-            modifier = modifier.fillMaxWidth().focusRequester(focusRequester),
+            modifier = modifier
+                .fillMaxWidth()
+                .focusRequester(focusRequester),
             state = foodNameState,
             placeholder = { Text("Food Name") },
             label = { Text("Enter Food Name") },
@@ -56,17 +69,24 @@ fun AddNewFoodScreenLayout(
         )
 
         TextField(
-            modifier = modifier.fillMaxWidth().focusRequester(focusRequester),
+            modifier = modifier
+                .fillMaxWidth()
+                .focusRequester(focusRequester),
             state = foodServingSizeState,
             placeholder = { Text("0") },
             label = { Text("Enter Food Serving Size in Gms") },
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Next
+            ),
             lineLimits = TextFieldLineLimits.SingleLine,
             onKeyboardAction = KeyboardActionHandler { focusManager.moveFocus(FocusDirection.Down) }
         )
 
         TextField(
-            modifier = modifier.fillMaxWidth().focusRequester(focusRequester),
+            modifier = modifier
+                .fillMaxWidth()
+                .focusRequester(focusRequester),
             state = fibrePerServingInGms,
             placeholder = { Text("0") },
             label = { Text("Fibre Per Serving in Gms") },
@@ -80,7 +100,12 @@ fun AddNewFoodScreenLayout(
 
         Button(
             modifier = modifier.fillMaxWidth(),
-            enabled = foodNameState.text.isNotBlank() && foodServingSizeState.text.isNotBlank() && fibrePerServingInGms.text.isNotBlank(),
+            enabled =
+                buttonIsEnabled(
+                    foodNameState.text.toString(),
+                    foodServingSizeState.text.toString(),
+                    fibrePerServingInGms.text.toString()
+                ),
             onClick = {
                 onAddButton(
                     foodNameState.text.toString(),
@@ -94,12 +119,28 @@ fun AddNewFoodScreenLayout(
     }
 }
 
-@Preview(showBackground = true, widthDp = 640, heightDp = 960)
+@PreviewDynamicColors
+@PreviewLightDark
 @Composable
-private fun AddNewFoodScreenPreview() {
+private fun AddNewFoodScreenPreview(
+    @PreviewParameter(AddNewFoodScreenParameterProvider::class) data: FoodEntity?
+) {
     FibreTrackerTheme {
-        AddNewFoodScreenLayout { _, _, _ ->
+        AddNewFoodScreenLayout(
+            data = data,
+            buttonIsEnabled = { _, _, _ ->
+                false
+            },
+            onAddButton = { _, _, _ ->
 
-        }
+            },
+        )
     }
+}
+
+class AddNewFoodScreenParameterProvider : PreviewParameterProvider<FoodEntity?> {
+    override val values: Sequence<FoodEntity?> = sequenceOf(
+        null,
+        CommonFoods[1]
+    )
 }

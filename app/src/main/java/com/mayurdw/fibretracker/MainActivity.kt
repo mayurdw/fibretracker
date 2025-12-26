@@ -25,9 +25,11 @@ import com.mayurdw.fibretracker.ui.destinations.AddNewFoodScreen
 import com.mayurdw.fibretracker.ui.destinations.EditEntry
 import com.mayurdw.fibretracker.ui.destinations.EditFoodEntryScreen
 import com.mayurdw.fibretracker.ui.destinations.EditMenu
+import com.mayurdw.fibretracker.ui.destinations.EnterEditedFood
 import com.mayurdw.fibretracker.ui.destinations.FoodQuantityScreen
 import com.mayurdw.fibretracker.ui.destinations.Home
 import com.mayurdw.fibretracker.ui.destinations.HomeScreen
+import com.mayurdw.fibretracker.ui.destinations.SelectFoodToEdit
 import com.mayurdw.fibretracker.ui.destinations.getDestination
 import com.mayurdw.fibretracker.ui.screens.EditMenuScreen
 import com.mayurdw.fibretracker.ui.screens.FibreTrackerTopBar
@@ -105,8 +107,7 @@ class MainActivity : ComponentActivity() {
                         composable<EditMenu> {
                             EditMenuScreen(
                                 onAddClicked = { navController.navigate(AddNewFoodItem) },
-                                // TODO: Complete this
-                                onEditClicked = { }
+                                onEditClicked = { navController.navigate(SelectFoodToEdit) }
                             )
                         }
 
@@ -115,6 +116,20 @@ class MainActivity : ComponentActivity() {
 
                             EditFoodEntryScreen(selectedFoodId = foodItem.selectedEntryId) {
                                 navController.popBackStack(Home, false)
+                            }
+                        }
+
+                        composable<SelectFoodToEdit> {
+                            AddFoodItemScreen {
+                                navController.navigate(EnterEditedFood(it.id))
+                            }
+                        }
+
+                        composable<EnterEditedFood> { backStackEntry ->
+                            val foodId: EnterEditedFood = backStackEntry.toRoute()
+
+                            AddNewFoodScreen(selectedFoodId = foodId.selectedFoodId) {
+                                navController.navigateUp()
                             }
                         }
                     }
