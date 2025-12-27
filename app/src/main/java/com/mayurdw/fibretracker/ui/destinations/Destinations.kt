@@ -1,6 +1,5 @@
 package com.mayurdw.fibretracker.ui.destinations
 
-import android.util.Log
 import androidx.annotation.StringRes
 import com.mayurdw.fibretracker.R
 import kotlinx.serialization.Serializable
@@ -71,7 +70,5 @@ fun getDestination(routeName: String?): Destinations {
         }
     }
 
-    Log.e("Destinations", "Unknown Destination Route = $routeName")
-
-    return Home
+    throw IllegalStateException("Screen Name not found $routeName")
 }

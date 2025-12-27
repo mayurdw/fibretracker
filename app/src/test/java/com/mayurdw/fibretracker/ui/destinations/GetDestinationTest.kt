@@ -5,9 +5,9 @@ import org.junit.Test
 
 class GetDestinationTest {
 
-    @Test
+    @Test(expected = IllegalStateException::class)
     fun `Unknown Name Returns Default`() {
-        assertEquals(Home, getDestination(""))
+        getDestination("")
     }
 
     @Test
