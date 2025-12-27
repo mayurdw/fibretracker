@@ -1,13 +1,10 @@
 package com.mayurdw.fibretracker.viewmodels
 
-import android.text.TextUtils
 import com.mayurdw.fibretracker.data.usecase.IAddFoodUseCase
 import com.mayurdw.fibretracker.data.usecase.IGetFoodUseCase
 import com.mayurdw.fibretracker.model.entity.FoodEntity
 import io.mockk.MockKAnnotations
-import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.mockkStatic
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
@@ -26,11 +23,10 @@ class AddNewFoodViewModelTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this, true)
-        mockkStatic(TextUtils::class)
 
         viewModel = AddNewFoodViewModel(
             getFoodUseCase = getFoodUseCase,
-            foodUseCase = addFoodUseCase
+            addFoodUseCase = addFoodUseCase
         )
     }
 
@@ -109,20 +105,16 @@ class AddNewFoodViewModelTest {
         )
     }
 
-    @Test
+    @Test(expected = NumberFormatException::class)
     fun checkIfUpdatedWhenInvalid() {
         val entity = FoodEntity(name = "Test", 1, 1_000_000)
-        every { TextUtils.isDigitsOnly(any()) } returns false
-
-        assertFalse(
-            viewModel.isUpdated(
-                data = entity,
-                foodName = entity.name,
-                foodServing = "Test",
-                fibrePerServing = entity.fibrePerGram.toString()
 
 
-            )
+        viewModel.isUpdated(
+            data = entity,
+            foodName = entity.name,
+            foodServing = "Test",
+            fibrePerServing = entity.fibrePerGram.toString()
         )
 
     }
@@ -130,8 +122,6 @@ class AddNewFoodViewModelTest {
     @Test
     fun checkIfUpdatedWhenBlank() {
         val entity = FoodEntity(name = "Test", 1, 1_000_000)
-
-        every { TextUtils.isDigitsOnly(any()) } returns true
 
         assertTrue(
             viewModel.isUpdated(

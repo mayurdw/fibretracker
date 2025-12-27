@@ -1,6 +1,5 @@
 package com.mayurdw.fibretracker.viewmodels
 
-import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mayurdw.fibretracker.data.usecase.IAddFoodUseCase
@@ -16,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AddNewFoodViewModel @Inject constructor(
     private val getFoodUseCase: IGetFoodUseCase,
-    private val foodUseCase: IAddFoodUseCase
+    private val addFoodUseCase: IAddFoodUseCase
 ) : ViewModel() {
     val uiState: StateFlow<UIState<FoodEntity>>
         field = MutableStateFlow<UIState<FoodEntity>>(UIState.Loading)
@@ -40,8 +39,8 @@ class AddNewFoodViewModel @Inject constructor(
         fibrePerServing: String
     ): Boolean {
         return foodName != data.name ||
-                foodServing.isBlank() || (foodServing.isDigitsOnly() && foodServing.toInt() != data.singleServingSizeInGm) ||
-                (fibrePerServing.isBlank() || fibrePerServing.toBigDecimal() != (data.fibrePerGram * data.singleServingSizeInGm.toBigDecimal()))
+                foodServing.isBlank() || foodServing.toInt() != data.singleServingSizeInGm ||
+                fibrePerServing.isBlank() || fibrePerServing.toBigDecimal() != (data.fibrePerGram * data.singleServingSizeInGm.toBigDecimal())
     }
 
     fun updateFood(
@@ -63,7 +62,7 @@ class AddNewFoodViewModel @Inject constructor(
                     id = foodEntity.id
                 }
 
-                foodUseCase.upsertNewFood(newEntity)
+                addFoodUseCase.upsertNewFood(newEntity)
             }
         }
     }
@@ -79,7 +78,7 @@ class AddNewFoodViewModel @Inject constructor(
 
     fun addNewFood(foodName: String, foodServingSize: String, fibrePerServingInGms: String) {
         viewModelScope.launch {
-            if (foodName.isNotBlank() && foodServingSize.isNotBlank() && fibrePerServingInGms.isNotBlank()) {
+            if (isValid(foodName, foodServingSize, fibrePerServingInGms)) {
                 try {
                     val foodEntity = FoodEntity(
                         name = foodName,
@@ -89,7 +88,7 @@ class AddNewFoodViewModel @Inject constructor(
                             fibrePerServingSizeInGms = fibrePerServingInGms
                         )
                     )
-                    foodUseCase.upsertNewFood(foodEntity)
+                    addFoodUseCase.upsertNewFood(foodEntity)
                 } catch (_: Exception) {
 
                 }
