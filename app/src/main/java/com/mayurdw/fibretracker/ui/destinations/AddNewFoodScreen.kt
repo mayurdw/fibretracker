@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mayurdw.fibretracker.R
 import com.mayurdw.fibretracker.model.entity.FoodEntity
 import com.mayurdw.fibretracker.ui.screens.AddNewFoodScreenLayout
 import com.mayurdw.fibretracker.ui.screens.core.LoadingScreen
@@ -35,6 +36,7 @@ fun AddNewFoodScreen(
                 AddNewFoodScreenLayout(
                     modifier = modifier,
                     data = data,
+                    primaryCtaTextId = R.string.update,
                     buttonIsEnabled = { foodName, foodServing, fibrePerServing ->
                         viewModel.isUpdated(data, foodName, foodServing, fibrePerServing)
 

@@ -12,12 +12,6 @@ import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import javax.inject.Inject
 
-sealed interface UIState<out T> {
-    data object Error : UIState<Nothing>
-    data object Loading : UIState<Nothing>
-    data class Success<T>(val data: T) : UIState<T>
-}
-
 @HiltViewModel
 class AddNewFoodViewModel @Inject constructor(
     private val getFoodUseCase: IGetFoodUseCase,
@@ -87,8 +81,6 @@ class AddNewFoodViewModel @Inject constructor(
         viewModelScope.launch {
             if (foodName.isNotBlank() && foodServingSize.isNotBlank() && fibrePerServingInGms.isNotBlank()) {
                 try {
-
-
                     val foodEntity = FoodEntity(
                         name = foodName,
                         singleServingSizeInGm = foodServingSize.toInt(),

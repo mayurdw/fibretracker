@@ -1,5 +1,6 @@
 package com.mayurdw.fibretracker.ui.screens
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -21,6 +22,7 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.PreviewDynamicColors
@@ -28,6 +30,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
+import com.mayurdw.fibretracker.R
 import com.mayurdw.fibretracker.model.domain.CommonFoods
 import com.mayurdw.fibretracker.model.entity.FoodEntity
 import com.mayurdw.fibretracker.ui.theme.FibreTrackerTheme
@@ -36,6 +39,7 @@ import com.mayurdw.fibretracker.ui.theme.FibreTrackerTheme
 fun AddNewFoodScreenLayout(
     modifier: Modifier = Modifier,
     data: FoodEntity? = null,
+    @StringRes primaryCtaTextId: Int = R.string.add_food,
     buttonIsEnabled: (foodName: String, foodServing: String, fibrePerServing: String) -> Boolean,
     onAddButton: (foodName: String, foodServing: String, fibrePerServing: String) -> Unit,
 ) {
@@ -114,7 +118,7 @@ fun AddNewFoodScreenLayout(
                 )
             }
         ) {
-            Text("Add Food")
+            Text(stringResource(primaryCtaTextId))
         }
     }
 }
