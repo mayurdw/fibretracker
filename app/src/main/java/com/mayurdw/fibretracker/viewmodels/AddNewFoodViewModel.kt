@@ -1,5 +1,6 @@
 package com.mayurdw.fibretracker.viewmodels
 
+import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mayurdw.fibretracker.data.usecase.IAddFoodUseCase
@@ -20,7 +21,6 @@ class AddNewFoodViewModel @Inject constructor(
     val uiState: StateFlow<UIState<FoodEntity>>
         field = MutableStateFlow<UIState<FoodEntity>>(UIState.Loading)
 
-
     fun getFoodById(foodId: Int) {
         viewModelScope.launch {
             val foodEntity = getFoodUseCase.getFoodById(foodId)
@@ -40,8 +40,8 @@ class AddNewFoodViewModel @Inject constructor(
         fibrePerServing: String
     ): Boolean {
         return foodName != data.name ||
-                foodServing.toInt() != data.singleServingSizeInGm ||
-                fibrePerServing.toBigDecimal() != (data.fibrePerGram * data.singleServingSizeInGm.toBigDecimal())
+                foodServing.isBlank() || (foodServing.isDigitsOnly() && foodServing.toInt() != data.singleServingSizeInGm) ||
+                (fibrePerServing.isBlank() || fibrePerServing.toBigDecimal() != (data.fibrePerGram * data.singleServingSizeInGm.toBigDecimal()))
     }
 
     fun updateFood(
