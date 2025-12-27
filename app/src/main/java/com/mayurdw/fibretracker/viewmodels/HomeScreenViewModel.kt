@@ -8,7 +8,9 @@ import com.mayurdw.fibretracker.data.helpers.convertFoodEntryEntityToFoodListIte
 import com.mayurdw.fibretracker.data.usecase.GetEntryUseCase
 import com.mayurdw.fibretracker.model.domain.HomeData
 import com.mayurdw.fibretracker.model.domain.HomeData.DateData
-import com.mayurdw.fibretracker.model.domain.HomeState
+import com.mayurdw.fibretracker.viewmodels.UIState.Error
+import com.mayurdw.fibretracker.viewmodels.UIState.Loading
+import com.mayurdw.fibretracker.viewmodels.UIState.Success
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,43 +33,48 @@ import kotlin.time.ExperimentalTime
 class HomeScreenViewModel @Inject constructor(
     private val getEntryUseCase: GetEntryUseCase
 ) : ViewModel() {
-    val homeStateFlow: StateFlow<HomeState>
-        field = MutableStateFlow<HomeState>(HomeState.Loading)
+    val homeStateFlow: StateFlow<UIState<HomeData>>
+        field = MutableStateFlow<UIState<HomeData>>(Loading)
 
     var currentDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
     val todaysDate = currentDate
 
     fun getLatestData() {
         viewModelScope.launch {
-            homeStateFlow.emit(HomeState.Loading)
+            homeStateFlow.emit(Loading)
             with(getEntryUseCase) {
                 getCurrentDateEntryData(currentDate).collectLatest { current ->
                     val foodList = current.map { entryData ->
                         convertFoodEntryEntityToFoodListItem(entryData)
                     }
-                    val dateFormat = LocalDate.Format {
-                        day()
-                        char('/')
-                        monthNumber()
-                        char('/')
-                        yearTwoDigits(2000)
-                    }
-                    val date = currentDate.format(dateFormat)
-                    var totalFibre = BigDecimal.ZERO
-                    current.forEach { totalFibre += it.fibreConsumedInGms }
 
-                    homeStateFlow.emit(
-                        HomeState.Success(
-                            HomeData(
-                                hasNext = (todaysDate != currentDate),
-                                dateData = DateData(
-                                    formattedDate = date,
-                                    fibreOfTheDay = totalFibre.toString(),
-                                    foodItems = foodList
+                    if (foodList.isEmpty()) {
+                        homeStateFlow.emit(Error)
+                    } else {
+                        val dateFormat = LocalDate.Format {
+                            day()
+                            char('/')
+                            monthNumber()
+                            char('/')
+                            yearTwoDigits(2000)
+                        }
+                        val date = currentDate.format(dateFormat)
+                        var totalFibre = BigDecimal.ZERO
+                        current.forEach { totalFibre += it.fibreConsumedInGms }
+
+                        homeStateFlow.emit(
+                            Success(
+                                HomeData(
+                                    hasNext = (todaysDate != currentDate),
+                                    dateData = DateData(
+                                        formattedDate = date,
+                                        fibreOfTheDay = totalFibre.toString(),
+                                        foodItems = foodList
+                                    )
                                 )
                             )
                         )
-                    )
+                    }
                 }
             }
         }

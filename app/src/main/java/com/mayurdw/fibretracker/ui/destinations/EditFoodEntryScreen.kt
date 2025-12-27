@@ -7,10 +7,13 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mayurdw.fibretracker.model.domain.EntryData
 import com.mayurdw.fibretracker.ui.screens.FoodQuantityScreenLayout
 import com.mayurdw.fibretracker.ui.screens.core.LoadingScreen
 import com.mayurdw.fibretracker.viewmodels.EditFoodEntryViewModel
-import com.mayurdw.fibretracker.viewmodels.EntryState
+import com.mayurdw.fibretracker.viewmodels.UIState.Error
+import com.mayurdw.fibretracker.viewmodels.UIState.Loading
+import com.mayurdw.fibretracker.viewmodels.UIState.Success
 import java.math.BigDecimal
 
 @Composable
@@ -32,12 +35,12 @@ fun EditFoodEntryScreen(
     }
 
     when (state) {
-        is EntryState.Loading -> {
+        is Loading -> {
             LoadingScreen()
         }
 
-        is EntryState.Success -> {
-            val entry = (state as EntryState.Success).entry
+        is Success<*> -> {
+            val entry = (state as Success<*>).data as EntryData
 
             FoodQuantityScreenLayout(
                 modifier = modifier,
@@ -50,5 +53,7 @@ fun EditFoodEntryScreen(
             }
 
         }
+
+        is Error -> {}
     }
 }

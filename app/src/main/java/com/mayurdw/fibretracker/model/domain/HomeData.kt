@@ -17,9 +17,3 @@ data class HomeData(
         val fibreThisMeal: String
     )
 }
-
-sealed interface HomeState {
-    object Loading : HomeState
-    object Error : HomeState
-    data class Success(val data: HomeData) : HomeState
-}

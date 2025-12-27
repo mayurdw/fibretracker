@@ -7,10 +7,13 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mayurdw.fibretracker.model.domain.HomeState
+import com.mayurdw.fibretracker.model.domain.HomeData
 import com.mayurdw.fibretracker.ui.screens.HomeScreenLayout
 import com.mayurdw.fibretracker.ui.screens.core.LoadingScreen
 import com.mayurdw.fibretracker.viewmodels.HomeScreenViewModel
+import com.mayurdw.fibretracker.viewmodels.UIState.Error
+import com.mayurdw.fibretracker.viewmodels.UIState.Loading
+import com.mayurdw.fibretracker.viewmodels.UIState.Success
 
 
 @Composable
@@ -26,19 +29,23 @@ fun HomeScreen(
     }
 
     when (homeState) {
-        is HomeState.Success -> {
-            val homeData = homeState as HomeState.Success
+        is Success<*> -> {
+            val homeData = homeState as Success<*>
             HomeScreenLayout(
                 modifier = modifier,
-                homeData = homeData.data,
+                homeData = homeData.data as HomeData,
                 onNextClicked = { viewModel.onDateChanged(false) },
                 onPreviousClicked = { viewModel.onDateChanged(true) }) {
                 onCardSelected(it)
             }
         }
 
-        is HomeState.Loading -> {
+        is Loading -> {
             LoadingScreen(modifier)
+        }
+
+        is Error -> {
+
         }
 
         else -> {

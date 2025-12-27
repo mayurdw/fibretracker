@@ -9,7 +9,9 @@ import com.mayurdw.fibretracker.model.entity.FoodEntity
 import com.mayurdw.fibretracker.ui.screens.AddFoodItemList
 import com.mayurdw.fibretracker.ui.screens.core.LoadingScreen
 import com.mayurdw.fibretracker.viewmodels.AddFoodEntryViewModel
-import com.mayurdw.fibretracker.viewmodels.FoodEntryState
+import com.mayurdw.fibretracker.viewmodels.UIState.Error
+import com.mayurdw.fibretracker.viewmodels.UIState.Loading
+import com.mayurdw.fibretracker.viewmodels.UIState.Success
 
 
 @Composable
@@ -21,20 +23,21 @@ fun AddFoodItemScreen(
     viewModel.loadData()
 
     when (entries) {
-        is FoodEntryState.Success -> {
-            val data = entries as FoodEntryState.Success
+        is Success<*> -> {
+            val data = entries as Success<*>
 
             AddFoodItemList(
-                foodItems = data.foodItems
+                foodItems = data.data as List<FoodEntity>
             ) {
                 onItemSelect(it)
             }
         }
 
-        is FoodEntryState.Loading -> {
+        is Loading -> {
             LoadingScreen()
         }
 
-        else -> {}
+        is Error -> {}
+
     }
 }

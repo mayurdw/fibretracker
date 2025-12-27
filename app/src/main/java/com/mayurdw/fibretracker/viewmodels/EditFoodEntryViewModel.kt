@@ -6,6 +6,9 @@ import com.mayurdw.fibretracker.data.usecase.IAddEntryUseCase
 import com.mayurdw.fibretracker.data.usecase.IGetEntryUseCase
 import com.mayurdw.fibretracker.model.domain.EntryData
 import com.mayurdw.fibretracker.model.entity.FoodEntryEntity
+import com.mayurdw.fibretracker.viewmodels.UIState.Error
+import com.mayurdw.fibretracker.viewmodels.UIState.Loading
+import com.mayurdw.fibretracker.viewmodels.UIState.Success
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,9 +23,9 @@ class EditFoodEntryViewModel @Inject constructor(
     private val addEntryUseCase: IAddEntryUseCase
 ) : ViewModel() {
 
-    val selectedEntryFlow: StateFlow<EntryState>
-        field = MutableStateFlow<EntryState>(EntryState.Loading)
-    
+    val selectedEntryFlow: StateFlow<UIState<EntryData>>
+        field = MutableStateFlow<UIState<EntryData>>(Loading)
+
     val saveSuccessful: StateFlow<Boolean>
         field = MutableStateFlow<Boolean>(false)
 
@@ -31,9 +34,9 @@ class EditFoodEntryViewModel @Inject constructor(
             val entry = entryUseCase.getEntry(selectedEntryId).firstOrNull()
 
             entry?.let {
-                selectedEntryFlow.emit(EntryState.Success(entry))
+                selectedEntryFlow.emit(Success(entry))
             } ?: run {
-                selectedEntryFlow.emit(EntryState.Error)
+                selectedEntryFlow.emit(Error)
             }
         }
     }
@@ -62,10 +65,4 @@ class EditFoodEntryViewModel @Inject constructor(
 
         return entry.servingInGms != newValue.toInt()
     }
-}
-
-sealed interface EntryState {
-    object Error : EntryState
-    object Loading : EntryState
-    data class Success(val entry: EntryData) : EntryState
 }

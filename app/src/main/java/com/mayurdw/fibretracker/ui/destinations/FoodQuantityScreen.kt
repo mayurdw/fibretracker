@@ -7,10 +7,13 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mayurdw.fibretracker.model.entity.FoodEntity
 import com.mayurdw.fibretracker.ui.screens.FoodQuantityScreenLayout
 import com.mayurdw.fibretracker.ui.screens.core.LoadingScreen
-import com.mayurdw.fibretracker.viewmodels.FoodQuantityState
 import com.mayurdw.fibretracker.viewmodels.FoodQuantityViewModel
+import com.mayurdw.fibretracker.viewmodels.UIState.Error
+import com.mayurdw.fibretracker.viewmodels.UIState.Loading
+import com.mayurdw.fibretracker.viewmodels.UIState.Success
 
 @Composable
 fun FoodQuantityScreen(
@@ -31,12 +34,14 @@ fun FoodQuantityScreen(
     }
 
     when (state) {
-        is FoodQuantityState.Loading -> {
+        is Loading -> {
             LoadingScreen()
         }
 
-        is FoodQuantityState.Success -> {
-            val foodEntity = (state as FoodQuantityState.Success).food
+        is Error -> {}
+
+        is Success<*> -> {
+            val foodEntity = (state as Success<*>).data as FoodEntity
 
             FoodQuantityScreenLayout(
                 modifier,
