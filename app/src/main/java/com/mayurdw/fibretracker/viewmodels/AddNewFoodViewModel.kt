@@ -5,6 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.mayurdw.fibretracker.data.usecase.IAddFoodUseCase
 import com.mayurdw.fibretracker.data.usecase.IGetFoodUseCase
 import com.mayurdw.fibretracker.model.entity.FoodEntity
+import com.mayurdw.fibretracker.viewmodels.UIState.Error
+import com.mayurdw.fibretracker.viewmodels.UIState.Loading
+import com.mayurdw.fibretracker.viewmodels.UIState.Success
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,13 +21,17 @@ class AddNewFoodViewModel @Inject constructor(
     private val addFoodUseCase: IAddFoodUseCase
 ) : ViewModel() {
     val uiState: StateFlow<UIState<FoodEntity>>
-        field = MutableStateFlow<UIState<FoodEntity>>(UIState.Loading)
+        field = MutableStateFlow<UIState<FoodEntity>>(Loading)
 
     fun getFoodById(foodId: Int) {
         viewModelScope.launch {
             val foodEntity = getFoodUseCase.getFoodById(foodId)
 
-            uiState.emit(UIState.Success<FoodEntity>(foodEntity))
+            foodEntity?.let {
+                uiState.emit(Success<FoodEntity>(foodEntity))
+            }?.run {
+                uiState.emit(Error)
+            }
         }
     }
 

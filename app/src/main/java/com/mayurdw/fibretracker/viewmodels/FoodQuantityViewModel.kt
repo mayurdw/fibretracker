@@ -26,7 +26,12 @@ class FoodQuantityViewModel @Inject constructor(
     fun loadFoodDetails(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             foodState.emit(FoodQuantityState.Loading)
-            foodState.emit(FoodQuantityState.Success(getFoodUseCase.getFoodById(id)))
+            getFoodUseCase.getFoodById(id)?.let {
+                foodState.emit(FoodQuantityState.Success(it))
+            } ?: run {
+                foodState.emit(FoodQuantityState.Error)
+            }
+
         }
     }
 
@@ -46,6 +51,7 @@ class FoodQuantityViewModel @Inject constructor(
         }
     }
 }
+
 
 sealed interface FoodQuantityState {
     object Error : FoodQuantityState

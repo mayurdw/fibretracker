@@ -21,7 +21,7 @@ class GetFoodUseCase @Inject constructor(
         }
     }
 
-    override suspend fun getFoodById(id: Int): FoodEntity {
+    override suspend fun getFoodById(id: Int): FoodEntity? {
         return dao.getFoodById(id)
     }
 }

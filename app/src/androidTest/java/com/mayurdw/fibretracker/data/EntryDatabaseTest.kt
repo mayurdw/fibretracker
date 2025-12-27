@@ -19,6 +19,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
 import kotlinx.datetime.todayIn
 import org.junit.After
+import org.junit.Assert.assertNotEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -162,7 +163,6 @@ class EntryDatabaseTest {
         }
     }
 
-
     fun testUpsertASingleEntry() = runTest {
         val currentDate = getCurrentDate()
         val food = FoodEntity(
@@ -228,6 +228,33 @@ class EntryDatabaseTest {
             assertEquals(entry.foodServingInGms, data.servingInGms)
             assertEquals(entry.date, data.date)
         }
+    }
+
+    @Test
+    fun testUpdateFood() = runTest {
+        val food = FoodEntity(
+            name = "Test",
+            singleServingSizeInGm = 10,
+            fibrePerMicroGram = 2000
+        )
+
+        dao.upsertNewFood(food)
+
+        val list = dao.getAllFoods()
+
+        val updatedFood =
+            list[0].copy(fibrePerMicroGram = food.fibrePerMicroGram / 2).apply { id = list[0].id }
+
+        dao.upsertNewFood(updatedFood)
+
+        val newList = dao.getAllFoods()
+
+        assertEquals(1, list.size)
+        assertEquals(food.name, list[0].name)
+        assertNotEquals(updatedFood.fibrePerMicroGram, food.fibrePerMicroGram)
+        assertEquals(1, newList.size)
+        assertEquals(food.name, newList[0].name)
+        assertEquals(updatedFood.fibrePerMicroGram, newList[0].fibrePerMicroGram)
 
     }
 
