@@ -1,22 +1,37 @@
 package com.mayurdw.fibretracker.viewmodels
 
+import android.content.res.Resources
+import app.cash.turbine.test
+import com.mayurdw.fibretracker.TestDispatcherRule
 import com.mayurdw.fibretracker.data.usecase.IAddFoodUseCase
 import com.mayurdw.fibretracker.data.usecase.IGetFoodUseCase
 import com.mayurdw.fibretracker.model.entity.FoodEntity
 import io.mockk.MockKAnnotations
+import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
+
+@OptIn(ExperimentalCoroutinesApi::class)
 class AddNewFoodViewModelTest {
     @MockK
     lateinit var getFoodUseCase: IGetFoodUseCase
 
     @MockK
     lateinit var addFoodUseCase: IAddFoodUseCase
+
+    @get:Rule
+    val dispatcherRule = TestDispatcherRule()
 
     lateinit var viewModel: AddNewFoodViewModel
 
@@ -140,5 +155,46 @@ class AddNewFoodViewModelTest {
                 fibrePerServing = " "
             )
         )
+    }
+
+    @Test
+    fun testIfNoFoodFound() = runTest {
+        val flow = flow {
+            emit(Result.failure<FoodEntity>(exception = Resources.NotFoundException()))
+        }
+        coEvery { getFoodUseCase.getFoodById(ofType(Int::class)) } returns flow
+
+
+        viewModel.uiState.test {
+            viewModel.getFoodById(-1)
+            advanceUntilIdle()
+
+            assertEquals(awaitItem(), UIState.Loading)
+            assertEquals(awaitItem(), UIState.Error)
+        }
+    }
+
+
+    @Test
+    fun testIfFoodFound() = runTest {
+        val entity = FoodEntity(
+            name = "Test",
+            fibrePerMicroGram = 1_00_0,
+            singleServingSizeInGm = 100
+        )
+        val flow = flow {
+            emit(Result.success(entity))
+        }
+        coEvery { getFoodUseCase.getFoodById(ofType(Int::class)) } returns flow
+
+        viewModel.uiState.test {
+            viewModel.getFoodById(1)
+            advanceUntilIdle()
+
+            assertEquals(awaitItem(), UIState.Loading)
+            val state = awaitItem()
+            assertTrue(state is UIState.Success<FoodEntity>)
+            assertEquals(entity.name, (state as UIState.Success<FoodEntity>).data.name)
+        }
     }
 }

@@ -11,6 +11,7 @@ import com.mayurdw.fibretracker.viewmodels.UIState.Success
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import javax.inject.Inject
@@ -25,12 +26,14 @@ class AddNewFoodViewModel @Inject constructor(
 
     fun getFoodById(foodId: Int) {
         viewModelScope.launch {
-            val foodEntity = getFoodUseCase.getFoodById(foodId)
 
-            foodEntity?.let {
-                uiState.emit(Success<FoodEntity>(foodEntity))
-            }?.run {
-                uiState.emit(Error)
+            uiState.emit(Loading)
+            getFoodUseCase.getFoodById(foodId).collectLatest {
+                if (it.isSuccess) {
+                    uiState.emit(Success(it.getOrNull()!!))
+                } else {
+                    uiState.emit(Error)
+                }
             }
         }
     }

@@ -12,6 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,12 +30,13 @@ class FoodQuantityViewModel @Inject constructor(
     fun loadFoodDetails(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             foodState.emit(Loading)
-            getFoodUseCase.getFoodById(id)?.let {
-                foodState.emit(Success(it))
-            } ?: run {
-                foodState.emit(Error)
+            getFoodUseCase.getFoodById(id).collectLatest {
+                if (it.isSuccess) {
+                    foodState.emit(Success(it.getOrNull()!!))
+                } else {
+                    foodState.emit(Error)
+                }
             }
-
         }
     }
 
