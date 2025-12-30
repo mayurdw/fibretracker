@@ -8,7 +8,6 @@ import com.mayurdw.fibretracker.data.helpers.convertFoodEntryEntityToFoodListIte
 import com.mayurdw.fibretracker.data.usecase.GetEntryUseCase
 import com.mayurdw.fibretracker.model.domain.HomeData
 import com.mayurdw.fibretracker.model.domain.HomeData.DateData
-import com.mayurdw.fibretracker.viewmodels.UIState.Error
 import com.mayurdw.fibretracker.viewmodels.UIState.Loading
 import com.mayurdw.fibretracker.viewmodels.UIState.Success
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -47,34 +46,29 @@ class HomeScreenViewModel @Inject constructor(
                     val foodList = current.map { entryData ->
                         convertFoodEntryEntityToFoodListItem(entryData)
                     }
+                    val dateFormat = LocalDate.Format {
+                        day()
+                        char('/')
+                        monthNumber()
+                        char('/')
+                        yearTwoDigits(2000)
+                    }
+                    val date = currentDate.format(dateFormat)
+                    var totalFibre = BigDecimal.ZERO
+                    current.forEach { totalFibre += it.fibreConsumedInGms }
 
-                    if (foodList.isEmpty()) {
-                        homeStateFlow.emit(Error)
-                    } else {
-                        val dateFormat = LocalDate.Format {
-                            day()
-                            char('/')
-                            monthNumber()
-                            char('/')
-                            yearTwoDigits(2000)
-                        }
-                        val date = currentDate.format(dateFormat)
-                        var totalFibre = BigDecimal.ZERO
-                        current.forEach { totalFibre += it.fibreConsumedInGms }
-
-                        homeStateFlow.emit(
-                            Success(
-                                HomeData(
-                                    hasNext = (todaysDate != currentDate),
-                                    dateData = DateData(
-                                        formattedDate = date,
-                                        fibreOfTheDay = totalFibre.toString(),
-                                        foodItems = foodList
-                                    )
+                    homeStateFlow.emit(
+                        Success(
+                            HomeData(
+                                hasNext = (todaysDate != currentDate),
+                                dateData = DateData(
+                                    formattedDate = date,
+                                    fibreOfTheDay = totalFibre.toString(),
+                                    foodItems = foodList
                                 )
                             )
                         )
-                    }
+                    )
                 }
             }
         }

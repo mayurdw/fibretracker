@@ -68,7 +68,8 @@ fun getDestination(routeName: String?): Destinations {
                 return screen
             }
         }
+        throw IllegalStateException("Screen Name not found $routeName")
     }
 
-    throw IllegalStateException("Screen Name not found $routeName")
+    return Home
 }

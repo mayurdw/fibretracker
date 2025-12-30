@@ -47,9 +47,5 @@ fun HomeScreen(
         is Error -> {
 
         }
-
-        else -> {
-
-        }
     }
 }

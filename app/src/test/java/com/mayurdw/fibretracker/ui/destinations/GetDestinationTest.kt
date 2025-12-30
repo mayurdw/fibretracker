@@ -5,8 +5,13 @@ import org.junit.Test
 
 class GetDestinationTest {
 
+    @Test
+    fun `Null Value returns Default`() {
+        assertEquals(Home, getDestination(null))
+    }
+
     @Test(expected = IllegalStateException::class)
-    fun `Unknown Name Returns Default`() {
+    fun `Unknown Name throws error`() {
         getDestination("")
     }
 
