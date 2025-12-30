@@ -1,16 +1,18 @@
-package com.mayurdw.fibretracker.data
+package com.mayurdw.fibretracker.data.usecase
 
 import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.cash.turbine.test
+import com.mayurdw.fibretracker.TestDispatcherRule
 import com.mayurdw.fibretracker.data.database.AppDao
 import com.mayurdw.fibretracker.data.database.AppDatabase
 import com.mayurdw.fibretracker.model.entity.FoodEntity
 import com.mayurdw.fibretracker.model.entity.FoodEntryEntity
+import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertFalse
+import junit.framework.TestCase.assertNull
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.DateTimeUnit
@@ -24,11 +26,12 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class)
-@RunWith(AndroidJUnit4::class)
+@RunWith(RobolectricTestRunner::class)
 class EntryDatabaseTest {
 
     @get:Rule
@@ -41,7 +44,8 @@ class EntryDatabaseTest {
     fun setup() {
         val context = ApplicationProvider.getApplicationContext<Context>()
 
-        db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
+        db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).allowMainThreadQueries()
+            .build()
         dao = db.getAppDao()
     }
 
@@ -256,6 +260,64 @@ class EntryDatabaseTest {
         assertEquals(food.name, newList[0].name)
         assertEquals(updatedFood.fibrePerMicroGram, newList[0].fibrePerMicroGram)
 
+    }
+
+    @Test
+    fun getFoodIfNotMatched() = runTest {
+        assertNull(dao.getFoodById(-1))
+    }
+
+    @Test
+    fun deleteEntryIfNoneExist() = runTest {
+        dao.deleteEntry(mockk<FoodEntryEntity>(relaxed = true))
+        dao.deleteFood(mockk<FoodEntity>(relaxed = true))
+    }
+
+    @Test
+    fun deleteEntry() = runTest {
+        val currentDate = getCurrentDate()
+        val food = FoodEntity(
+            name = "Test",
+            singleServingSizeInGm = 10,
+            fibrePerMicroGram = 2000
+        ).apply { id = 1 }
+        val entry =
+            FoodEntryEntity(
+                foodId = food.id,
+                foodServingInGms = food.singleServingSizeInGm,
+                date = currentDate
+            ).apply { id = 1 }
+
+        dao.upsertEntry(entry)
+        dao.upsertNewFood(food)
+
+        dao.getEntryData(currentDate, currentDate).test {
+            val list = awaitItem()
+
+            assertEquals(1, list.size)
+        }
+        dao.deleteEntry(entry)
+        dao.getEntryData(currentDate, currentDate).test {
+            val list = awaitItem()
+
+            assertTrue(list.isEmpty())
+        }
+    }
+
+    @Test
+    fun deleteFood() = runTest {
+        val food = FoodEntity(
+            name = "Test",
+            singleServingSizeInGm = 10,
+            fibrePerMicroGram = 2000
+        ).apply { id = 1 }
+
+        dao.upsertNewFood(food)
+
+        assertEquals(1, dao.getAllFoods().size)
+
+        dao.deleteFood(food)
+        assertTrue(dao.getAllFoods().isEmpty())
     }
 
     inline fun getCurrentDate() = Clock.System.todayIn(TimeZone.currentSystemDefault())

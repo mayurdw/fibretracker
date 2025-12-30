@@ -1,6 +1,7 @@
 package com.mayurdw.fibretracker.data.database
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Upsert
 import com.mayurdw.fibretracker.model.domain.EntryData
@@ -52,6 +53,9 @@ interface AppDao {
     @Upsert
     fun upsertEntry(entryEntity: FoodEntryEntity)
 
+    @Delete
+    suspend fun deleteEntry(foodEntryEntity: FoodEntryEntity)
+
     /**
      * Food related methods
      * */
@@ -63,4 +67,7 @@ interface AppDao {
 
     @Query("SELECT * FROM food WHERE id LIKE :id")
     suspend fun getFoodById(id: Int): FoodEntity?
+
+    @Delete
+    suspend fun deleteFood(foodEntity: FoodEntity)
 }
