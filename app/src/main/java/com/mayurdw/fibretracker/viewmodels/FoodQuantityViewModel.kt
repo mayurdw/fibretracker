@@ -9,7 +9,6 @@ import com.mayurdw.fibretracker.viewmodels.UIState.Error
 import com.mayurdw.fibretracker.viewmodels.UIState.Loading
 import com.mayurdw.fibretracker.viewmodels.UIState.Success
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -28,7 +27,7 @@ class FoodQuantityViewModel @Inject constructor(
         field = MutableStateFlow<Boolean>(false)
 
     fun loadFoodDetails(id: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             foodState.emit(Loading)
             getFoodUseCase.getFoodById(id).collectLatest {
                 if (it.isSuccess) {
@@ -41,7 +40,7 @@ class FoodQuantityViewModel @Inject constructor(
     }
 
     fun insertNewEntry(foodEntity: FoodEntity, foodQuantity: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             foodState.emit(Loading)
             entryState.emit(false)
             val quantity = foodQuantity.toInt()

@@ -10,7 +10,6 @@ import com.mayurdw.fibretracker.viewmodels.UIState.Error
 import com.mayurdw.fibretracker.viewmodels.UIState.Loading
 import com.mayurdw.fibretracker.viewmodels.UIState.Success
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.firstOrNull
@@ -44,7 +43,7 @@ class EditFoodEntryViewModel @Inject constructor(
     fun updateEntry(newFoodQuantity: String, entry: EntryData) {
         if (newFoodQuantity.toInt() != entry.servingInGms) {
 
-            viewModelScope.launch(Dispatchers.IO) {
+            viewModelScope.launch {
                 addEntryUseCase.insertNewEntry(
                     FoodEntryEntity(
                         foodId = entry.foodId,
