@@ -19,6 +19,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers.IO
 import javax.inject.Singleton
 
 @Module
@@ -40,6 +42,11 @@ object DataModule {
     @Provides
     fun getFoodEntryDao(database: AppDatabase): AppDao {
         return database.getAppDao()
+    }
+
+    @Provides
+    fun providerDispatcher(): CoroutineDispatcher {
+        return IO
     }
 }
 

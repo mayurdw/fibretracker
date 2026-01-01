@@ -8,9 +8,9 @@ import com.mayurdw.fibretracker.viewmodels.UIState.Error
 import com.mayurdw.fibretracker.viewmodels.UIState.Loading
 import com.mayurdw.fibretracker.viewmodels.UIState.Success
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,14 +22,14 @@ class AddFoodEntryViewModel @Inject constructor(
         field = MutableStateFlow<UIState<List<FoodEntity>>>(Loading)
 
     fun loadData() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             entryState.emit(Loading)
-            val list = getFoodUseCase.getFoods()
-
-            if (list.isEmpty()) {
-                entryState.emit(Error)
-            } else {
-                entryState.emit(Success(list))
+            getFoodUseCase.getFoods().collectLatest {
+                if (it.isEmpty()) {
+                    entryState.emit(Error)
+                } else {
+                    entryState.emit(Success(it))
+                }
             }
         }
     }

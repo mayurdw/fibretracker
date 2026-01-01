@@ -244,22 +244,24 @@ class EntryDatabaseTest {
 
         dao.upsertNewFood(food)
 
-        val list = dao.getAllFoods()
+        dao.getAllFoods().test {
+            val list = awaitItem()
 
-        val updatedFood =
-            list[0].copy(fibrePerMicroGram = food.fibrePerMicroGram / 2).apply { id = list[0].id }
+            val updatedFood =
+                list[0].copy(fibrePerMicroGram = food.fibrePerMicroGram / 2)
+                    .apply { id = list[0].id }
 
-        dao.upsertNewFood(updatedFood)
+            dao.upsertNewFood(updatedFood)
 
-        val newList = dao.getAllFoods()
+            val newList = awaitItem()
 
-        assertEquals(1, list.size)
-        assertEquals(food.name, list[0].name)
-        assertNotEquals(updatedFood.fibrePerMicroGram, food.fibrePerMicroGram)
-        assertEquals(1, newList.size)
-        assertEquals(food.name, newList[0].name)
-        assertEquals(updatedFood.fibrePerMicroGram, newList[0].fibrePerMicroGram)
-
+            assertEquals(1, list.size)
+            assertEquals(food.name, list[0].name)
+            assertNotEquals(updatedFood.fibrePerMicroGram, food.fibrePerMicroGram)
+            assertEquals(1, newList.size)
+            assertEquals(food.name, newList[0].name)
+            assertEquals(updatedFood.fibrePerMicroGram, newList[0].fibrePerMicroGram)
+        }
     }
 
     @Test
@@ -314,10 +316,15 @@ class EntryDatabaseTest {
 
         dao.upsertNewFood(food)
 
-        assertEquals(1, dao.getAllFoods().size)
+        dao.getAllFoods().test {
+            assertEquals(1, awaitItem().size)
+        }
 
         dao.deleteFood(food)
-        assertTrue(dao.getAllFoods().isEmpty())
+
+        dao.getAllFoods().test {
+            assertTrue(awaitItem().isEmpty())
+        }
     }
 
     inline fun getCurrentDate() = Clock.System.todayIn(TimeZone.currentSystemDefault())

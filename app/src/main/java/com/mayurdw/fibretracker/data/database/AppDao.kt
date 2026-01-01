@@ -15,10 +15,6 @@ interface AppDao {
     /**
      * ENTRY related methods
      * */
-    @Query("SELECT * FROM entry WHERE date BETWEEN :startTime AND :endTime ORDER BY date DESC")
-    fun getEntries(startTime: Long, endTime: Long): Flow<List<FoodEntryEntity>>
-
-
     @Query("SELECT 1 FROM entry WHERE entry.date BETWEEN :startTime AND :endTime")
     fun checkIfEntryDataExists(startTime: LocalDate, endTime: LocalDate): Flow<Boolean>
 
@@ -35,7 +31,6 @@ interface AppDao {
                 "ORDER BY date DESC"
     )
     fun getEntryData(startTime: LocalDate, endTime: LocalDate): Flow<List<EntryData>>
-
 
     @Query(
         "SELECT entry.date AS date, " +
@@ -60,7 +55,7 @@ interface AppDao {
      * Food related methods
      * */
     @Query("SELECT * FROM food")
-    fun getAllFoods(): List<FoodEntity>
+    fun getAllFoods(): Flow<List<FoodEntity>>
 
     @Upsert
     suspend fun upsertNewFood(foodEntity: FoodEntity)
