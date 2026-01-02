@@ -93,7 +93,7 @@ class MainActivity : ComponentActivity() {
 
                         composable<AddNewFoodItem> {
                             AddNewFoodScreen {
-                                navController.popBackStack(AddFoodItem, false)
+                                navController.navigateUp()
                             }
                         }
 
