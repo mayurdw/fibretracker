@@ -47,7 +47,11 @@ fun EditFoodEntryScreen(
                 foodName = entry.name,
                 fibrePerGram = BigDecimal.valueOf(entry.fibrePerMicroGrams / 1_000_000.0),
                 singleServingSizeInGm = entry.servingInGms,
-                buttonEnabled = { viewModel.isEdited(it, entry) }
+                buttonEnabled = { viewModel.isEdited(it, entry) },
+                canDelete = true,
+                onDeleteClicked = {
+                    viewModel.deleteEntry(entry)
+                }
             ) {
                 viewModel.updateEntry(it, entry)
             }

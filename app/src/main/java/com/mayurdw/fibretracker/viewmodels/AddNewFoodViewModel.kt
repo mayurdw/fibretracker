@@ -4,6 +4,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mayurdw.fibretracker.data.usecase.IAddFoodUseCase
+import com.mayurdw.fibretracker.data.usecase.IDeleteFoodUseCase
 import com.mayurdw.fibretracker.data.usecase.IGetFoodUseCase
 import com.mayurdw.fibretracker.model.entity.FoodEntity
 import com.mayurdw.fibretracker.viewmodels.UIState.Error
@@ -22,7 +23,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AddNewFoodViewModel @Inject constructor(
     private val getFoodUseCase: IGetFoodUseCase,
-    private val addFoodUseCase: IAddFoodUseCase
+    private val addFoodUseCase: IAddFoodUseCase,
+    private val deleteFoodUseCase: IDeleteFoodUseCase
 ) : ViewModel() {
     val uiState: StateFlow<UIState<FoodEntity>>
         field = MutableStateFlow<UIState<FoodEntity>>(Loading)
@@ -110,6 +112,12 @@ class AddNewFoodViewModel @Inject constructor(
 
                 }
             }
+        }
+    }
+
+    fun deleteFood(foodEntity: FoodEntity) {
+        viewModelScope.launch {
+            deleteFoodUseCase.deleteFood(foodEntity)
         }
     }
 }

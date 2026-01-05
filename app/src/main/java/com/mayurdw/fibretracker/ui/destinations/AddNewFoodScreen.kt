@@ -40,6 +40,10 @@ fun AddNewFoodScreen(
                     buttonIsEnabled = { foodName, foodServing, fibrePerServing ->
                         viewModel.isUpdated(data, foodName, foodServing, fibrePerServing)
 
+                    },
+                    onDelete = {
+                        viewModel.deleteFood(data)
+                        onActionCompleted()
                     }
                 ) { foodName: String, foodServing: String, fibrePerServing: String ->
                     viewModel.updateFood(data, foodName, foodServing, fibrePerServing)
@@ -53,7 +57,8 @@ fun AddNewFoodScreen(
             modifier = modifier,
             buttonIsEnabled = { foodName, foodServing, fibrePerServing ->
                 viewModel.isValid(foodName, foodServing, fibrePerServing)
-            }
+            },
+            onDelete = {}
         ) { foodName: String, foodServing: String, fibrePerServing: String ->
             viewModel.addNewFood(foodName, foodServing, fibrePerServing)
             onActionCompleted()

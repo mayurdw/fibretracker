@@ -48,7 +48,9 @@ fun FoodQuantityScreen(
                 foodName = foodEntity.name,
                 fibrePerGram = foodEntity.fibrePerGram,
                 singleServingSizeInGm = foodEntity.singleServingSizeInGm,
-                buttonEnabled = { !it.isNullOrBlank() }
+                buttonEnabled = { !it.isNullOrBlank() },
+                canDelete = false,
+                onDeleteClicked = {}
             ) { foodQuantity ->
                 viewModel.insertNewEntry(foodEntity, foodQuantity)
             }

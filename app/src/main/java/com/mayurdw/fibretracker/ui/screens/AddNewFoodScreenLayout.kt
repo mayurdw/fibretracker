@@ -1,6 +1,7 @@
 package com.mayurdw.fibretracker.ui.screens
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +13,8 @@ import androidx.compose.foundation.text.input.KeyboardActionHandler
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -41,6 +44,7 @@ fun AddNewFoodScreenLayout(
     data: FoodEntity? = null,
     @StringRes primaryCtaTextId: Int = R.string.add_food,
     buttonIsEnabled: (foodName: String, foodServing: String, fibrePerServing: String) -> Boolean,
+    onDelete: () -> Unit = {},
     onAddButton: (foodName: String, foodServing: String, fibrePerServing: String) -> Unit,
 ) {
     val foodNameState = rememberTextFieldState(data?.name ?: "")
@@ -120,6 +124,22 @@ fun AddNewFoodScreenLayout(
         ) {
             Text(stringResource(primaryCtaTextId))
         }
+
+        data?.let {
+            OutlinedButton(
+                modifier = modifier.fillMaxWidth(),
+                enabled = true,
+                onClick = onDelete,
+                border = BorderStroke(1.dp, color = MaterialTheme.colorScheme.error)
+            ) {
+                Text(
+                    modifier = modifier,
+                    text = "Delete",
+                    color = MaterialTheme.colorScheme.error
+                )
+
+            }
+        }
     }
 }
 
@@ -135,6 +155,7 @@ private fun AddNewFoodScreenPreview(
             buttonIsEnabled = { _, _, _ ->
                 false
             },
+            onDelete = {},
             onAddButton = { _, _, _ ->
 
             },

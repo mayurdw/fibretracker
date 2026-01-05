@@ -6,10 +6,14 @@ import com.mayurdw.fibretracker.data.database.AppDao
 import com.mayurdw.fibretracker.data.database.AppDatabase
 import com.mayurdw.fibretracker.data.usecase.AddEntryUseCase
 import com.mayurdw.fibretracker.data.usecase.AddFoodUseCase
+import com.mayurdw.fibretracker.data.usecase.DeleteEntryUseCase
+import com.mayurdw.fibretracker.data.usecase.DeleteFoodUseCase
 import com.mayurdw.fibretracker.data.usecase.GetEntryUseCase
 import com.mayurdw.fibretracker.data.usecase.GetFoodUseCase
 import com.mayurdw.fibretracker.data.usecase.IAddEntryUseCase
 import com.mayurdw.fibretracker.data.usecase.IAddFoodUseCase
+import com.mayurdw.fibretracker.data.usecase.IDeleteEntryUseCase
+import com.mayurdw.fibretracker.data.usecase.IDeleteFoodUseCase
 import com.mayurdw.fibretracker.data.usecase.IGetEntryUseCase
 import com.mayurdw.fibretracker.data.usecase.IGetFoodUseCase
 import dagger.Binds
@@ -64,4 +68,10 @@ abstract class UseCaseModule {
 
     @Binds
     abstract fun provideGetFoodUseCase(getFoodUseCase: GetFoodUseCase): IGetFoodUseCase
+
+    @Binds
+    abstract fun provideDeleteFoodUseCase(deleteFoodUseCase: DeleteFoodUseCase): IDeleteFoodUseCase
+
+    @Binds
+    abstract fun provideDeleteEntryUseCase(deleteEntryUseCase: DeleteEntryUseCase): IDeleteEntryUseCase
 }

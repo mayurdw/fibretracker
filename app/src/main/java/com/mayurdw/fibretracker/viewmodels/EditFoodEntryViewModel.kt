@@ -3,6 +3,7 @@ package com.mayurdw.fibretracker.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mayurdw.fibretracker.data.usecase.IAddEntryUseCase
+import com.mayurdw.fibretracker.data.usecase.IDeleteEntryUseCase
 import com.mayurdw.fibretracker.data.usecase.IGetEntryUseCase
 import com.mayurdw.fibretracker.model.domain.EntryData
 import com.mayurdw.fibretracker.model.entity.FoodEntryEntity
@@ -19,7 +20,8 @@ import javax.inject.Inject
 @HiltViewModel
 class EditFoodEntryViewModel @Inject constructor(
     private val entryUseCase: IGetEntryUseCase,
-    private val addEntryUseCase: IAddEntryUseCase
+    private val addEntryUseCase: IAddEntryUseCase,
+    private val deleteEntryUseCase: IDeleteEntryUseCase
 ) : ViewModel() {
 
     val selectedEntryFlow: StateFlow<UIState<EntryData>>
@@ -63,5 +65,12 @@ class EditFoodEntryViewModel @Inject constructor(
             return false
 
         return entry.servingInGms != newValue.toInt()
+    }
+
+    fun deleteEntry(entry: EntryData) {
+        viewModelScope.launch {
+            deleteEntryUseCase.deleteEntry(entry)
+            saveSuccessful.emit(true)
+        }
     }
 }

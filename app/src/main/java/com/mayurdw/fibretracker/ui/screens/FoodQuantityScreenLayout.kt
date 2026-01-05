@@ -1,5 +1,6 @@
 package com.mayurdw.fibretracker.ui.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,7 @@ import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -26,6 +28,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewDynamicColors
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import com.mayurdw.fibretracker.R
 import com.mayurdw.fibretracker.ui.theme.FibreTrackerTheme
@@ -38,7 +42,9 @@ fun FoodQuantityScreenLayout(
     singleServingSizeInGm: Int,
     foodName: String,
     fibrePerGram: BigDecimal,
+    canDelete: Boolean,
     buttonEnabled: (foodQuantity: String?) -> Boolean,
+    onDeleteClicked: () -> Unit,
     onSaveClick: (foodQuantity: String) -> Unit
 ) {
     val foodQuantity =
@@ -142,21 +148,48 @@ fun FoodQuantityScreenLayout(
             },
             enabled = buttonEnabled(foodQuantity.text.toString()),
             content = { Text(stringResource(R.string.submit)) })
+
+        if (canDelete) {
+            OutlinedButton(
+                modifier = modifier.fillMaxWidth(),
+                enabled = true,
+                onClick = onDeleteClicked,
+                border = BorderStroke(1.dp, color = MaterialTheme.colorScheme.error)
+            ) {
+                Text(
+                    modifier = modifier,
+                    text = "Delete",
+                    color = MaterialTheme.colorScheme.error
+                )
+
+            }
+        }
     }
 }
 
 @PreviewLightDark
 @PreviewDynamicColors
 @Composable
-private fun FoodQuantityScreenPreview() {
+private fun FoodQuantityScreenPreview(
+    @PreviewParameter(FoodQuantityScreenProvider::class) deleteEnabled: Boolean
+) {
     FibreTrackerTheme {
         FoodQuantityScreenLayout(
             foodName = "Test",
             singleServingSizeInGm = 40,
             fibrePerGram = BigDecimal.ONE,
-            buttonEnabled = { true }
+            buttonEnabled = { true },
+            onDeleteClicked = {},
+            canDelete = deleteEnabled
         ) { _ ->
 
         }
     }
+}
+
+class FoodQuantityScreenProvider : PreviewParameterProvider<Boolean> {
+    override val values: Sequence<Boolean> = sequenceOf(
+        true,
+        false
+    )
 }
