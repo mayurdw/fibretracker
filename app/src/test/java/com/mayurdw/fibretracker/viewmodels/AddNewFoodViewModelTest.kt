@@ -4,6 +4,7 @@ import android.content.res.Resources
 import app.cash.turbine.test
 import com.mayurdw.fibretracker.TestDispatcherRule
 import com.mayurdw.fibretracker.data.usecase.IAddFoodUseCase
+import com.mayurdw.fibretracker.data.usecase.IDeleteFoodUseCase
 import com.mayurdw.fibretracker.data.usecase.IGetFoodUseCase
 import com.mayurdw.fibretracker.model.domain.CommonFoods
 import com.mayurdw.fibretracker.model.entity.FoodEntity
@@ -33,6 +34,9 @@ class AddNewFoodViewModelTest {
     @MockK
     lateinit var addFoodUseCase: IAddFoodUseCase
 
+    @MockK
+    lateinit var deleteFoodUseCase: IDeleteFoodUseCase
+
     @get:Rule
     val dispatcherRule = TestDispatcherRule()
 
@@ -44,7 +48,8 @@ class AddNewFoodViewModelTest {
 
         viewModel = AddNewFoodViewModel(
             getFoodUseCase = getFoodUseCase,
-            addFoodUseCase = addFoodUseCase
+            addFoodUseCase = addFoodUseCase,
+            deleteFoodUseCase = deleteFoodUseCase
         )
     }
 
@@ -52,8 +57,10 @@ class AddNewFoodViewModelTest {
     fun checkIfDependenciesAreNotNull() {
         assertNotNull(getFoodUseCase)
         assertNotNull(addFoodUseCase)
+        assertNotNull(deleteFoodUseCase)
         assertTrue(this::addFoodUseCase.isInitialized)
         assertTrue(this::getFoodUseCase.isInitialized)
+        assertTrue(this::deleteFoodUseCase.isInitialized)
     }
 
     @Test
