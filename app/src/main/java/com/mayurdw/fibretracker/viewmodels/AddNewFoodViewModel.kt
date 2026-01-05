@@ -10,7 +10,7 @@ import com.mayurdw.fibretracker.viewmodels.UIState.Error
 import com.mayurdw.fibretracker.viewmodels.UIState.Loading
 import com.mayurdw.fibretracker.viewmodels.UIState.Success
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -85,7 +85,7 @@ class AddNewFoodViewModel @Inject constructor(
         fibrePerServingSizeInGms: String,
         foodServingSize: String
     ): Int {
-        return viewModelScope.async(Dispatchers.Default) {
+        return viewModelScope.async(Default) {
             val fibrePerServing = BigDecimal(fibrePerServingSizeInGms)
             val servingSize = BigDecimal(foodServingSize)
 
