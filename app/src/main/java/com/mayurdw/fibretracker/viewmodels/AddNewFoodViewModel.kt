@@ -1,5 +1,6 @@
 package com.mayurdw.fibretracker.viewmodels
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mayurdw.fibretracker.data.usecase.IAddFoodUseCase
@@ -9,6 +10,8 @@ import com.mayurdw.fibretracker.viewmodels.UIState.Error
 import com.mayurdw.fibretracker.viewmodels.UIState.Loading
 import com.mayurdw.fibretracker.viewmodels.UIState.Success
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -77,13 +80,17 @@ class AddNewFoodViewModel @Inject constructor(
         }
     }
 
-    private fun getFibrePerMicroGram(
+    @VisibleForTesting
+    suspend fun getFibrePerMicroGram(
         fibrePerServingSizeInGms: String,
         foodServingSize: String
     ): Int {
-        return BigDecimal.valueOf(
-            fibrePerServingSizeInGms.toDouble() / foodServingSize.toDouble() * 1_000_000
-        ).toInt()
+        return viewModelScope.async(Dispatchers.Default) {
+            val fibrePerServing = BigDecimal(fibrePerServingSizeInGms)
+            val servingSize = BigDecimal(foodServingSize)
+
+            ((fibrePerServing * BigDecimal(1_000_000)) / servingSize).toInt()
+        }.await()
     }
 
     fun addNewFood(foodName: String, foodServingSize: String, fibrePerServingInGms: String) {
