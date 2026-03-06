@@ -90,6 +90,7 @@ dependencies {
     implementation(libs.hilt)
     implementation(libs.hilt.navigation)
     implementation(libs.datetime)
+    implementation (libs.androidx.compose.material.icons.extended)
 
     testImplementation(libs.junit)
     testImplementation(libs.androidx.room.test)
