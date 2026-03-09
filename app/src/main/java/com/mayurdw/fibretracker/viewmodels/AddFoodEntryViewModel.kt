@@ -28,7 +28,7 @@ class AddFoodEntryViewModel @Inject constructor(
                 if (it.isEmpty()) {
                     entryState.emit(Error)
                 } else {
-                    entryState.emit(Success(it))
+                    entryState.emit(Success(it.sortedBy { foodItem -> foodItem.name }))
                 }
             }
         }
