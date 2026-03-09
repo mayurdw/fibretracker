@@ -7,8 +7,7 @@ import com.mayurdw.fibretracker.model.entity.FoodEntity
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -19,15 +18,15 @@ class GetFoodUseCase @Inject constructor(
     override suspend fun getFoods(): Flow<List<FoodEntity>> {
         return channelFlow {
             withContext(dispatcher) {
-                dao.getAllFoods().distinctUntilChanged().collectLatest {
-                    if (it.isEmpty()) {
-                        CommonFoods.forEach { foodItem ->
-                            dao.upsertNewFood(foodItem)
-                        }
-                        trySend(CommonFoods)
-                    } else {
-                        trySend(it)
+                val foods = dao.getAllFoods().first()
+
+                if (foods.isEmpty()) {
+                    CommonFoods.forEach {
+                        dao.upsertNewFood(it)
                     }
+                    trySend(CommonFoods)
+                } else {
+                    trySend(foods)
                 }
             }
         }
