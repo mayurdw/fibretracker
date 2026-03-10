@@ -7,16 +7,18 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.Icons.Filled
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Upcoming
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -40,78 +42,8 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import com.mayurdw.fibretracker.ui.destinations.AddFoodItem
-import com.mayurdw.fibretracker.ui.destinations.AddNewFoodItem
 import com.mayurdw.fibretracker.ui.destinations.Destinations
-import com.mayurdw.fibretracker.ui.destinations.Home
 import com.mayurdw.fibretracker.ui.theme.FibreTrackerTheme
-
-@Composable
-fun TrackerBottomBar(
-    modifier: Modifier = Modifier,
-    items: List<TrackerBottomBarButton>
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .heightIn(min = 48.dp)
-            .background(MaterialTheme.colorScheme.primaryContainer),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceEvenly
-    ) {
-        for (i in items) {
-            Column(
-                modifier = Modifier.clickable(
-                    enabled = true, onClick = {
-
-                    }
-                ),
-                horizontalAlignment = Alignment.CenterHorizontally) {
-                Icon(
-                    imageVector = i.icon,
-                    contentDescription = "",
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer
-                )
-                Text(
-                    text = i.label,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
-                )
-            }
-        }
-    }
-}
-
-@PreviewLightDark
-@Composable
-fun PreviewTrackerBottomBar() {
-    FibreTrackerTheme {
-        TrackerBottomBar(
-            items = bottomBarButtons
-        )
-    }
-}
-
-val bottomBarButtons = listOf(
-    TrackerBottomBarButton(
-        label = "Home",
-        icon = Icons.Filled.Home,
-        isSelected = true,
-        navRoute = Home
-    ),
-    TrackerBottomBarButton(
-        label = "Add",
-        icon = Icons.Filled.Add,
-        isSelected = false,
-        navRoute = AddFoodItem
-    ),
-    TrackerBottomBarButton(
-        label = "History",
-        icon = Icons.Filled.History,
-        isSelected = false,
-        navRoute = AddNewFoodItem
-    )
-)
 
 data class TrackerBottomBarButton(
     val label: String,
@@ -122,7 +54,7 @@ data class TrackerBottomBarButton(
 
 @PreviewLightDark
 @Composable
-fun NewBottomBar() {
+fun TrackerBottomBar() {
     FibreTrackerTheme {
         Box {
             BottomNavPanel()
@@ -131,7 +63,40 @@ fun NewBottomBar() {
 }
 
 @Composable
-fun BoxScope.BottomNavPanelWithCutOut() {
+private fun BottomBarIcon(
+    icon: ImageVector,
+    label: String,
+    isSelected: Boolean,
+    onClick: () -> Unit = {}
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxHeight()
+            .padding(top = 8.dp)
+            .clickable(
+                enabled = !isSelected,
+                onClick = onClick
+            ),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        Icon(
+            modifier = Modifier.size(24.dp),
+            imageVector = icon,
+            contentDescription = null,
+            tint = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSecondaryContainer
+        )
+
+        Text(
+            style = MaterialTheme.typography.labelMedium,
+            text = label,
+            color = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSecondaryContainer
+        )
+    }
+}
+
+@Composable
+private fun BoxScope.BottomNavPanelWithCutOut() {
     Box(
         modifier = Modifier
             .align(Alignment.BottomCenter)
@@ -148,23 +113,42 @@ fun BoxScope.BottomNavPanelWithCutOut() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 56.dp),
+                .padding(horizontal = 24.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            IconButton(onClick = {}) {
-                Icon(imageVector = Icons.Filled.Home, contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer)
-            }
+            BottomBarIcon(
+                icon = Filled.Home,
+                label = "Home",
+                isSelected = true
+            )
 
-            IconButton(onClick = {}) {
-                Icon(imageVector = Icons.Filled.History, contentDescription = null,tint = MaterialTheme.colorScheme.onPrimaryContainer)
-            }
+            BottomBarIcon(
+                icon = Filled.Upcoming,
+                label = "Plan",
+                isSelected = false
+            )
+
+            Spacer(modifier = Modifier.width(24.dp))
+
+            BottomBarIcon(
+                icon = Filled.Home,
+                label = "Home",
+                isSelected = false
+            )
+
+            BottomBarIcon(
+                icon = Filled.Upcoming,
+                label = "Plan",
+                isSelected = false
+            )
         }
     }
 }
 
 @Composable
-fun BoxScope.BottomNavPanel() {
+private fun BoxScope.BottomNavPanel(
+
+) {
     Box(
         modifier = Modifier
             .align(Alignment.BottomCenter)
@@ -179,14 +163,14 @@ fun BoxScope.BottomNavPanel() {
                 .padding(bottom = 32.dp)
                 .size(58.dp)
                 .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.primaryContainer),
+                .background(MaterialTheme.colorScheme.primary),
             contentAlignment = Alignment.Center,
         ) {
             IconButton(onClick = {}) {
                 Icon(
-                    imageVector = Icons.Filled.Add,
+                    imageVector = Filled.Add,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer
+                    tint = MaterialTheme.colorScheme.onPrimary
                 )
             }
         }
