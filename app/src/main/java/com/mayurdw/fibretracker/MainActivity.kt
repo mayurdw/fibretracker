@@ -6,12 +6,13 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons.Filled
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -65,7 +66,7 @@ class MainActivity : ComponentActivity() {
                                 navController.navigate(AddFoodItem)
                             }) {
                                 Icon(
-                                    painterResource(R.drawable.add),
+                                    imageVector = Filled.Add,
                                     contentDescription = "",
                                     tint = MaterialTheme.colorScheme.onPrimaryContainer
                                 )

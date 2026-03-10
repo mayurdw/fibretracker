@@ -1,5 +1,7 @@
 package com.mayurdw.fibretracker.ui.screens
 
+import androidx.compose.material.icons.Icons.Filled
+import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -10,7 +12,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.PreviewDynamicColors
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
@@ -50,7 +51,7 @@ fun FibreTrackerTopBar(
             if (Home != currentDestination) {
                 IconButton(onClick = onBackPressed) {
                     Icon(
-                        painterResource(R.drawable.previous),
+                        imageVector = Filled.ChevronLeft,
                         contentDescription = null
                     )
                 }
@@ -71,7 +72,6 @@ fun FibreTrackerTopBar(
 
 @Composable
 @PreviewLightDark
-@PreviewDynamicColors
 private fun PreviewFibreTrackerTopBar(
     @PreviewParameter(TopBarPreviewProvider::class) destination: Destinations
 ) {

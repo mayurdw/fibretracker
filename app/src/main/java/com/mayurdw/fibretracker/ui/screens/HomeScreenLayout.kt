@@ -13,6 +13,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons.Filled
+import androidx.compose.material.icons.filled.ChevronLeft
+import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -20,13 +23,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.PreviewDynamicColors
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
-import com.mayurdw.fibretracker.R
 import com.mayurdw.fibretracker.model.domain.HomeData
 import com.mayurdw.fibretracker.model.domain.HomeData.DateData
 import com.mayurdw.fibretracker.model.domain.HomeData.FoodListItem
@@ -127,7 +128,7 @@ private fun DatePicker(
         ) {
             Icon(
                 modifier = modifier,
-                painter = painterResource(R.drawable.previous),
+                imageVector = Filled.ChevronLeft,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurface
             )
@@ -143,7 +144,7 @@ private fun DatePicker(
         IconButton(onClick = onNextClicked, enabled = hasNext) {
             Icon(
                 modifier = modifier,
-                painter = painterResource(R.drawable.next),
+                imageVector = Filled.ChevronRight,
                 contentDescription = null,
                 tint = if (hasNext) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.inverseOnSurface
             )
