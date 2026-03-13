@@ -11,8 +11,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons.Filled
 import androidx.compose.material.icons.filled.Add
@@ -57,7 +59,7 @@ data class TrackerBottomBarButton(
 @Composable
 fun TrackerBottomBar() {
     FibreTrackerTheme {
-        Box {
+        Box(modifier = Modifier.navigationBarsPadding()) {
             BottomNavPanel()
         }
     }
@@ -72,6 +74,7 @@ private fun BottomBarIcon(
 ) {
     Column(
         modifier = Modifier
+            .widthIn(min = 48.dp)
             .fillMaxHeight()
             .padding(top = 8.dp)
             .clickable(
@@ -112,13 +115,13 @@ private fun BoxScope.BottomNavPanelWithCutOut() {
             .background(MaterialTheme.colorScheme.primaryContainer)
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth(0.4f)
-                    .padding(horizontal = 24.dp),
+                    .padding(end = 16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 BottomBarIcon(
@@ -134,12 +137,12 @@ private fun BoxScope.BottomNavPanelWithCutOut() {
                 )
             }
 
-            Spacer(modifier = Modifier.fillMaxWidth(0.35f))
+            Spacer(modifier = Modifier.fillMaxWidth(0.32f))
 
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
+                    .padding(start = 16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 BottomBarIcon(

@@ -34,6 +34,7 @@ import com.mayurdw.fibretracker.ui.destinations.SelectFoodToEdit
 import com.mayurdw.fibretracker.ui.destinations.getDestination
 import com.mayurdw.fibretracker.ui.screens.EditMenuScreen
 import com.mayurdw.fibretracker.ui.screens.FibreTrackerTopBar
+import com.mayurdw.fibretracker.ui.screens.core.TrackerBottomBar
 import com.mayurdw.fibretracker.ui.theme.FibreTrackerTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -72,6 +73,9 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                         }
+                    },
+                    bottomBar = {
+                        TrackerBottomBar()
                     },
                     modifier = Modifier
                         .fillMaxSize()
