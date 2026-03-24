@@ -19,6 +19,7 @@ turbine = "1.2.1"
 datetime = "0.7.1"
 mockk = "1.14.7"
 robolectric = "4.16"
+foundation = "1.10.5"
 
 [libraries]
 androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
@@ -50,6 +51,7 @@ turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine
 datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "datetime" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
+androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

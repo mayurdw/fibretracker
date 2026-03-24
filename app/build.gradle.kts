@@ -84,6 +84,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewModel)
     implementation(libs.androidx.room)
     implementation(libs.androidx.junit.ktx)
+    implementation(libs.androidx.compose.foundation)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     ksp(libs.hilt.compiler)
